@@ -103,3 +103,59 @@ Este repositório contém um resumo das principais funções em C que são funda
   char *args[] = {"/bin/ls", NULL};
   execve("/bin/ls", args, NULL);
 
+## Gerenciamento de Sinais e Processos
+
+### `signal`
+- **Biblioteca**: `signal.h`
+- **Assinatura**: `void (*signal(int signum, void (*handler)(int)))(int);`
+- **Retorno**: Ponteiro para o manipulador anterior ou SIG_ERR em erro.
+- **O que faz**: Define um manipulador de sinais.
+- **Exemplo**:
+  ```c
+  signal(SIGINT, handle_sigint);
+
+### `sigaction`
+- **Biblioteca**: `signal.h`
+- **Assinatura**: `int sigaction(int signum, const struct sigaction *act, struct sigaction *oldact);`
+- **Retorno**: 0 em sucesso ou -1 em erro.
+- **O que faz**: Define a ação de um sinal.
+- **Exemplo**:
+  ```c
+  struct sigaction sa;
+  sa.sa_handler = &handle_sigint;
+  sigaction(SIGINT, &sa, NULL);
+
+### `kill`
+- **Biblioteca**: `signal.h`
+- **Assinatura**: `int kill(pid_t pid, int sig);`
+- **Retorno**: 0 em sucesso ou -1 em erro.
+- **O que faz**: Envia um sinal para um processo.
+- **Exemplo**:
+  ```c
+  kill(pid, SIGKILL);
+
+## Gerenciamento de Diretórios e Arquivos
+
+### `getcwd`
+- **Biblioteca**: `unistd.h`
+- **Assinatura**: `char *getcwd(char *buf, size_t size);`
+- **Retorno**: Ponteiro para o buffer com o caminho ou NULL em erro.
+- **O que faz**: Obtém o diretório de trabalho atual.
+- **Exemplo**:
+  ```c
+  char cwd[1024];
+  getcwd(cwd, sizeof(cwd));
+
+### `chdir`
+- **Biblioteca**: `unistd.h`
+- **Assinatura**: `int chdir(const char *path);`
+- **Retorno**: 0 em sucesso ou -1 em erro.
+- **O que faz**: Altera o diretório de trabalho atual.
+- **Exemplo**:
+  ```c
+  chdir("/path/to/directory");
+
+
+Esse README detalha cada função, o que elas fazem e inclui exemplos simples para ajudar na implementação do seu projeto.
+
+
