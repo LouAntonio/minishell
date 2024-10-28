@@ -1,26 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/13 10:06:57 by lantonio          #+#    #+#             */
-/*   Updated: 2024/10/16 15:56:26 by lantonio         ###   ########.fr       */
+/*   Created: 2024/10/28 11:42:02 by hmateque          #+#    #+#             */
+/*   Updated: 2024/10/28 11:42:47 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "../includes/minishell.h"
 
-# include <unistd.h>
-# include <stdlib.h>
-# include <stdio.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include <limits.h>
-
-void	pwd(void);
-void	echo(char *str, int option);
-
-#endif
+void	configure_signal(void)
+{
+	signal(SIGINT, signal_new_line);
+	signal(SIGQUIT, SIG_IGN);
+}

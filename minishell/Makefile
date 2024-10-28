@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+         #
+#    By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/11 16:35:01 by lantonio          #+#    #+#              #
-#    Updated: 2024/10/16 15:56:50 by lantonio         ###   ########.fr        #
+#    Updated: 2024/10/28 12:01:54 by hmateque         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,6 +15,9 @@ CC		= cc
 FLAGS	= -Wall -Wextra -Werror
 
 SRCS	= minishell.c\
+			./src/funts_aux.c\
+			./checkers/signal.c\
+			./signal/signal.c\
 			./commands/pwd.c\
 			./commands/echo.c\
 
