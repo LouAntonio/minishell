@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+         #
+#    By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/11 16:35:01 by lantonio          #+#    #+#              #
-#    Updated: 2024/10/28 12:01:54 by hmateque         ###   ########.fr        #
+#    Updated: 2024/10/29 08:23:33 by lantonio         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= minishell
 CC		= cc
-FLAGS	= -Wall -Wextra -Werror
+FLAGS	= -Wall -Wextra -Werror -g
 
 SRCS	= minishell.c\
 			./src/funts_aux.c\
@@ -20,6 +20,7 @@ SRCS	= minishell.c\
 			./signal/signal.c\
 			./commands/pwd.c\
 			./commands/echo.c\
+			./src/ft_split.c\
 
 OBJS	= $(SRCS:.c=.o)
 
