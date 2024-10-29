@@ -6,7 +6,7 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:10:13 by lantonio          #+#    #+#             */
-/*   Updated: 2024/10/29 08:16:46 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/10/29 12:57:43 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,13 @@ void	pwd(char **str)
 		printf("pwd: too many arguments\n");
 		return ;
 	}
-	if (getcwd(path, sizeof(path)) != NULL)
-		ft_putstr_fd(path, fd);
-	else
-		perror("Erro ao obter o diretório");
+	if (!isset_in_mat(str, "<<"))
+	{
+		if (getcwd(path, sizeof(path)) != NULL)
+			ft_putstr_fd(path, fd);
+		else
+			perror("Erro ao obter o diretório");
+	}
 	ft_putstr_fd("\n", fd);
 	if (fd != 1)
 		close(fd);

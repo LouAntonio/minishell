@@ -6,7 +6,7 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:52:12 by lantonio          #+#    #+#             */
-/*   Updated: 2024/10/29 08:34:18 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/10/29 12:56:23 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,19 @@ void	echo(char **str)
 		if (!ft_strcmp(str[1], "-n"))
 			i = 1;
 	}
-	while (str[++i])
+	if (!check_read_from(str))
 	{
-		if (!(!ft_strcmp(str[i], ">") || !ft_strcmp(str[i], ">>") || !ft_strcmp(str[i - 1], ">") || !ft_strcmp(str[i - 1], ">>")))
-				ft_putstr_fd(str[i], fd);
-		if (str[i + 1])
-			ft_putstr_fd(" ", fd);
+		while (str[++i])
+		{
+			if (!(!ft_strcmp(str[i], ">") || !ft_strcmp(str[i], ">>") || !ft_strcmp(str[i - 1], ">") || !ft_strcmp(str[i - 1], ">>")))
+					ft_putstr_fd(str[i], fd);
+			if (str[i + 1])
+				ft_putstr_fd(" ", fd);
+		}
+		if (str[1])
+			if (!ft_strcmp(str[1], "-n"))
+				ft_putstr_fd("\033[30m\033[47m%\033[0m", fd);
 	}
-	if (str[1])
-		if (!ft_strcmp(str[1], "-n"))
-			ft_putstr_fd("\033[30m\033[47m%\033[0m", fd);
 	ft_putstr_fd("\n", fd);
 	if (fd != 1)
 		close(fd);

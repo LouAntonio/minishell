@@ -6,11 +6,33 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 11:56:22 by hmateque          #+#    #+#             */
-/*   Updated: 2024/10/28 17:48:10 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/10/29 12:55:55 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int	isset_in_mat(char **mat, char *str)
+{
+	int	i;
+
+	i = -1;
+	while (mat[++i])
+		if (!ft_strcmp(mat[i], str))
+			return (1);
+	return (0);
+}
+
+int	check_read_from(char **str)
+{
+	int	i;
+
+	i = -1;
+	while (str[++i])
+		if (!ft_strcmp(str[i], "<") || !ft_strcmp(str[i], "<<"))
+			return (1);
+	return (0);
+}
 
 void	ft_putstr_fd(char *s, int fd)
 {
