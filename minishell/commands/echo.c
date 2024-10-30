@@ -6,13 +6,13 @@
 /*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:52:12 by lantonio          #+#    #+#             */
-/*   Updated: 2024/10/29 15:10:02 by hmateque         ###   ########.fr       */
+/*   Updated: 2024/10/30 16:41:53 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	echo(char **str)
+void	echo(char **str, t_env *env)
 {
 	int	i;
 	int	fd;
@@ -36,7 +36,8 @@ void	echo(char **str)
 	{
 		while (str[++i])
 		{
-			if (!(!ft_strcmp(str[i], ">") || !ft_strcmp(str[i], ">>") || !ft_strcmp(str[i - 1], ">") || !ft_strcmp(str[i - 1], ">>")))
+			if(check_cipher(str[i], fd, env)) ;
+			else if (!(!ft_strcmp(str[i], ">") || !ft_strcmp(str[i], ">>") || !ft_strcmp(str[i - 1], ">") || !ft_strcmp(str[i - 1], ">>")))
 					ft_putstr_fd(str[i], fd);
 			if (str[i + 1])
 				ft_putstr_fd(" ", fd);
@@ -49,4 +50,3 @@ void	echo(char **str)
 	if (fd != 1)
 		close(fd);
 }
-
