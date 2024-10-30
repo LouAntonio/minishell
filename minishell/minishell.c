@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 12:32:54 by lantonio          #+#    #+#             */
-/*   Updated: 2024/10/28 14:55:07 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/10/30 10:58:12 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,14 @@ void signal_new_line(int signum)
 }
 
 
-int	main(void)
+int	main(int ac, char **av, char **env)
 {
 	char	*command;
+	t_env	*all_env;
 	
+	print_all_var(env);
+	all_env = NULL;
+	ft_set_value(ac, av, env, &all_env);
 	configure_signal();
 	while (1)
 	{
