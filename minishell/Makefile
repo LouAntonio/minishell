@@ -6,7 +6,7 @@
 #    By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/11 16:35:01 by lantonio          #+#    #+#              #
-#    Updated: 2024/10/30 14:16:55 by hmateque         ###   ########.fr        #
+#    Updated: 2024/10/31 17:05:16 by hmateque         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,7 @@ SRCS	= minishell.c\
 			./signal/signal.c\
 			./commands/pwd.c\
 			./commands/echo.c\
+			./commands/export.c\
 			./env/print_var.c\
 
 OBJS	= $(SRCS:.c=.o)

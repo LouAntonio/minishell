@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 10:06:57 by lantonio          #+#    #+#             */
-/*   Updated: 2024/10/31 08:30:17 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/10/31 17:27:21 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,20 +51,21 @@ char				*ft_char_cpy(char *src, int len_src, int len_dest,
 int					ft_strcmp(char *s1, char *s2);
 void				ft_putstr_fd(char *s, int fd);
 int					isset_in_mat(char **mat, char *str);
-char				*remove_quote(char *str) ;
+char				*remove_quote(char *str);
 char				**remove_quotes(char **str);
 
 // command
 void				pwd(char **str);
 void				echo(char **str, t_env *env);
 void				identify_command(char *command, t_env **env);
+int					ft_export(char **command, t_env **env);
 
 // env
 void				print_all_var(char **env);
 void				ft_list_add_back(t_env **lst, t_env *new);
 t_env				*ft_list_last(t_env *lst);
 char				*ft_str_ncpy(int len, char *src);
-void				print_list(t_env *list);
-void	search_and_print_list(t_env *list, char *str, int fd);
+void				print_list(t_env *list, int flag);
+void				search_and_print_list(t_env *list, char *str, int fd);
 
 #endif

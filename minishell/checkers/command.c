@@ -3,60 +3,58 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 10:28:57 by hmateque          #+#    #+#             */
-/*   Updated: 2024/10/31 08:17:08 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/10/31 17:28:54 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-char **tokenizar(const char *str, char delimitador) {
+char	**tokenizar(const char *str, char delimitador)
+{
     char **tokens = malloc(MAX_TOKENS * sizeof(char *));
     int token_count = 0;
     int inside_quotes = 0;
     char *temp = malloc(ft_strlen(str) + 1);
     int temp_index = 0;
 
-    for (int i = 0; str[i] != '\0'; i++) {
+    for (int i = 0; str[i] != '\0'; i++)
+	{
         if (str[i] == '"')
-            inside_quotes = !inside_quotes;  // Alterna o estado de dentro de aspas
-        
-        if (inside_quotes) {
-            // Adiciona caractere à string temporária se estiver dentro de aspas
+            inside_quotes = !inside_quotes;
+        if (inside_quotes)
             temp[temp_index++] = str[i];
-        } else {
-            // Verifica se o caractere atual é o delimitador
-            if (str[i] == delimitador) {
-                if (temp_index > 0) {
-                    temp[temp_index] = '\0'; // Termina a string temporária
-                    tokens[token_count++] = strdup(temp); // Duplica a string para o token
-                    temp_index = 0; // Reseta o índice da string temporária
+        else
+		{
+            if (str[i] == delimitador)
+			{
+                if (temp_index > 0)
+				{
+                    temp[temp_index] = '\0';
+                    tokens[token_count++] = strdup(temp);
+                    temp_index = 0;
                 }
-            } else {
-                // Adiciona caractere à string temporária
-                temp[temp_index++] = str[i];
             }
+			else
+                temp[temp_index++] = str[i];
         }
     }
-
-    // Adiciona o último token se necessário
-    if (temp_index > 0) {
+    if (temp_index > 0)
+	{
         temp[temp_index] = '\0';
         tokens[token_count++] = strdup(temp);
     }
-
-    free(temp); // Libera a memória temporária
-    tokens[token_count] = NULL; // Define o final da lista de tokens
-    return tokens; // Retorna a matriz de tokens
+    free(temp);
+    tokens[token_count] = NULL;
+    return (tokens);
 }
 
 void	identify_command(char *command, t_env **env)
 {
 	char	**str;
 
-	//str = ft_split(command, ' ');
 	str = tokenizar(command, ' ');
 	str = remove_quotes(str);
 	if (str)
@@ -68,7 +66,9 @@ void	identify_command(char *command, t_env **env)
 			else if (!ft_strcmp(str[0], "echo"))
 				echo(str, *env);
 			else if (!ft_strcmp(str[0], "env"))
-				print_list(*env);
+				print_list(*env, 1);
+			else if (!ft_strcmp(str[0], "export"))
+				ft_export(str, env);
 			else if (!ft_strcmp(str[0], "exit"))
 				exit(0);
 		}

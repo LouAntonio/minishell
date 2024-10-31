@@ -6,7 +6,7 @@
 /*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:08:30 by hmateque          #+#    #+#             */
-/*   Updated: 2024/10/30 16:41:36 by hmateque         ###   ########.fr       */
+/*   Updated: 2024/10/31 17:25:22 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,26 @@ t_env	*ft_list_last(t_env *lst)
 	return (lst);
 }
 
-void	print_list(t_env *list)
+void	print_list(t_env *list, int flag)
 {
 	if (!list)
 		return ;
-	while (list != NULL)
+	if (flag == 1)
 	{
-		printf("%s = %s\n", list->name, list->value);
-		list = list->next;
+		while (list != NULL)
+		{
+			if (list->value != NULL)
+				printf("%s = %s\n", list->name, list->value);
+			list = list->next;
+		}
+	}
+	else if (flag == 2)
+	{
+		while (list != NULL)
+		{
+			printf("%s = %s\n", list->name, list->value);
+			list = list->next;
+		}
 	}
 }
 
@@ -59,7 +71,7 @@ void	search_and_print_list(t_env *list, char *str, int fd)
 	{
 		if (ft_strcmp(list->name, str) == 0)
 		{
-			printf("%s = %s\n", list->name, list->value);
+			ft_putstr_fd(list->value, fd);
 			return ;
 		}
 		list = list->next;
