@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmateque <hmateque@student.42luanda.com    +#+  +:+       +#+        */
+/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 11:58:53 by hmateque          #+#    #+#             */
-/*   Updated: 2024/08/19 03:02:39 by hmateque         ###   ########.fr       */
+/*   Updated: 2024/10/31 08:14:31 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	ft_freeup(char *strs)
 	free(strs);
 }
 
-static int	ft_wordcount(char *str, char c)
+int	ft_wordcount(char *str, char c)
 {
 	int	i;
 	int	word;
