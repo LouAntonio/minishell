@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+         #
+#    By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/15 15:11:45 by hmateque          #+#    #+#              #
-#    Updated: 2024/08/14 12:26:55 by hmateque         ###   ########.fr        #
+#    Updated: 2024/10/31 08:42:10 by lantonio         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,8 +46,7 @@ bonus:		$(BONUS_OBJ) $(NAME)
 			@ar $(FLAGLIB) $(NAME) $(BONUS_OBJ)
 			@ranlib $(NAME)
 
-.c.o:
-			@echo "Compiling $(<)"
+%.o:%.c
 			@$(CC) $(CFLAGS) -I . -c $< -o $@
 
 clean:

@@ -6,9 +6,10 @@
 /*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:52:12 by lantonio          #+#    #+#             */
-/*   Updated: 2024/10/31 12:37:33 by hmateque         ###   ########.fr       */
+/*   Updated: 2024/10/31 12:53:22 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../includes/minishell.h"
 
