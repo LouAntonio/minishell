@@ -6,28 +6,11 @@
 /*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 14:39:54 by hmateque          #+#    #+#             */
-/*   Updated: 2024/10/31 18:31:36 by hmateque         ###   ########.fr       */
+/*   Updated: 2024/11/01 09:23:37 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-static int	check_arg(char *str)
-{
-	int	i;
-
-	i = 0;
-	if (!ft_isalpha(str[i]) && str[i] != '_')
-		return (0);
-	i++;
-	while (str[i] && str[i] != '=')
-	{
-		if (!ft_isalnum(str[i]) && str[i] != '_')
-			return (0);
-		i++;
-	}
-	return (1);
-}
 
 static void	add_or_update_env(t_env **env, char *key, char *value)
 {
@@ -54,8 +37,8 @@ static void	add_or_update_env(t_env **env, char *key, char *value)
 
 static void	add_var_of_env(char *str, t_env **env)
 {
-    char	*equal_sign;
-    
+	char	*equal_sign;
+
 	equal_sign = ft_strchr(str, '=');
 	if (equal_sign)
 	{
@@ -69,7 +52,7 @@ static void	add_var_of_env(char *str, t_env **env)
 
 int	ft_export(char **command, t_env **env)
 {
-	int		len_str;
+	int	len_str;
 
 	len_str = 0;
 	while (command[len_str])
@@ -87,8 +70,8 @@ int	ft_export(char **command, t_env **env)
 			printf("export: '%s': not a valid identifier\n", command[len_str]);
 			continue ;
 		}
-        add_var_of_env(command[len_str], env);
-        len_str++;
+		add_var_of_env(command[len_str], env);
+		len_str++;
 	}
-    return (0);
+	return (0);
 }

@@ -6,10 +6,9 @@
 /*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:08:30 by hmateque          #+#    #+#             */
-/*   Updated: 2024/10/31 17:25:22 by hmateque         ###   ########.fr       */
+/*   Updated: 2024/11/01 09:25:15 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../includes/minishell.h"
 
@@ -47,8 +46,8 @@ void	print_list(t_env *list, int flag)
 	{
 		while (list != NULL)
 		{
-			if (list->value != NULL)
-				printf("%s = %s\n", list->name, list->value);
+			if (ft_strcmp(list->value, "") != 0 && list->value != NULL)
+				printf("%s=%s\n", list->name, list->value);
 			list = list->next;
 		}
 	}
@@ -56,7 +55,10 @@ void	print_list(t_env *list, int flag)
 	{
 		while (list != NULL)
 		{
-			printf("%s = %s\n", list->name, list->value);
+			if (ft_strcmp(list->value, "") == 0)
+				printf("%s\n", list->name);
+			else
+				printf("%s=%s\n", list->name, list->value);
 			list = list->next;
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 10:34:06 by hmateque          #+#    #+#             */
-/*   Updated: 2024/10/30 14:14:36 by hmateque         ###   ########.fr       */
+/*   Updated: 2024/11/01 09:33:10 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ void	ft_set_value(int ac, char **av, char **env, t_env **all_env)
 	while (env[++i] != NULL)
 	{
 		new = (t_env *)malloc(sizeof(t_env));
-        new->name = ft_char_cpy(env[i], 0, 0, 1);
-        new->value = ft_char_cpy(env[i], 0, 0, 2);
+		new->name = ft_char_cpy(env[i], 0, 0, 1);
+		new->value = ft_char_cpy(env[i], 0, 0, 2);
 		ft_list_add_back(all_env, new);
 	}
 }
@@ -36,19 +36,18 @@ char	*ft_char_cpy(char *src, int len_src, int len_dest, int limit)
 	char	*dest;
 
 	i = 0;
-	j = -1;
 	len_src = ft_strlen(src);
 	while (src[i] != '\0' && src[i] != '=')
 		i++;
 	if (i == len_src)
 	{
-        dest = ft_str_ncpy(len_src, src);
-        return (dest);
+		dest = ft_str_ncpy(len_src, src);
+		return (dest);
 	}
 	if (limit == 1)
 	{
-        dest = ft_str_ncpy(i, src);
-        return (dest);
+		dest = ft_str_ncpy(i, src);
+		return (dest);
 	}
 	len_dest = len_src - i - 1;
 	dest = (char *)malloc(sizeof(char) * (len_dest + 1));
@@ -61,8 +60,8 @@ char	*ft_char_cpy(char *src, int len_src, int len_dest, int limit)
 
 char	*ft_str_ncpy(int len, char *src)
 {
-	int j;
-	char *str;
+	int		j;
+	char	*str;
 
 	j = -1;
 	str = (char *)malloc(sizeof(char) * (len + 1));
@@ -71,6 +70,3 @@ char	*ft_str_ncpy(int len, char *src)
 	str[len] = '\0';
 	return (str);
 }
-
-
-

@@ -6,10 +6,9 @@
 /*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:52:12 by lantonio          #+#    #+#             */
-/*   Updated: 2024/10/31 12:53:22 by hmateque         ###   ########.fr       */
+/*   Updated: 2024/11/01 09:24:04 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../includes/minishell.h"
 
@@ -27,9 +26,11 @@ void	echo(char **str, t_env *env)
 	if (vet_len >= 2)
 	{
 		if (!ft_strcmp(str[vet_len - 2], ">"))
-			fd = open(str[vet_len - 1], O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
+			fd = open(str[vet_len - 1], O_WRONLY | O_CREAT | O_TRUNC,
+					S_IRUSR | S_IWUSR);
 		else if (!ft_strcmp(str[vet_len - 2], ">>"))
-			fd = open(str[vet_len - 1], O_WRONLY | O_CREAT | O_APPEND, S_IRUSR | S_IWUSR);
+			fd = open(str[vet_len - 1], O_WRONLY | O_CREAT | O_APPEND,
+					S_IRUSR | S_IWUSR);
 		if (!ft_strcmp(str[1], "-n"))
 			i = 1;
 	}
@@ -37,9 +38,12 @@ void	echo(char **str, t_env *env)
 	{
 		while (str[++i])
 		{
-			if(check_cipher(str[i], fd, env)) ;
-			else if (!(!ft_strcmp(str[i], ">") || !ft_strcmp(str[i], ">>") || !ft_strcmp(str[i - 1], ">") || !ft_strcmp(str[i - 1], ">>")))
-					ft_putstr_fd(str[i], fd);
+			if (check_cipher(str[i], fd, env))
+				;
+			else if (!(!ft_strcmp(str[i], ">") || !ft_strcmp(str[i], ">>")
+					|| !ft_strcmp(str[i - 1], ">") || !ft_strcmp(str[i - 1],
+						">>")))
+				ft_putstr_fd(str[i], fd);
 			if (str[i + 1])
 				ft_putstr_fd(" ", fd);
 		}

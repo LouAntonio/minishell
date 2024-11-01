@@ -6,7 +6,7 @@
 /*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 10:06:57 by lantonio          #+#    #+#             */
-/*   Updated: 2024/10/31 17:27:21 by hmateque         ###   ########.fr       */
+/*   Updated: 2024/11/01 09:26:47 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,6 @@
 # define MINISHELL_H
 
 # define MAX_TOKENS 100
-
-typedef struct s_env
-{
-	char			*name;
-	char			*value;
-	struct s_env	*next;
-}					t_env;
 
 # include "../libft/libft.h"
 # include <fcntl.h>
@@ -32,10 +25,18 @@ typedef struct s_env
 # include <stdlib.h>
 # include <unistd.h>
 
+typedef struct s_env
+{
+	char			*name;
+	char			*value;
+	struct s_env	*next;
+}					t_env;
+
 // checkers
 int					check_signal_exit(char *str);
 int					check_read_from(char **str);
 int					check_cipher(char *str, int fd, t_env *env);
+int					check_arg(char *str);
 
 // Signal
 void				signal_new_line(int signum);
@@ -59,6 +60,7 @@ void				pwd(char **str);
 void				echo(char **str, t_env *env);
 void				identify_command(char *command, t_env **env);
 int					ft_export(char **command, t_env **env);
+int					ft_unset(char **command, t_env **env);
 
 // env
 void				print_all_var(char **env);
