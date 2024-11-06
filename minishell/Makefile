@@ -6,7 +6,7 @@
 #    By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/11 16:35:01 by lantonio          #+#    #+#              #
-#    Updated: 2024/11/01 08:57:06 by hmateque         ###   ########.fr        #
+#    Updated: 2024/11/06 09:44:23 by hmateque         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,7 @@ LIBFT_A = $(LIBFT_DIR)/libft.a
 SRCS	= minishell.c\
 			./src/ft_aux_str.c\
 			./src/ft_args_main.c\
+			./src/tokenizer.c\
 			./env/list_manipulation.c\
 			./checkers/signal.c\
 			./checkers/command.c\
