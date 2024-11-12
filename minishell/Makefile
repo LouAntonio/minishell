@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+         #
+#    By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/11 16:35:01 by lantonio          #+#    #+#              #
-#    Updated: 2024/11/06 09:44:23 by hmateque         ###   ########.fr        #
+#    Updated: 2024/11/08 11:46:22 by lantonio         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,6 +30,7 @@ SRCS	= minishell.c\
 			./commands/echo.c\
 			./commands/export.c\
 			./commands/unset.c\
+			./commands/cd.c\
 			./env/print_var.c\
 
 OBJS	= $(SRCS:.c=.o)

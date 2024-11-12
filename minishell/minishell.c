@@ -6,27 +6,26 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 12:32:54 by lantonio          #+#    #+#             */
-/*   Updated: 2024/10/31 08:16:02 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/11/12 11:52:18 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./includes/minishell.h"
 
-void signal_new_line(int signum)
+void	signal_new_line(int signum)
 {
 	(void)signum;
 	printf("\n");
 	rl_replace_line("", 0);
-    rl_on_new_line();
+	rl_on_new_line();
 	rl_redisplay();
 }
-
 
 int	main(int ac, char **av, char **env)
 {
 	char	*command;
 	t_env	*all_env;
-	
+
 	//print_all_var(env);
 	all_env = NULL;
 	ft_set_value(ac, av, env, &all_env);
@@ -34,9 +33,9 @@ int	main(int ac, char **av, char **env)
 	configure_signal();
 	while (1)
 	{
-		command = readline("minishell> ");
+		command = readline("\033[1;32mminishell$ \033[0m");
 		if (check_signal_exit(command))
-			break;
+			break ;
 		identify_command(command, &all_env);
 		add_history(command);
 		free(command);
