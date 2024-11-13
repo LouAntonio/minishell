@@ -6,7 +6,7 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 10:28:57 by hmateque          #+#    #+#             */
-/*   Updated: 2024/11/12 14:17:53 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/11/13 11:38:35 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,16 +92,54 @@ int	built_ins(Command *command_tree, char **str, t_env **env)
 	return (ret);
 }
 
-int	paths(Command *command_tree, char **str, t_env **env)
+int	path_commands(Command *command_tree, t_env **env, char **envp)
 {
-	(void)command_tree;
-	(void)str;
-	(void)env;
-	printf("PATH\n");
-	return (0);
+	char		**paths;
+	char		path[1024];
+	int			i;
+	pid_t		pid;
+	int			status;
+	int			cmd_ret;
+
+	i = -1;
+	while (env != NULL)
+	{
+		if (!ft_strcmp((*env)->name, "PATH"))
+			break ;
+		*env = (*env)->next;
+	}
+	paths = ft_split((*env)->value, ':');
+	while (paths[++i] != NULL)
+	{
+		ft_strlcpy(path, paths[i], sizeof(path));// Copia paths[i] para path.
+		ft_strlcat(path, "/", sizeof(path));// Adiciona a barra.
+		ft_strlcat(path, command_tree->command, sizeof(path));// Adiciona o comando.
+		if (access(path, X_OK) == 0)
+		{
+			pid = fork();
+			if (pid == -1)
+				return (perror("Fork error"), -1);
+			else if (pid == 0)
+			{
+				if (execve(path, command_tree->args, envp) == -1)
+					return (perror("Exec error"), -1);
+			}
+			else
+			{
+				if (waitpid(pid, &status, 0) == -1)
+					return (perror("Waitpid error"), -1);
+				if (WIFEXITED(status))
+					cmd_ret = WEXITSTATUS(status);
+				else if (WIFSIGNALED(status))
+					cmd_ret = WTERMSIG(status);
+				return (cmd_ret);
+			}
+		}
+	}
+	return (printf("Command not found!\n"), -1);
 }
 
-int	run_commands(Command *command_tree, char **str, t_env **env)
+int	run_commands(Command *command_tree, char **str, t_env **env, char **envp)
 {
 	int		fd[2];
 	int		old_fd;
@@ -110,6 +148,8 @@ int	run_commands(Command *command_tree, char **str, t_env **env)
 
 	old_fd = dup(STDOUT_FILENO);
 	fd[1] = handle_redirection(command_tree);
+	if (command_tree->command == NULL)
+		return (printf("KO\n"), -1);
 	if (command_tree->next != NULL)
 	{
 		if (pipe(fd) == -1)
@@ -124,7 +164,7 @@ int	run_commands(Command *command_tree, char **str, t_env **env)
 				return (perror("Dup2 error"), -1);
 			close(fd[1]);
 			if (!built_ins(command_tree, str, env))
-				paths(command_tree, str, env);
+				path_commands(command_tree, env, envp);
 			exit(EXIT_SUCCESS);
 		}
 		else
@@ -139,7 +179,7 @@ int	run_commands(Command *command_tree, char **str, t_env **env)
 					return (close(fd[0]), perror("Dup2 error"), -1);
 				close(fd[0]);
 				if (command_tree->next != NULL)
-					run_commands(command_tree->next, str, env);
+					run_commands(command_tree->next, str, env, envp);
 				exit(EXIT_SUCCESS);
 			}
 			else
@@ -152,14 +192,14 @@ int	run_commands(Command *command_tree, char **str, t_env **env)
 	}
 	else
 		if (!built_ins(command_tree, str, env))
-			paths(command_tree, str, env);
+			path_commands(command_tree, env, envp);
 	if (dup2(old_fd, STDOUT_FILENO) == -1)
 		return (perror("Dup2 error"), -1);
 	close(old_fd);
 	return (1);
 }
 
-void	identify_command(char *command, t_env **env)
+void	identify_command(char *command, t_env **env, char **envp)
 {
 	int		i;
 	Token	**classified_tokens;
@@ -180,6 +220,6 @@ void	identify_command(char *command, t_env **env)
 	//else
 	//	printf("Comando inválido.\n");
 	print_command_tree(command_tree);
-	run_commands(command_tree, str, env);
+	run_commands(command_tree, str, env, envp);
 	(void)env;
 }

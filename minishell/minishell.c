@@ -6,7 +6,7 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 12:32:54 by lantonio          #+#    #+#             */
-/*   Updated: 2024/11/12 11:52:18 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/11/13 12:08:40 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,14 @@ int	main(int ac, char **av, char **env)
 	while (1)
 	{
 		command = readline("\033[1;32mminishell$ \033[0m");
-		if (check_signal_exit(command))
-			break ;
-		identify_command(command, &all_env);
-		add_history(command);
-		free(command);
+		if (command[0])
+		{
+			if (check_signal_exit(command))
+				break ;
+			identify_command(command, &all_env, env);
+			add_history(command);
+			free(command);
+		}
 	}
 	free(command);
 	rl_clear_history();

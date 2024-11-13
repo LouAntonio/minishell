@@ -6,7 +6,7 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 10:06:57 by lantonio          #+#    #+#             */
-/*   Updated: 2024/11/12 11:37:28 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/11/13 11:02:31 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ typedef struct CommandTree
 }					CommandTree;
 
 // checkers
-void				identify_command(char *command, t_env **env);
+void				identify_command(char *command, t_env **env, char **envp);
 int					check_signal_exit(char *str);
 int					check_read_from(char **str);
 int					check_cipher(char *str, int fd, t_env *env);
