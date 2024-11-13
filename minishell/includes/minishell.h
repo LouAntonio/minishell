@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 10:06:57 by lantonio          #+#    #+#             */
-/*   Updated: 2024/11/06 16:27:31 by hmateque         ###   ########.fr       */
+/*   Updated: 2024/11/13 11:02:31 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <limits.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <sys/wait.h>
 # include <signal.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -55,6 +56,7 @@ typedef struct Command
 	char			**args;
 	char			*redirect_out;
 	char			*redirect_in;
+	int				redirect_out_type;
 	struct Command	*next;
 }					Command;
 
@@ -64,7 +66,7 @@ typedef struct CommandTree
 }					CommandTree;
 
 // checkers
-void				identify_command(char *command, t_env **env);
+void				identify_command(char *command, t_env **env, char **envp);
 int					check_signal_exit(char *str);
 int					check_read_from(char **str);
 int					check_cipher(char *str, int fd, t_env *env);
@@ -90,6 +92,7 @@ char				**remove_quotes(char **str);
 // command
 void				pwd(char **str);
 void				echo(char **str, t_env *env);
+void				cd(char **str);
 int					ft_export(char **command, t_env **env);
 int					ft_unset(char **command, t_env **env);
 
@@ -107,4 +110,5 @@ TokenType			identify_token(char *token);
 Token				**classify_tokens(char **tokens);
 Command				*build_command_tree(Token **tokens);
 int					validate_command_tree(Command *root);
+char				**tokenizar(const char *str, char delimitador);
 #endif
