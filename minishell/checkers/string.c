@@ -6,7 +6,7 @@
 /*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 10:30:56 by hmateque          #+#    #+#             */
-/*   Updated: 2024/11/01 09:20:45 by hmateque         ###   ########.fr       */
+/*   Updated: 2024/11/13 18:09:51 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,4 +64,21 @@ int	check_cipher(char *str, int fd, t_env *env)
 	search_and_print_list(env, new_str, fd);
 	free(new_str);
 	return (1);
+}
+
+int	ft_isspace(char c)
+{
+	if (c == ' ')
+		return (1);
+	if (c == '\t')
+		return (1);
+	if (c == '\n')
+		return (1);
+	if (c == '\v')
+		return (1);
+	if (c == '\f')
+		return (1);
+	if (c == '\r')
+		return (1);
+	return (0);
 }

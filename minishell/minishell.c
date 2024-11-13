@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 12:32:54 by lantonio          #+#    #+#             */
-/*   Updated: 2024/11/13 12:08:40 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/11/13 18:18:04 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,17 @@ int	main(int ac, char **av, char **env)
 	configure_signal();
 	while (1)
 	{
-		command = readline("\033[1;32mminishell$ \033[0m");
-		if (command[0])
+		command = readline("minishell$ ");
+		if (command != NULL)
 		{
-			if (check_signal_exit(command))
+			if (check_signal_exit(command)) // eliminar dps, nao tem efeito
 				break ;
 			identify_command(command, &all_env, env);
 			add_history(command);
 			free(command);
 		}
+		else
+			break;
 	}
 	free(command);
 	rl_clear_history();

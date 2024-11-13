@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 10:28:57 by hmateque          #+#    #+#             */
-/*   Updated: 2024/11/13 11:38:35 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/11/13 18:53:32 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,8 +206,16 @@ void	identify_command(char *command, t_env **env, char **envp)
 	char	**str;
 	Command	*command_tree;
 
-	i = -1;
-	(void)i;
+	i = 0;
+	str = NULL;
+	while (command[i])
+    {
+        if (!ft_isspace(command[i]))
+            break;
+        i++;
+    }
+    if (command[i] == '\0')
+		return ;
 	str = tokenize(command);
 	//str = tokenizar(command, ' ');
 	classified_tokens = classify_tokens(str);

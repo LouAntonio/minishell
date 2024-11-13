@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 09:39:33 by hmateque          #+#    #+#             */
-/*   Updated: 2024/11/13 11:02:10 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/11/13 18:52:56 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,8 @@ char	**tokenize(char *line)
 			in_quotes = 0;
 			quote_char = '\0';
 		}
-		else if (!in_quotes && (isspace(line[i])
-				|| line[i] == '|' || line[i] == '<' || line[i] == '>'))
+		else if (!in_quotes && (isspace(line[i]) || line[i] == '|'
+				|| line[i] == '<' || line[i] == '>'))
 		{
 			if (token_index > 0)
 			{
@@ -158,8 +158,8 @@ char	**tokenize2(char *line)
 			in_quotes = 0;
 			quote_char = '\0';
 		}
-		else if (!in_quotes && (isspace(line[i])
-				|| line[i] == '|' || line[i] == '<' || line[i] == '>'))
+		else if (!in_quotes && (isspace(line[i]) || line[i] == '|'
+				|| line[i] == '<' || line[i] == '>'))
 		{
 			if (token_index > 0)
 			{
@@ -267,7 +267,12 @@ Command	*build_command_tree(Token **tokens)
 			new_cmd->next = NULL;
 			arg_index = 0;
 			while (tokens[i + 1] != NULL && tokens[i + 1]->type == TOKEN_ARG)
-				new_cmd->args[arg_index++] = tokens[++i]->value;
+			{
+				if (arg_index == 0)
+					new_cmd->args[arg_index++] = "";
+				else
+					new_cmd->args[arg_index++] = tokens[++i]->value;
+			}
 			new_cmd->args[arg_index] = NULL;
 			if (root == NULL)
 			{
@@ -279,10 +284,6 @@ Command	*build_command_tree(Token **tokens)
 				current->next = new_cmd;
 				current = current->next;
 			}
-		}
-		else if (tokens[i]->type == TOKEN_PIPE)
-		{
-			// O próximo comando no pipeline será adicionado na próxima iteração
 		}
 		else if (tokens[i]->type == TOKEN_REDIRECT_OUT)
 		{
@@ -321,8 +322,7 @@ int	validate_command_tree(Command *root)
 		{
 			if (access(current->redirect_in, R_OK) == -1)
 			{
-				fprintf(stderr, "Erro: Arquivo %s não encontrado para entrada\n",
-					current->redirect_in);
+				fprintf(stderr, "Erro: Arquivo %s não encontrado para entrada\n", current->redirect_in);
 				return (0);
 			}
 		}

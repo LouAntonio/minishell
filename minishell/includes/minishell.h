@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 10:06:57 by lantonio          #+#    #+#             */
-/*   Updated: 2024/11/13 11:02:31 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/11/13 18:10:31 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ int					check_signal_exit(char *str);
 int					check_read_from(char **str);
 int					check_cipher(char *str, int fd, t_env *env);
 int					check_arg(char *str);
+int					ft_isspace(char c);
 
 // Signal
 void				signal_new_line(int signum);
