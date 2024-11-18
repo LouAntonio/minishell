@@ -6,7 +6,7 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 11:56:22 by hmateque          #+#    #+#             */
-/*   Updated: 2024/11/07 08:40:06 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/11/15 15:58:19 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,6 @@ int	isset_in_mat(char **mat, char *str)
 		if (!ft_strcmp(mat[i], str))
 			return (i);
 	return (0);
-}
-
-void	ft_putstr_fd(char *s, int fd)
-{
-	int	i;
-
-	i = -1;
-	while (s[++i])
-		write(fd, &s[i], 1);
 }
 
 int	ft_strcmp(char *s1, char *s2)
