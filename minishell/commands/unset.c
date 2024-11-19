@@ -6,7 +6,7 @@
 /*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 08:19:38 by hmateque          #+#    #+#             */
-/*   Updated: 2024/11/01 08:53:44 by hmateque         ###   ########.fr       */
+/*   Updated: 2024/11/19 08:13:14 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	ft_unset(char **command, t_env **env)
 	while (command[len_str])
 		len_str++;
 	if (len_str == 1)
-		return (1);
+		return (printf("unset: not enough arguments\n"), 1);
 	len_str = 1;
 	while (command[len_str])
 	{

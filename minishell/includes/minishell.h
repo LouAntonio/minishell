@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 10:06:57 by lantonio          #+#    #+#             */
-/*   Updated: 2024/11/18 16:11:45 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/11/19 12:42:00 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@
 # include <limits.h>
 # include <readline/history.h>
 # include <readline/readline.h>
-# include <sys/wait.h>
 # include <signal.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <sys/wait.h>
 # include <unistd.h>
 
 typedef struct s_env
@@ -69,7 +69,8 @@ typedef struct CommandTree
 }					CommandTree;
 
 // checkers
-void				identify_command(char *command, t_env **env, char **envp, int *g_returns);
+void				identify_command(char *command, t_env **env, char **envp,
+						int *g_returns);
 int					check_read_from(char **str);
 int					check_cipher(char *str, int fd, t_env *env);
 int					check_arg(char *str);
@@ -85,6 +86,8 @@ void				ft_set_value(int ac, char **av, char **env,
 						t_env **all_env);
 char				*ft_char_cpy(char *src, int len_src, int len_dest,
 						int limit);
+char				*ft_strncpy(char *dest, const char *src, int n);
+char				*trim_spaces(char *str);
 
 // aux_funct str
 int					ft_strcmp(char *s1, char *s2);
@@ -98,6 +101,7 @@ void				echo(char **str, t_env *env);
 void				cd(char **str);
 int					ft_export(char **command, t_env **env);
 int					ft_unset(char **command, t_env **env);
+void				ft_exit(Command *command_tree, t_env **env);
 
 // env
 void				print_all_var(char **env);
@@ -114,4 +118,11 @@ Token				**classify_tokens(char **tokens);
 Command				*build_command_tree(Token **tokens);
 int					validate_command_tree(Command *root);
 char				**tokenizar(const char *str, char delimitador);
+
+// Liberacao de memoria
+void				free_command_tree(CommandTree *command_tree);
+void				free_env_list(t_env **env);
+void				free_matrix(char **matrix);
+void				free_classified_tokens(Token **classified_tokens);
+
 #endif

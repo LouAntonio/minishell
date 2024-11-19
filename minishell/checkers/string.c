@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   string.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 10:30:56 by hmateque          #+#    #+#             */
-/*   Updated: 2024/11/18 16:37:57 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/11/19 12:20:16 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,4 +81,49 @@ int	ft_isspace(char c)
 	if (c == '\r')
 		return (1);
 	return (0);
+}
+
+char	*trim_spaces(char *str)
+{
+	char *start;
+	char *end;
+	char *trimmed;
+	int new_length;
+
+	if (!str)
+		return (NULL);
+	start = str;
+	while (*start && ft_isspace((unsigned char)*start))
+		start++;
+	if (*start == '\0')
+		return (NULL);
+	end = str + ft_strlen(str) - 1;
+	while (end > start && ft_isspace((unsigned char)*end))
+		end--;
+	new_length = end - start + 1;
+	trimmed = (char *)malloc(new_length + 1);
+	if (!trimmed)
+		return (NULL);
+	ft_strncpy(trimmed, start, new_length);
+	trimmed[new_length] = '\0';
+	return (trimmed);
+}
+
+
+char *ft_strncpy(char *dest, const char *src, int n)
+{
+    int i;
+
+	i = 0;
+    while (i < n && src[i] != '\0')
+    {
+        dest[i] = src[i];
+		i++;
+    }
+    while (i < n)
+    {
+        dest[i] = '\0';
+		i++;
+    }
+    return dest;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 10:28:57 by hmateque          #+#    #+#             */
-/*   Updated: 2024/11/18 18:07:56 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/11/19 13:03:08 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	print_command_tree(Command *root)
 	Command	*current;
 
 	current = root;
-	return ;
+		return ;
 	while (current != NULL)
 	{
 		printf("Comando: \033[0;32m%s\033[0m\n", current->command);
@@ -75,10 +75,14 @@ int	built_ins(Command *command_tree, t_env **env, int *g_returns)
 		return (cd(command_tree->args), 1);
 	else if (!ft_strcmp(command_tree->command, "export"))
 		return (ft_export(command_tree->args, env), 1);
+	else if (!ft_strcmp(command_tree->command, "env"))
+		return (print_list(*env, 1), 1);
 	else if (!ft_strcmp(command_tree->command, "pwd"))
 		return (pwd(command_tree->args), 1);
 	else if (!ft_strcmp(command_tree->command, "unset"))
 		return (ft_unset(command_tree->args, env), 1);
+	else if (!ft_strcmp(command_tree->command, "exit"))
+		return (ft_exit(command_tree, env), 1);
 	else if (!ft_strcmp(command_tree->command, "return"))
 		return (printf("%d\n", *g_returns), 1);
 	return (0);
@@ -261,31 +265,18 @@ int	run_commands(Command *command_tree, char **str, t_env **env, char **envp, in
 
 void	identify_command(char *command, t_env **env, char **envp, int *g_returns)
 {
-	int		i;
 	Token	**classified_tokens;
 	char	**str;
 	Command	*command_tree;
 
-	i = -1;
 	str = NULL;
-	while (command[++i])
-		if (!ft_isspace(command[i]))
-			break ;
-	if (command[i] == '\0')
+	command = trim_spaces(command);
+	if (!command)
 		return ;
 	str = tokenize(command);
-	//str = tokenizar(command, ' ');
 	classified_tokens = classify_tokens(str);
 	command_tree = build_command_tree(classified_tokens);
-	while (classified_tokens[++i] != NULL)
-	//	printf("Token: \033[0;32m%s\033[0m, Tipo: \033[0;31m%d\033[0m\n",
-	//		classified_tokens[i]->value, classified_tokens[i]->type);
-	//if (validate_command_tree(command_tree))
-	//	printf("Comando válido e pronto para execução.\n");
-	//else
-	//	printf("Comando inválido.\n");
 	print_command_tree(command_tree);
 	if (command_tree)
 		run_commands(command_tree, str, env, envp, g_returns);
-	(void)env;
 }
