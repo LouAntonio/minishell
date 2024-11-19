@@ -6,11 +6,13 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 12:32:54 by lantonio          #+#    #+#             */
-/*   Updated: 2024/11/14 15:33:51 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/11/18 16:43:36 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./includes/minishell.h"
+
+int	g_return;
 
 void	signal_new_line(int signum)
 {
@@ -42,13 +44,13 @@ int	main(int ac, char **av, char **env)
 		command = readline("minishell$ ");
 		if (command != NULL)
 		{
-			identify_command(command, &all_env, env);
+			signal(SIGINT, signal_new_line_2);
+			identify_command(command, &all_env, env, &g_return);
 			add_history(command);
 			free(command);
 		}
 		else
 			break ;
-		signal(SIGINT, signal_new_line_2);
 	}
 	free(command);
 	rl_clear_history();

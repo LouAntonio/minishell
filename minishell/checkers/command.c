@@ -6,7 +6,7 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 10:28:57 by hmateque          #+#    #+#             */
-/*   Updated: 2024/11/18 14:08:29 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/11/18 18:07:56 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,40 +58,6 @@ int	handle_redirection(Command *command_tree)
 	return (fd);
 }
 
-int	built_ins(Command *command_tree, char **str, t_env **env)
-{
-	int	ret;
-
-	ret = 0;
-	if (!ft_strcmp(command_tree->command, "echo"))
-	{
-		ret = 1;
-		echo(command_tree->args, *env);
-	}
-	else if (!ft_strcmp(command_tree->command, "cd"))
-	{
-		ret = 1;
-		cd(command_tree->args);
-	}
-	else if (!ft_strcmp(command_tree->command, "export"))
-	{
-		ret = 1;
-		ft_export(command_tree->args, env);
-	}
-	else if (!ft_strcmp(command_tree->command, "pwd"))
-	{
-		ret = 1;
-		pwd(command_tree->args);
-	}
-	else if (!ft_strcmp(command_tree->command, "unset"))
-	{
-		ret = 1;
-		ft_unset(command_tree->args, env);
-	}
-	(void)str;
-	return (ret);
-}
-
 int	check_red_in(Command *command_tree)
 {
 	if (command_tree->redirect_in != NULL)
@@ -101,7 +67,24 @@ int	check_red_in(Command *command_tree)
 	return (0);
 }
 
-int	path_commands(Command *command_tree, t_env **env, char **envp)
+int	built_ins(Command *command_tree, t_env **env, int *g_returns)
+{
+	if (!ft_strcmp(command_tree->command, "echo"))
+		return (echo(command_tree->args, *env), 1);
+	else if (!ft_strcmp(command_tree->command, "cd"))
+		return (cd(command_tree->args), 1);
+	else if (!ft_strcmp(command_tree->command, "export"))
+		return (ft_export(command_tree->args, env), 1);
+	else if (!ft_strcmp(command_tree->command, "pwd"))
+		return (pwd(command_tree->args), 1);
+	else if (!ft_strcmp(command_tree->command, "unset"))
+		return (ft_unset(command_tree->args, env), 1);
+	else if (!ft_strcmp(command_tree->command, "return"))
+		return (printf("%d\n", *g_returns), 1);
+	return (0);
+}
+
+int	path_commands(Command *command_tree, t_env **env, char **envp, int *g_returns)
 {
 	char		**paths;
 	char		path[1024];
@@ -132,7 +115,8 @@ int	path_commands(Command *command_tree, t_env **env, char **envp)
 				return (perror("Fork error"), -1);
 			else if (pid == 0)
 			{
-				if (execve(path, command_tree->args, envp) == -1)
+				*g_returns = execve(path, command_tree->args, envp);
+				if (*g_returns == -1)
 					return (perror("Exec error"), -1);
 			}
 			else
@@ -147,10 +131,11 @@ int	path_commands(Command *command_tree, t_env **env, char **envp)
 			}
 		}
 	}
+	*g_returns = 127;
 	return (printf("%s: command not found\n", command_tree->command), -1);
 }
 
-int	run_commands(Command *command_tree, char **str, t_env **env, char **envp)
+int	run_commands(Command *command_tree, char **str, t_env **env, char **envp, int *g_returns)
 {
 	int		fd[2];
 	int		old_fd_out;
@@ -180,7 +165,6 @@ int	run_commands(Command *command_tree, char **str, t_env **env, char **envp)
 			return (perror("Dup2 error"), close(fd_in), close(old_fd_out), close(old_fd_in), -1);
 		close(fd_in);
 	}
-
 	// Heredoc
 	if (command_tree->heredoc) {
 		int heredoc_fd[2];
@@ -235,8 +219,8 @@ int	run_commands(Command *command_tree, char **str, t_env **env, char **envp)
 				exit(EXIT_FAILURE);
 			}
 			close(fd[1]);
-			if (!built_ins(command_tree, str, env))
-				path_commands(command_tree, env, envp);
+			if (!built_ins(command_tree, env, g_returns))
+				path_commands(command_tree, env, envp, g_returns);
 			exit(EXIT_SUCCESS);
 		} else {
 			close(fd[1]);
@@ -251,7 +235,7 @@ int	run_commands(Command *command_tree, char **str, t_env **env, char **envp)
 				}
 				close(fd[0]);
 				if (command_tree->next != NULL)
-					run_commands(command_tree->next, str, env, envp);
+					run_commands(command_tree->next, str, env, envp, g_returns);
 				exit(EXIT_SUCCESS);
 			} else {
 				close(fd[0]);
@@ -262,8 +246,8 @@ int	run_commands(Command *command_tree, char **str, t_env **env, char **envp)
 	}
 	else
 	{
-		if (!built_ins(command_tree, str, env))
-			path_commands(command_tree, env, envp);
+		if (!built_ins(command_tree, env, g_returns))
+			path_commands(command_tree, env, envp, g_returns);
 	}
 	// Restaurar o stdout e stdin originais
 	if (dup2(old_fd_out, STDOUT_FILENO) == -1)
@@ -275,7 +259,7 @@ int	run_commands(Command *command_tree, char **str, t_env **env, char **envp)
 	return (1);
 }
 
-void	identify_command(char *command, t_env **env, char **envp)
+void	identify_command(char *command, t_env **env, char **envp, int *g_returns)
 {
 	int		i;
 	Token	**classified_tokens;
@@ -293,7 +277,7 @@ void	identify_command(char *command, t_env **env, char **envp)
 	//str = tokenizar(command, ' ');
 	classified_tokens = classify_tokens(str);
 	command_tree = build_command_tree(classified_tokens);
-	//while (classified_tokens[++i] != NULL)
+	while (classified_tokens[++i] != NULL)
 	//	printf("Token: \033[0;32m%s\033[0m, Tipo: \033[0;31m%d\033[0m\n",
 	//		classified_tokens[i]->value, classified_tokens[i]->type);
 	//if (validate_command_tree(command_tree))
@@ -302,6 +286,6 @@ void	identify_command(char *command, t_env **env, char **envp)
 	//	printf("Comando inválido.\n");
 	print_command_tree(command_tree);
 	if (command_tree)
-		run_commands(command_tree, str, env, envp);
+		run_commands(command_tree, str, env, envp, g_returns);
 	(void)env;
 }
