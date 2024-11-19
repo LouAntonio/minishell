@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 10:28:57 by hmateque          #+#    #+#             */
-/*   Updated: 2024/11/13 18:53:32 by hmateque         ###   ########.fr       */
+/*   Updated: 2024/11/18 18:07:56 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,41 +58,33 @@ int	handle_redirection(Command *command_tree)
 	return (fd);
 }
 
-int	built_ins(Command *command_tree, char **str, t_env **env)
+int	check_red_in(Command *command_tree)
 {
-	int	ret;
-
-	ret = 0;
-	if (!ft_strcmp(command_tree->command, "echo"))
-	{
-		ret = 1;
-		echo(command_tree->args, *env);
-	}
-	else if (!ft_strcmp(command_tree->command, "cd"))
-	{
-		ret = 1;
-		cd(command_tree->args);
-	}
-	else if (!ft_strcmp(command_tree->command, "export"))
-	{
-		ret = 1;
-		ft_export(command_tree->args, env);
-	}
-	else if (!ft_strcmp(command_tree->command, "pwd"))
-	{
-		ret = 1;
-		pwd(command_tree->args);
-	}
-	else if (!ft_strcmp(command_tree->command, "unset"))
-	{
-		ret = 1;
-		ft_unset(command_tree->args, env);
-	}
-	(void)str;
-	return (ret);
+	if (command_tree->redirect_in != NULL)
+		if (access(command_tree->redirect_in, R_OK) == -1)
+			return (printf("minishell: %s: No such file or directory\n"
+					, command_tree->redirect_in), 1);
+	return (0);
 }
 
-int	path_commands(Command *command_tree, t_env **env, char **envp)
+int	built_ins(Command *command_tree, t_env **env, int *g_returns)
+{
+	if (!ft_strcmp(command_tree->command, "echo"))
+		return (echo(command_tree->args, *env), 1);
+	else if (!ft_strcmp(command_tree->command, "cd"))
+		return (cd(command_tree->args), 1);
+	else if (!ft_strcmp(command_tree->command, "export"))
+		return (ft_export(command_tree->args, env), 1);
+	else if (!ft_strcmp(command_tree->command, "pwd"))
+		return (pwd(command_tree->args), 1);
+	else if (!ft_strcmp(command_tree->command, "unset"))
+		return (ft_unset(command_tree->args, env), 1);
+	else if (!ft_strcmp(command_tree->command, "return"))
+		return (printf("%d\n", *g_returns), 1);
+	return (0);
+}
+
+int	path_commands(Command *command_tree, t_env **env, char **envp, int *g_returns)
 {
 	char		**paths;
 	char		path[1024];
@@ -100,20 +92,22 @@ int	path_commands(Command *command_tree, t_env **env, char **envp)
 	pid_t		pid;
 	int			status;
 	int			cmd_ret;
+	t_env		*env_copy;
 
 	i = -1;
-	while (env != NULL)
+	env_copy = *env;
+	while (env_copy != NULL)
 	{
-		if (!ft_strcmp((*env)->name, "PATH"))
+		if (!ft_strcmp(env_copy->name, "PATH"))
 			break ;
-		*env = (*env)->next;
+		env_copy = env_copy->next;
 	}
-	paths = ft_split((*env)->value, ':');
+	paths = ft_split(env_copy->value, ':');
 	while (paths[++i] != NULL)
 	{
-		ft_strlcpy(path, paths[i], sizeof(path));// Copia paths[i] para path.
-		ft_strlcat(path, "/", sizeof(path));// Adiciona a barra.
-		ft_strlcat(path, command_tree->command, sizeof(path));// Adiciona o comando.
+		ft_strlcpy(path, paths[i], sizeof(path));
+		ft_strlcat(path, "/", sizeof(path));
+		ft_strlcat(path, command_tree->command, sizeof(path));
 		if (access(path, X_OK) == 0)
 		{
 			pid = fork();
@@ -121,7 +115,8 @@ int	path_commands(Command *command_tree, t_env **env, char **envp)
 				return (perror("Fork error"), -1);
 			else if (pid == 0)
 			{
-				if (execve(path, command_tree->args, envp) == -1)
+				*g_returns = execve(path, command_tree->args, envp);
+				if (*g_returns == -1)
 					return (perror("Exec error"), -1);
 			}
 			else
@@ -136,54 +131,113 @@ int	path_commands(Command *command_tree, t_env **env, char **envp)
 			}
 		}
 	}
-	return (printf("Command not found!\n"), -1);
+	*g_returns = 127;
+	return (printf("%s: command not found\n", command_tree->command), -1);
 }
 
-int	run_commands(Command *command_tree, char **str, t_env **env, char **envp)
+int	run_commands(Command *command_tree, char **str, t_env **env, char **envp, int *g_returns)
 {
 	int		fd[2];
-	int		old_fd;
+	int		old_fd_out;
+	int		old_fd_in;
 	pid_t	pid;
 	int		status;
 
-	old_fd = dup(STDOUT_FILENO);
+	// Salvar o descritor de arquivo original do stdout
+	old_fd_out = dup(STDOUT_FILENO);
+	if (old_fd_out == -1)
+		return (perror("dup error"), -1);
+	// Salvar o descritor de arquivo original do stdin
+	old_fd_in = dup(STDIN_FILENO);
+	if (old_fd_in == -1)
+		return (perror("dup error"), close(old_fd_out), -1);
+	// redirecionamento de output
 	fd[1] = handle_redirection(command_tree);
-	if (command_tree->command == NULL)
-		return (printf("KO\n"), -1);
-	if (command_tree->next != NULL)
-	{
-		if (pipe(fd) == -1)
-			return (perror("Pipe error"), -1);
+	if (fd[1] == -1)
+		return (close(old_fd_out), close(old_fd_in), -1);
+	if (check_red_in(command_tree))
+		return (close(old_fd_out), close(old_fd_in), -1);
+	if (command_tree->redirect_in != NULL) {
+		int fd_in = open(command_tree->redirect_in, O_RDONLY);
+		if (fd_in == -1)
+			return (perror("Open input file error"), close(old_fd_out), close(old_fd_in), -1);
+		if (dup2(fd_in, STDIN_FILENO) == -1)
+			return (perror("Dup2 error"), close(fd_in), close(old_fd_out), close(old_fd_in), -1);
+		close(fd_in);
+	}
+	// Heredoc
+	if (command_tree->heredoc) {
+		int heredoc_fd[2];
+		if (pipe(heredoc_fd) == -1)
+			return (perror("Pipe error"), close(old_fd_in), close(old_fd_out), -1);
+		// Fork para processar heredoc
 		pid = fork();
 		if (pid == -1)
-			return (close(fd[0]), close(fd[1]), perror("Fork error"), -1);
-		if (pid == 0)
-		{
-			close(fd[0]);
-			if (dup2(fd[1], STDOUT_FILENO) == -1)
-				return (perror("Dup2 error"), -1);
-			close(fd[1]);
-			if (!built_ins(command_tree, str, env))
-				path_commands(command_tree, env, envp);
+			return (perror("Fork error"), close(heredoc_fd[0]), close(heredoc_fd[1]), close(old_fd_out), close(old_fd_in), -1);
+		if (pid == 0) {
+			close(heredoc_fd[0]); // Fechar a extremidade de leitura do pipe            
+			// Escrever o conteúdo do heredoc na extremidade de escrita do pipe
+			char *str;
+			while (1)
+			{
+				str = readline("> ");
+				if (str == NULL)
+					return (-1);
+				if (strcmp(str, command_tree->heredoc_end) == 0) {
+					free(str);
+					break;
+				}
+				write(heredoc_fd[1], str, strlen(str));
+				write(heredoc_fd[1], "\n", 1); // Adicionar nova linha após cada entrada
+				free(str);
+			}
+			close(heredoc_fd[1]); // Fechar a extremidade de escrita do pipe após escrever
 			exit(EXIT_SUCCESS);
 		}
 		else
 		{
+			close(heredoc_fd[1]); // Fechar a extremidade de escrita do pipe
+			// Redirecionar stdin para a extremidade de leitura do pipe
+			if (dup2(heredoc_fd[0], STDIN_FILENO) == -1)
+				return (perror("Dup2 error"), close(heredoc_fd[0]), close(old_fd_out), close(old_fd_in), -1);
+			close(heredoc_fd[0]); // Fechar a extremidade de leitura do pipe
+			waitpid(pid, &status, 0); // Esperar o processo filho terminar
+		}
+	}
+	// execucao do comando
+	if (command_tree->next != NULL) {
+		if (pipe(fd) == -1)
+			return (perror("Pipe error"), close(old_fd_out), close(old_fd_in), -1);
+		pid = fork();
+		if (pid == -1)
+			return (close(fd[0]), close(fd[1]), perror("Fork error"), close(old_fd_out), close(old_fd_in), -1);
+		if (pid == 0)
+		{
+			close(fd[0]);
+			if (dup2(fd[1], STDOUT_FILENO) == -1) {
+				perror("Dup2 error");
+				exit(EXIT_FAILURE);
+			}
+			close(fd[1]);
+			if (!built_ins(command_tree, env, g_returns))
+				path_commands(command_tree, env, envp, g_returns);
+			exit(EXIT_SUCCESS);
+		} else {
 			close(fd[1]);
 			pid = fork();
 			if (pid == -1)
-				return (close(fd[0]), perror("Fork error"), -1);
+				return (close(fd[0]), perror("Fork error"), close(old_fd_out), close(old_fd_in), -1);
 			if (pid == 0)
 			{
-				if (dup2(fd[0], STDIN_FILENO) == -1)
-					return (close(fd[0]), perror("Dup2 error"), -1);
+				if (dup2(fd[0], STDIN_FILENO) == -1) {
+					perror("Dup2 error");
+					exit(EXIT_FAILURE);
+				}
 				close(fd[0]);
 				if (command_tree->next != NULL)
-					run_commands(command_tree->next, str, env, envp);
+					run_commands(command_tree->next, str, env, envp, g_returns);
 				exit(EXIT_SUCCESS);
-			}
-			else
-			{
+			} else {
 				close(fd[0]);
 				waitpid(pid, &status, 0);
 				waitpid(pid, &status, 0);
@@ -191,36 +245,39 @@ int	run_commands(Command *command_tree, char **str, t_env **env, char **envp)
 		}
 	}
 	else
-		if (!built_ins(command_tree, str, env))
-			path_commands(command_tree, env, envp);
-	if (dup2(old_fd, STDOUT_FILENO) == -1)
-		return (perror("Dup2 error"), -1);
-	close(old_fd);
+	{
+		if (!built_ins(command_tree, env, g_returns))
+			path_commands(command_tree, env, envp, g_returns);
+	}
+	// Restaurar o stdout e stdin originais
+	if (dup2(old_fd_out, STDOUT_FILENO) == -1)
+		return (perror("Dup2 error"), close(old_fd_out), close(old_fd_in), -1);
+	close(old_fd_out);
+	if (dup2(old_fd_in, STDIN_FILENO) == -1)
+		return (perror("Dup2 error"), close(old_fd_in), -1);
+	close(old_fd_in);
 	return (1);
 }
 
-void	identify_command(char *command, t_env **env, char **envp)
+void	identify_command(char *command, t_env **env, char **envp, int *g_returns)
 {
 	int		i;
 	Token	**classified_tokens;
 	char	**str;
 	Command	*command_tree;
 
-	i = 0;
+	i = -1;
 	str = NULL;
-	while (command[i])
-    {
-        if (!ft_isspace(command[i]))
-            break;
-        i++;
-    }
-    if (command[i] == '\0')
+	while (command[++i])
+		if (!ft_isspace(command[i]))
+			break ;
+	if (command[i] == '\0')
 		return ;
 	str = tokenize(command);
 	//str = tokenizar(command, ' ');
 	classified_tokens = classify_tokens(str);
 	command_tree = build_command_tree(classified_tokens);
-	//while (classified_tokens[++i] != NULL)
+	while (classified_tokens[++i] != NULL)
 	//	printf("Token: \033[0;32m%s\033[0m, Tipo: \033[0;31m%d\033[0m\n",
 	//		classified_tokens[i]->value, classified_tokens[i]->type);
 	//if (validate_command_tree(command_tree))
@@ -228,6 +285,7 @@ void	identify_command(char *command, t_env **env, char **envp)
 	//else
 	//	printf("Comando inválido.\n");
 	print_command_tree(command_tree);
-	run_commands(command_tree, str, env, envp);
+	if (command_tree)
+		run_commands(command_tree, str, env, envp, g_returns);
 	(void)env;
 }

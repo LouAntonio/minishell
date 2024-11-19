@@ -6,7 +6,7 @@
 #    By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/11 16:35:01 by lantonio          #+#    #+#              #
-#    Updated: 2024/11/08 11:46:22 by lantonio         ###   ########.fr        #
+#    Updated: 2024/11/14 08:26:27 by lantonio         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,6 @@ SRCS	= minishell.c\
 			./src/ft_args_main.c\
 			./src/tokenizer.c\
 			./env/list_manipulation.c\
-			./checkers/signal.c\
 			./checkers/command.c\
 			./checkers/string.c\
 			./signal/signal.c\
@@ -37,7 +36,7 @@ OBJS	= $(SRCS:.c=.o)
 
 $(NAME): $(OBJS) $(LIBFT_A)
 	@$(CC) $(FLAGS) $(OBJS) $(LIBFT_A) -Iincludes -o $(NAME) -lreadline
-	@echo "\033[1;32mSUCESS!"
+	@echo "\033[1;32mSUCESS!\033[0m"
 
 %.o:%.c
 	@$(CC) $(FLAGS) -c $< -o $@

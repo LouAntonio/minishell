@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 10:06:57 by lantonio          #+#    #+#             */
-/*   Updated: 2024/11/13 18:10:31 by hmateque         ###   ########.fr       */
+/*   Updated: 2024/11/18 16:11:45 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef enum
 	TOKEN_REDIRECT_IN,
 	TOKEN_REDIRECT_OUT,
 	TOKEN_APPEND_OUT,
+	TOKEN_HEREDOC,
 }					TokenType;
 
 typedef struct
@@ -56,7 +57,9 @@ typedef struct Command
 	char			**args;
 	char			*redirect_out;
 	char			*redirect_in;
+	char			*heredoc_end;
 	int				redirect_out_type;
+	int				heredoc;
 	struct Command	*next;
 }					Command;
 
@@ -66,8 +69,7 @@ typedef struct CommandTree
 }					CommandTree;
 
 // checkers
-void				identify_command(char *command, t_env **env, char **envp);
-int					check_signal_exit(char *str);
+void				identify_command(char *command, t_env **env, char **envp, int *g_returns);
 int					check_read_from(char **str);
 int					check_cipher(char *str, int fd, t_env *env);
 int					check_arg(char *str);
@@ -75,6 +77,7 @@ int					ft_isspace(char c);
 
 // Signal
 void				signal_new_line(int signum);
+void				signal_new_line_2(int signum);
 void				configure_signal(void);
 
 // aux_funct args main
@@ -85,7 +88,6 @@ char				*ft_char_cpy(char *src, int len_src, int len_dest,
 
 // aux_funct str
 int					ft_strcmp(char *s1, char *s2);
-void				ft_putstr_fd(char *s, int fd);
 int					isset_in_mat(char **mat, char *str);
 char				*remove_quote(char *str);
 char				**remove_quotes(char **str);

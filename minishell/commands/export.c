@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 14:39:54 by hmateque          #+#    #+#             */
-/*   Updated: 2024/11/01 09:23:37 by hmateque         ###   ########.fr       */
+/*   Updated: 2024/11/15 11:50:35 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	ft_export(char **command, t_env **env)
 	len_str = 0;
 	while (command[len_str])
 		len_str++;
-	if (len_str == 1)
+	if (len_str == 0)
 	{
 		print_list(*env, 2);
 		return (1);
