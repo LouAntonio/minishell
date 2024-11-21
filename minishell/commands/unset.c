@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 08:19:38 by hmateque          #+#    #+#             */
-/*   Updated: 2024/11/21 08:55:03 by hmateque         ###   ########.fr       */
+/*   Updated: 2024/11/21 12:21:53 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static void	delete_env(t_env **env, char *key)
 	ft_free_node(temp);
 }
 
-int	ft_unset(char **command, t_env **env)
+int	ft_unset(char **command, t_env **env, int *g_returns)
 {
 	int	len_str;
 
@@ -63,5 +63,6 @@ int	ft_unset(char **command, t_env **env)
 		delete_env(env, command[len_str]);
 		len_str++;
 	}
+	*g_returns = 1;
 	return (0);
 }

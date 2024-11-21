@@ -6,7 +6,7 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 12:32:54 by lantonio          #+#    #+#             */
-/*   Updated: 2024/11/18 16:43:36 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/11/19 15:07:49 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ int	g_return;
 
 void	signal_new_line(int signum)
 {
-	
 	(void)signum;
 	printf("\n");
 	rl_replace_line("", 0);

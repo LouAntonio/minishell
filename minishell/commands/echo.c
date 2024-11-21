@@ -6,13 +6,13 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:52:12 by lantonio          #+#    #+#             */
-/*   Updated: 2024/11/18 16:36:38 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/11/19 15:00:06 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	echo(char **str, t_env *env)
+void	echo(char **str, t_env *env, int *g_returns)
 {
 	int	i;
 	int	fd;
@@ -39,4 +39,5 @@ void	echo(char **str, t_env *env)
 	if (!ft_strcmp(str[1], "-n"))
 		ft_putstr_fd("\033[30m\033[47m%\033[0m", fd);
 	ft_putstr_fd("\n", fd);
+	*g_returns = 1;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 08:23:31 by hmateque          #+#    #+#             */
-/*   Updated: 2024/11/19 12:40:59 by hmateque         ###   ########.fr       */
+/*   Updated: 2024/11/19 15:45:57 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,36 +83,37 @@ void	ft_exit(Command *command_tree, t_env **env)
 	free_env_list(env);
 	if (command_tree)
 		free_command_list(command_tree);
+	printf("exit\n");
 	exit(0);
 }
-#include <stdlib.h>
 
-void free_matrix(char **matrix)
+void	free_matrix(char **matrix)
 {
-	int i;
+	int	i;
 
 	i = 0;
-    if (!matrix)
-        return;
-    while (matrix[i] != NULL)
-    {
-        free(matrix[i]);
+	if (!matrix)
+		return ;
+	while (matrix[i] != NULL)
+	{
+		free(matrix[i]);
 		i++;
-    }
-    free(matrix);
+	}
+	free(matrix);
 }
-void free_classified_tokens(Token **classified_tokens)
+
+void	free_classified_tokens(Token **classified_tokens)
 {
-    int i;
+	int	i;
 
 	i = 0;
-    if (!classified_tokens)
-        return;
-    while (classified_tokens[i] != NULL)
-    {
-        free(classified_tokens[i]->value);
-        free(classified_tokens[i]);
+	if (!classified_tokens)
+		return ;
+	while (classified_tokens[i] != NULL)
+	{
+		free(classified_tokens[i]->value);
+		free(classified_tokens[i]);
 		i++;
-    }
-    free(classified_tokens);
+	}
+	free(classified_tokens);
 }
