@@ -6,7 +6,7 @@
 /*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 08:19:38 by hmateque          #+#    #+#             */
-/*   Updated: 2024/11/19 08:13:14 by hmateque         ###   ########.fr       */
+/*   Updated: 2024/11/21 08:55:03 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,10 @@ int	ft_unset(char **command, t_env **env)
 	while (command[len_str])
 	{
 		if (!check_arg(command[len_str]))
+		{
+			len_str++;
 			continue ;
+		}
 		delete_env(env, command[len_str]);
 		len_str++;
 	}

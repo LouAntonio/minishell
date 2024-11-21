@@ -6,7 +6,7 @@
 /*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 10:28:57 by hmateque          #+#    #+#             */
-/*   Updated: 2024/11/19 13:03:08 by hmateque         ###   ########.fr       */
+/*   Updated: 2024/11/21 08:50:56 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	print_command_tree(Command *root)
 	Command	*current;
 
 	current = root;
-		return ;
+	//return ;
 	while (current != NULL)
 	{
 		printf("Comando: \033[0;32m%s\033[0m\n", current->command);
