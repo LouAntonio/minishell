@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 10:06:57 by lantonio          #+#    #+#             */
-/*   Updated: 2024/11/19 12:42:00 by hmateque         ###   ########.fr       */
+/*   Updated: 2024/11/19 15:04:11 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,11 +96,11 @@ char				*remove_quote(char *str);
 char				**remove_quotes(char **str);
 
 // command
-void				pwd(char **str);
-void				echo(char **str, t_env *env);
-void				cd(char **str);
-int					ft_export(char **command, t_env **env);
-int					ft_unset(char **command, t_env **env);
+void				pwd(char **str, int *g_returns);
+void				echo(char **str, t_env *env, int *g_returns);
+void				cd(char **str, int *g_returns);
+int					ft_export(char **command, t_env **env, int *g_returns);
+int					ft_unset(char **command, t_env **env, int *g_returns);
 void				ft_exit(Command *command_tree, t_env **env);
 
 // env

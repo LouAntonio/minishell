@@ -6,75 +6,11 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 09:39:33 by hmateque          #+#    #+#             */
-/*   Updated: 2024/11/18 12:42:20 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/11/20 16:25:19 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-char **tokenize2(char *line) {
-    int i, token_index, token_count;
-    char **tokens;
-    char *token;
-    int in_quotes;
-    char quote_char;
-    
-    tokens = malloc(MAX_TOKENS * sizeof(char *));
-    if (!tokens) {
-        perror("malloc error");
-        exit(EXIT_FAILURE);
-    }
-
-    token = malloc(MAX_TOKEN_LENGTH * sizeof(char));
-    if (!token) {
-        perror("malloc error");
-        exit(EXIT_FAILURE);
-    }
-
-    token_count = 0;
-    token_index = 0;
-    in_quotes = 0;
-    quote_char = '\0';
-    i = 0;
-
-    while (line[i]) {
-        if (!in_quotes && (line[i] == '\'' || line[i] == '"')) {
-            in_quotes = 1;
-            quote_char = line[i];
-        } else if (in_quotes && line[i] == quote_char) {
-            in_quotes = 0;
-            quote_char = '\0';
-        } else if (!in_quotes && (isspace(line[i]) || line[i] == '|' || line[i] == '<' || line[i] == '>')) {
-            if (token_index > 0) {
-                token[token_index] = '\0';
-                tokens[token_count++] = strdup(token);
-                token_index = 0;
-            }
-            if (line[i] == '>' && line[i + 1] == '>') {
-                tokens[token_count++] = strdup(">>");
-                i++;
-            } else if (line[i] == '<' && line[i + 1] == '<') {
-                tokens[token_count++] = strdup("<<");
-                i++;
-            } else if (line[i] == '|' || line[i] == '<' || line[i] == '>') {
-                char operator[2] = { line[i], '\0' };
-                tokens[token_count++] = strdup(operator);
-            }
-        } else {
-            token[token_index++] = line[i];
-        }
-        i++;
-    }
-
-    if (token_index > 0) {
-        token[token_index] = '\0';
-        tokens[token_count++] = strdup(token);
-    }
-
-    tokens[token_count] = NULL;
-    free(token);
-    return tokens;
-}
 
 char	**tokenize(char *line)
 {
@@ -181,6 +117,42 @@ Token	**classify_tokens(char **tokens)
 
 	i = 0;
 	classified_tokens = malloc(64 * sizeof(Token *));
+	if (tokens[i] == NULL)
+	{
+		classified_tokens[0] = NULL;
+		return (classified_tokens);
+	}
+	t = malloc(sizeof(Token));
+	t->value = tokens[i];
+	if (identify_token(tokens[i]) == TOKEN_ARG)
+		t->type = TOKEN_COMMAND;
+	else
+		t->type = identify_token(tokens[i]);
+	classified_tokens[i] = t;
+
+	while (tokens[++i] != NULL)
+	{
+		t = malloc(sizeof(Token));
+		t->value = tokens[i];
+		if (classified_tokens[i - 1]->type == TOKEN_PIPE)
+			t->type = TOKEN_COMMAND;
+		else
+			t->type = identify_token(tokens[i]);
+		classified_tokens[i] = t;
+	}
+	classified_tokens[i] = NULL;
+	return (classified_tokens);
+}
+
+
+Token	**classify_tokens_2(char **tokens)
+{
+	int		i;
+	Token	**classified_tokens;
+	Token	*t;
+
+	i = 0;
+	classified_tokens = malloc(64 * sizeof(Token *));
 	if (tokens[i] != NULL)
 	{
 		t = malloc(sizeof(Token));
@@ -215,23 +187,27 @@ Command	*build_command_tree(Token **tokens)
 	current = NULL;
 	while (tokens[i] != NULL)
 	{
-		if (tokens[i]->type == TOKEN_COMMAND)
+		if (tokens[i]->type == TOKEN_COMMAND || current == NULL)
 		{
 			new_cmd = malloc(sizeof(Command));
-			new_cmd->command = tokens[i]->value;
+			new_cmd->command = tokens[i]->type == TOKEN_COMMAND ? tokens[i]->value : NULL;
 			new_cmd->args = malloc(64 * sizeof(char *));
 			new_cmd->redirect_out = NULL;
 			new_cmd->redirect_in = NULL;
+			new_cmd->redirect_out_type = 0;
 			new_cmd->next = NULL;
 			new_cmd->heredoc = 0;
 			new_cmd->heredoc_end = NULL;
 			arg_index = 0;
-			while (tokens[i + 1] != NULL && tokens[i + 1]->type == TOKEN_ARG)
+			if (tokens[i]->type == TOKEN_COMMAND)
 			{
-				if (arg_index == 0)
-					new_cmd->args[arg_index++] = "";
-				else
-					new_cmd->args[arg_index++] = tokens[++i]->value;
+				while (tokens[i + 1] != NULL && tokens[i + 1]->type == TOKEN_ARG)
+				{
+					if (arg_index == 0)
+						new_cmd->args[arg_index++] = "";
+					else
+						new_cmd->args[arg_index++] = tokens[++i]->value;
+				}
 			}
 			new_cmd->args[arg_index] = NULL;
 			if (root == NULL)
@@ -245,50 +221,100 @@ Command	*build_command_tree(Token **tokens)
 				current = current->next;
 			}
 		}
-		else if (tokens[i]->type == TOKEN_REDIRECT_OUT)
+		if (tokens[i]->type == TOKEN_REDIRECT_OUT)
 		{
-			current->redirect_out_type = 1;
-			if (current != NULL)
+			if (current == NULL)
 			{
-				if (tokens[i + 1])
-					current->redirect_out = tokens[++i]->value;
-				else
-					return (printf("minishell: syntax error near unexpected token `newline'\n"), NULL);
+				// Cria um comando vazio para associar ao redirecionamento
+				new_cmd = malloc(sizeof(Command));
+				new_cmd->command = NULL;
+				new_cmd->args = NULL;
+				new_cmd->redirect_out = NULL;
+				new_cmd->redirect_in = NULL;
+				new_cmd->redirect_out_type = 0;
+				new_cmd->next = NULL;
+				new_cmd->heredoc = 0;
+				new_cmd->heredoc_end = NULL;
+				if (root == NULL)
+					root = new_cmd;
+				current = new_cmd;
 			}
+			current->redirect_out_type = 1;
+			if (tokens[i + 1])
+				current->redirect_out = tokens[++i]->value;
+			else
+				return (printf("minishell: syntax error near unexpected token `newline'\n"), NULL);
 		}
 		else if (tokens[i]->type == TOKEN_APPEND_OUT)
 		{
-			current->redirect_out_type = 2;
-			if (current != NULL)
+			if (current == NULL)
 			{
-				if (tokens[i + 1])
-					current->redirect_out = tokens[++i]->value;
-				else
-					return (printf("minishell: syntax error near unexpected token `newline'\n"), NULL);
+				new_cmd = malloc(sizeof(Command));
+				new_cmd->command = NULL;
+				new_cmd->args = NULL;
+				new_cmd->redirect_out = NULL;
+				new_cmd->redirect_in = NULL;
+				new_cmd->redirect_out_type = 0;
+				new_cmd->next = NULL;
+				new_cmd->heredoc = 0;
+				new_cmd->heredoc_end = NULL;
+				if (root == NULL)
+					root = new_cmd;
+				current = new_cmd;
 			}
+			current->redirect_out_type = 2;
+			if (tokens[i + 1])
+				current->redirect_out = tokens[++i]->value;
+			else
+				return (printf("minishell: syntax error near unexpected token `newline'\n"), NULL);
 		}
 		else if (tokens[i]->type == TOKEN_REDIRECT_IN)
 		{
-			if (current != NULL)
+			if (current == NULL)
 			{
-				if (tokens[i + 1])
-					current->redirect_in = tokens[++i]->value;
-				else
-					return (printf("minishell: syntax error near unexpected token `newline'\n"), NULL);
+				new_cmd = malloc(sizeof(Command));
+				new_cmd->command = NULL;
+				new_cmd->args = NULL;
+				new_cmd->redirect_out = NULL;
+				new_cmd->redirect_in = NULL;
+				new_cmd->redirect_out_type = 0;
+				new_cmd->next = NULL;
+				new_cmd->heredoc = 0;
+				new_cmd->heredoc_end = NULL;
+				if (root == NULL)
+					root = new_cmd;
+				current = new_cmd;
 			}
+			if (tokens[i + 1])
+				current->redirect_in = tokens[++i]->value;
+			else
+				return (printf("minishell: syntax error near unexpected token `newline'\n"), NULL);
 		}
 		else if (tokens[i]->type == TOKEN_HEREDOC)
 		{
-			if (current != NULL)
+			if (current == NULL)
 			{
-				if (tokens[i + 1])
-				{
-					current->heredoc = 1;
-					current->heredoc_end = tokens[++i]->value;
-				}
-				else
-					return (printf("minishell: syntax error near unexpected token `newline'\n"), NULL);
+				// Cria um comando vazio para associar ao heredoc
+				new_cmd = malloc(sizeof(Command));
+				new_cmd->command = NULL;
+				new_cmd->args = NULL;
+				new_cmd->redirect_out = NULL;
+				new_cmd->redirect_in = NULL;
+				new_cmd->redirect_out_type = 0;
+				new_cmd->next = NULL;
+				new_cmd->heredoc = 0;
+				new_cmd->heredoc_end = NULL;
+				if (root == NULL)
+					root = new_cmd;
+				current = new_cmd;
 			}
+			if (tokens[i + 1])
+			{
+				current->heredoc = 1;
+				current->heredoc_end = tokens[++i]->value;
+			}
+			else
+				return (printf("minishell: syntax error near unexpected token `newline'\n"), NULL);
 		}
 		i++;
 	}

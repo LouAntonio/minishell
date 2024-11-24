@@ -6,7 +6,7 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 14:39:54 by hmateque          #+#    #+#             */
-/*   Updated: 2024/11/15 11:50:35 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/11/19 15:38:14 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,12 @@ static void	add_var_of_env(char *str, t_env **env)
 		add_or_update_env(env, str, "");
 }
 
-int	ft_export(char **command, t_env **env)
+int	ft_export(char **command, t_env **env, int *g_returns)
 {
 	int	len_str;
 
 	len_str = 0;
+	*g_returns = 1;
 	while (command[len_str])
 		len_str++;
 	if (len_str == 0)
