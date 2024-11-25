@@ -6,7 +6,7 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 09:39:33 by hmateque          #+#    #+#             */
-/*   Updated: 2024/11/20 16:25:19 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/11/25 10:42:18 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,30 +19,29 @@ char	**tokenize(char *line)
 	char	*token;
 	int		token_count;
 	int		token_index;
-	int		in_quotes;
-	char	quote_char;
+	int		in_single_quotes;
+	int		in_double_quotes;
 
 	tokens = malloc(MAX_TOKENS * sizeof(char *));
 	token = malloc(MAX_TOKEN_LENGTH * sizeof(char));
 	token_count = 0;
 	token_index = 0;
-	in_quotes = 0;
-	quote_char = '\0';
+	in_single_quotes = 0;
+	in_double_quotes = 0;
 	i = -1;
 	while (line[++i])
 	{
-		if (!in_quotes && (line[i] == '\'' || line[i] == '"'))
+		if (line[i] == '\'' && !in_double_quotes)
 		{
-			in_quotes = 1;
-			quote_char = line[i];
+			in_single_quotes = !in_single_quotes;
+			token[token_index++] = line[i];
 		}
-		else if (in_quotes && line[i] == quote_char)
+		else if (line[i] == '"' && !in_single_quotes)
 		{
-			in_quotes = 0;
-			quote_char = '\0';
+			in_double_quotes = !in_double_quotes;
 		}
-		else if (!in_quotes && (isspace(line[i]) || line[i] == '|'
-				|| line[i] == '<' || line[i] == '>'))
+		else if (!in_single_quotes && !in_double_quotes && (isspace(line[i])
+				|| line[i] == '|' || line[i] == '<' || line[i] == '>'))
 		{
 			if (token_index > 0)
 			{
@@ -129,42 +128,11 @@ Token	**classify_tokens(char **tokens)
 	else
 		t->type = identify_token(tokens[i]);
 	classified_tokens[i] = t;
-
 	while (tokens[++i] != NULL)
 	{
 		t = malloc(sizeof(Token));
 		t->value = tokens[i];
 		if (classified_tokens[i - 1]->type == TOKEN_PIPE)
-			t->type = TOKEN_COMMAND;
-		else
-			t->type = identify_token(tokens[i]);
-		classified_tokens[i] = t;
-	}
-	classified_tokens[i] = NULL;
-	return (classified_tokens);
-}
-
-
-Token	**classify_tokens_2(char **tokens)
-{
-	int		i;
-	Token	**classified_tokens;
-	Token	*t;
-
-	i = 0;
-	classified_tokens = malloc(64 * sizeof(Token *));
-	if (tokens[i] != NULL)
-	{
-		t = malloc(sizeof(Token));
-		t->value = tokens[i];
-		t->type = TOKEN_COMMAND;
-		classified_tokens[i] = t;
-	}
-	while (tokens[++i] != NULL)
-	{
-		t = malloc(sizeof(Token));
-		t->value = tokens[i];
-		if (i > 0 && classified_tokens[i - 1]->type == TOKEN_PIPE)
 			t->type = TOKEN_COMMAND;
 		else
 			t->type = identify_token(tokens[i]);
@@ -225,7 +193,6 @@ Command	*build_command_tree(Token **tokens)
 		{
 			if (current == NULL)
 			{
-				// Cria um comando vazio para associar ao redirecionamento
 				new_cmd = malloc(sizeof(Command));
 				new_cmd->command = NULL;
 				new_cmd->args = NULL;
@@ -294,7 +261,6 @@ Command	*build_command_tree(Token **tokens)
 		{
 			if (current == NULL)
 			{
-				// Cria um comando vazio para associar ao heredoc
 				new_cmd = malloc(sizeof(Command));
 				new_cmd->command = NULL;
 				new_cmd->args = NULL;

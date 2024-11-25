@@ -6,7 +6,7 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 10:06:57 by lantonio          #+#    #+#             */
-/*   Updated: 2024/11/19 15:04:11 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/11/25 14:01:48 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,10 +95,10 @@ int					isset_in_mat(char **mat, char *str);
 char				*remove_quote(char *str);
 char				**remove_quotes(char **str);
 
-// command
+// commands
 void				pwd(char **str, int *g_returns);
-void				echo(char **str, t_env *env, int *g_returns);
-void				cd(char **str, int *g_returns);
+void				echo(char **str, int *g_returns);
+int					cd(char **str, int *g_returns, t_env **env);
 int					ft_export(char **command, t_env **env, int *g_returns);
 int					ft_unset(char **command, t_env **env, int *g_returns);
 void				ft_exit(Command *command_tree, t_env **env);
@@ -117,7 +117,6 @@ TokenType			identify_token(char *token);
 Token				**classify_tokens(char **tokens);
 Command				*build_command_tree(Token **tokens);
 int					validate_command_tree(Command *root);
-char				**tokenizar(const char *str, char delimitador);
 
 // Liberacao de memoria
 void				free_command_tree(CommandTree *command_tree);
