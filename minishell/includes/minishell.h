@@ -6,7 +6,7 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 10:06:57 by lantonio          #+#    #+#             */
-/*   Updated: 2024/11/25 14:01:48 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/11/25 14:29:29 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void				configure_signal(void);
 
 // aux_funct args main
 void				ft_set_value(int ac, char **av, char **env,
-						t_env **all_env);
+						t_env **all_env); 
 char				*ft_char_cpy(char *src, int len_src, int len_dest,
 						int limit);
 char				*ft_strncpy(char *dest, const char *src, int n);

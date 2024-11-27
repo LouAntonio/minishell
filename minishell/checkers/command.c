@@ -6,7 +6,7 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 10:28:57 by hmateque          #+#    #+#             */
-/*   Updated: 2024/11/25 14:07:41 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/11/26 16:15:27 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,22 @@ int	handle_redirection(Command *command_tree)
 	return (fd);
 }
 
-int	check_red_in(Command *command_tree)
+int	check_red_in(Command *command_tree, int *fd_in)
 {
 	if (command_tree->redirect_in != NULL)
+	{
 		if (access(command_tree->redirect_in, R_OK) == -1)
-			return (printf("minishell: %s: No such file or directory\n"
-					, command_tree->redirect_in), 1);
+		{
+			printf("minishell: %s: No such file or directory\n",
+				command_tree->redirect_in);
+			return (1);
+		}
+		*fd_in = open(command_tree->redirect_in, O_RDONLY);
+		if (*fd_in == -1)
+			return (perror("Open input file error"), 1);
+		if (dup2(*fd_in, STDIN_FILENO) == -1)
+			return (perror("Dup2 error"), close(*fd_in), 1);
+	}
 	return (0);
 }
 
@@ -93,7 +103,6 @@ int	path_commands(Command *command_tree, t_env **env, char **envp, int *g_return
 	int			i;
 	pid_t		pid;
 	int			status;
-	int			cmd_ret;
 	t_env		*env_copy;
 
 	i = -1;
@@ -101,24 +110,23 @@ int	path_commands(Command *command_tree, t_env **env, char **envp, int *g_return
 	if (access(command_tree->command, X_OK) == 0)
 	{
 		pid = fork();
-			if (pid == -1)
-				return (perror("Fork error"), -1);
-			else if (pid == 0)
-			{
-				*g_returns = execve(command_tree->command, command_tree->args, envp);
-				if (*g_returns == -1)
-					return (perror("Exec error"), -1);
-			}
-			else
-			{
-				if (waitpid(pid, &status, 0) == -1)
-					return (perror("Waitpid error"), -1);
-				if (WIFEXITED(status))
-					cmd_ret = WEXITSTATUS(status);
-				else if (WIFSIGNALED(status))
-					cmd_ret = WTERMSIG(status);
-				return (cmd_ret);
-			}
+		if (pid == -1)
+			return (perror("Fork error"), -1);
+		else if (pid == 0)
+		{
+			if (execve(command_tree->command, command_tree->args, envp) == -1)
+				return (perror("Exec error"), -1);
+		}
+		else
+		{
+			if (waitpid(pid, &status, 0) == -1)
+				return (perror("Waitpid error"), -1);
+			if (WIFEXITED(status))
+				*g_returns = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				*g_returns = WTERMSIG(status);
+			return (*g_returns);
+		}
 	}
 	while (env_copy != NULL)
 	{
@@ -141,8 +149,7 @@ int	path_commands(Command *command_tree, t_env **env, char **envp, int *g_return
 				return (perror("Fork error"), -1);
 			else if (pid == 0)
 			{
-				*g_returns = execve(path, command_tree->args, envp);
-				if (*g_returns == -1)
+				if (execve(path, command_tree->args, envp) == -1)
 					return (perror("Exec error"), -1);
 			}
 			else
@@ -150,10 +157,10 @@ int	path_commands(Command *command_tree, t_env **env, char **envp, int *g_return
 				if (waitpid(pid, &status, 0) == -1)
 					return (perror("Waitpid error"), -1);
 				if (WIFEXITED(status))
-					cmd_ret = WEXITSTATUS(status);
+					*g_returns = WEXITSTATUS(status);
 				else if (WIFSIGNALED(status))
-					cmd_ret = WTERMSIG(status);
-				return (cmd_ret);
+					*g_returns = WTERMSIG(status);
+				return (*g_returns);
 			}
 		}
 	}
@@ -164,30 +171,27 @@ int	path_commands(Command *command_tree, t_env **env, char **envp, int *g_return
 int	run_commands(Command *command_tree, char **str, t_env **env, char **envp, int *g_returns)
 {
 	int		fd[2];
-	int		old_fd_out;
-	int		old_fd_in;
+	int		old_fd[2];
 	pid_t	pid;
 	int		status;
 	int		fd_in;
 
-	// Salvar o descritor de arquivo original do stdout
-	old_fd_out = dup(STDOUT_FILENO);
-	if (old_fd_out == -1)
+	old_fd[0] = dup(STDOUT_FILENO);
+	if (old_fd[0] == -1)
 		return (perror("dup error"), -1);
-	// Salvar o descritor de arquivo original do stdin
-	old_fd_in = dup(STDIN_FILENO);
-	if (old_fd_in == -1)
-		return (perror("dup error"), close(old_fd_out), -1);
-	// Heredoc
+	old_fd[1] = dup(STDIN_FILENO);
+	if (old_fd[1] == -1)
+		return (perror("dup error"), close(old_fd[0]), -1);
+
 	if (command_tree->heredoc)
 	{
 		int heredoc_fd[2];
 		if (pipe(heredoc_fd) == -1)
-			return (perror("Pipe error"), close(old_fd_in), close(old_fd_out), -1);
+			return (perror("Pipe error"), close(old_fd[1]), close(old_fd[0]), -1);
 		pid = fork();
 		if (pid == -1)
 			return (perror("Fork error"), close(heredoc_fd[0])
-				, close(heredoc_fd[1]), close(old_fd_out), close(old_fd_in), -1);
+				, close(heredoc_fd[1]), close(old_fd[0]), close(old_fd[1]), -1);
 		if (pid == 0) {
 			close(heredoc_fd[0]);
 			char *str;
@@ -200,7 +204,6 @@ int	run_commands(Command *command_tree, char **str, t_env **env, char **envp, in
 					free(str);
 					break;
 				}
-				//printf("%s\n", str);
 				write(heredoc_fd[1], str, ft_strlen(str));
 				write(heredoc_fd[1], "\n", 1);
 				free(str);
@@ -213,39 +216,28 @@ int	run_commands(Command *command_tree, char **str, t_env **env, char **envp, in
 			close(heredoc_fd[1]);
 			if (dup2(heredoc_fd[0], STDIN_FILENO) == -1)
 				return (perror("Dup2 error"), close(heredoc_fd[0])
-					, close(old_fd_out), close(old_fd_in), -1);
+					, close(old_fd[0]), close(old_fd[1]), -1);
 			close(heredoc_fd[0]);
 			waitpid(pid, &status, 0);
 		}
 	}
-	// redirecionamento de output
+
 	fd[1] = handle_redirection(command_tree);
 	if (fd[1] == -1) 
-		return (close(old_fd_out), close(old_fd_in), -1);
-	if (check_red_in(command_tree))
-		return (close(old_fd_out), close(old_fd_in), -1);
-	if (command_tree->redirect_in != NULL)
-	{
-		fd_in = open(command_tree->redirect_in, O_RDONLY);
-		if (fd_in == -1)
-			return (perror("Open input file error")
-				, close(old_fd_out), close(old_fd_in), -1);
-		if (dup2(fd_in, STDIN_FILENO) == -1)
-			return (perror("Dup2 error"), close(fd_in)
-				, close(old_fd_out), close(old_fd_in), -1);
-		close(fd_in);
-	}
+		return (close(old_fd[0]), close(old_fd[1]), -1);
+	if (check_red_in(command_tree, &fd_in))
+		return (close(old_fd[0]), close(old_fd[1]), -1);
 
-	// execucao do comando
+	// Execução do comando
 	if (command_tree->command)
 	{
 		if (command_tree->next != NULL) {
 			if (pipe(fd) == -1)
-				return (perror("Pipe error"), close(old_fd_out), close(old_fd_in), -1);
+				return (perror("Pipe error"), close(old_fd[0]), close(old_fd[1]), -1);
 			pid = fork();
 			if (pid == -1)
 				return (close(fd[0]), close(fd[1]), perror("Fork error")
-					, close(old_fd_out), close(old_fd_in), -1);
+					, close(old_fd[0]), close(old_fd[1]), -1);
 			if (pid == 0)
 			{
 				close(fd[0]);
@@ -262,7 +254,7 @@ int	run_commands(Command *command_tree, char **str, t_env **env, char **envp, in
 				pid = fork();
 				if (pid == -1)
 					return (close(fd[0]), perror("Fork error")
-						, close(old_fd_out), close(old_fd_in), -1);
+						, close(old_fd[0]), close(old_fd[1]), -1);
 				if (pid == 0)
 				{
 					if (dup2(fd[0], STDIN_FILENO) == -1) {
@@ -278,7 +270,6 @@ int	run_commands(Command *command_tree, char **str, t_env **env, char **envp, in
 				{
 					close(fd[0]);
 					waitpid(pid, &status, 0);
-					waitpid(pid, &status, 0);
 				}
 			}
 		}
@@ -288,12 +279,13 @@ int	run_commands(Command *command_tree, char **str, t_env **env, char **envp, in
 				path_commands(command_tree, env, envp, g_returns);
 		}
 	}
-	if (dup2(old_fd_out, STDOUT_FILENO) == -1)
-		return (perror("Dup2 error"), close(old_fd_out), close(old_fd_in), -1);
-	close(old_fd_out);
-	if (dup2(old_fd_in, STDIN_FILENO) == -1)
-		return (perror("Dup2 error"), close(old_fd_in), -1);
-	close(old_fd_in);
+	while (waitpid(-1, &status, WNOHANG) > 0);
+	if (dup2(old_fd[0], STDOUT_FILENO) == -1)
+		return (perror("Dup2 error"), close(old_fd[0]), close(old_fd[1]), -1);
+	close(old_fd[0]);
+	if (dup2(old_fd[1], STDIN_FILENO) == -1)
+		return (perror("Dup2 error"), close(old_fd[1]), -1);
+	close(old_fd[1]);
 	return (1);
 }
 
@@ -339,7 +331,7 @@ char	**expander(char **str, t_env **env, int *g_returns)
 			cur = *env;
 			while (cur)
 			{
-				if (!ft_strcmp(cur->name, str[i]+1))
+				if (!ft_strcmp(cur->name, str[i] + 1))
 				{
 					str[i] = ft_strdup(cur->value);
 					break ;
@@ -380,7 +372,8 @@ void	create_files(char **str)
 	}
 }
 
-void	identify_command(char *command, t_env **env, char **envp, int *g_returns)
+void	identify_command(char *command, t_env **env,
+char **envp, int *g_returns)
 {
 	Token	**classified_tokens;
 	char	**str;
