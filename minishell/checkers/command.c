@@ -6,7 +6,7 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 10:28:57 by hmateque          #+#    #+#             */
-/*   Updated: 2024/11/26 16:15:27 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/12/02 11:19:33 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,10 +112,11 @@ int	path_commands(Command *command_tree, t_env **env, char **envp, int *g_return
 		pid = fork();
 		if (pid == -1)
 			return (perror("Fork error"), -1);
-		else if (pid == 0)
+		if (pid == 0)
 		{
 			if (execve(command_tree->command, command_tree->args, envp) == -1)
 				return (perror("Exec error"), -1);
+			exit(EXIT_SUCCESS);
 		}
 		else
 		{
@@ -147,10 +148,11 @@ int	path_commands(Command *command_tree, t_env **env, char **envp, int *g_return
 			pid = fork();
 			if (pid == -1)
 				return (perror("Fork error"), -1);
-			else if (pid == 0)
+			if (pid == 0)
 			{
 				if (execve(path, command_tree->args, envp) == -1)
 					return (perror("Exec error"), -1);
+				exit(EXIT_SUCCESS);
 			}
 			else
 			{
@@ -301,8 +303,15 @@ char	*close_pipe(char *command)
 	if (command[--i] == '|')
 	{
 		complete = readline("pipe> ");
-		while (!complete || complete[0] == '\0')
+		if (!complete)
 		{
+			printf("minishell: syntax error: unexpected end of file\n");
+			ft_exit(NULL, NULL);
+		}
+		while (complete[0] == '\0')
+		{
+			if (command[0] == '\0')
+				printf("KO\n");
 			free(complete);
 			complete = readline("pipe> ");
 		}
@@ -372,8 +381,7 @@ void	create_files(char **str)
 	}
 }
 
-void	identify_command(char *command, t_env **env,
-char **envp, int *g_returns)
+void	identify_command(char *command, t_env **env, char **envp, int *g_returns)
 {
 	Token	**classified_tokens;
 	char	**str;
@@ -385,8 +393,12 @@ char **envp, int *g_returns)
 	if (!command)
 		return ;
 	str = tokenize(command);
+	if (!str)
+	{
+		printf("Erro na tokenização!\n");
+		return ;
+	}
 	str = expander(str, env, g_returns);
-	free(command);
 	classified_tokens = classify_tokens(str);
 	command_tree = build_command_tree(classified_tokens);
 	create_files(str);

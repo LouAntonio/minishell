@@ -6,7 +6,7 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:52:12 by lantonio          #+#    #+#             */
-/*   Updated: 2024/11/25 08:28:10 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/11/27 08:48:54 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,5 @@ void	echo(char **str, int *g_returns)
 	if (!ft_strcmp(str[1], "-n"))
 		ft_putstr_fd("\033[30m\033[47m%\033[0m", fd);
 	ft_putstr_fd("\n", fd);
-	*g_returns = 1;
+	*g_returns = 0;
 }

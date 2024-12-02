@@ -6,7 +6,7 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 08:19:38 by hmateque          #+#    #+#             */
-/*   Updated: 2024/11/21 15:55:12 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/11/27 08:51:33 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,6 @@ int	ft_unset(char **command, t_env **env, int *g_returns)
 		delete_env(env, command[len_str]);
 		len_str++;
 	}
-	*g_returns = 1;
+	*g_returns = 0;
 	return (0);
 }
