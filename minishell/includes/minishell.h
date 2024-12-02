@@ -6,15 +6,15 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 10:06:57 by lantonio          #+#    #+#             */
-/*   Updated: 2024/11/25 14:29:29 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/12/02 10:21:17 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# define MAX_TOKENS 100
-# define MAX_TOKEN_LENGTH 1000
+# define MAX_TOKENS 128
+# define MAX_TOKEN_LENGTH 256
 
 # include "../libft/libft.h"
 # include <fcntl.h>
@@ -79,6 +79,7 @@ int					ft_isspace(char c);
 // Signal
 void				signal_new_line(int signum);
 void				signal_new_line_2(int signum);
+void				signal_new_line_3(int signum);
 void				configure_signal(void);
 
 // aux_funct args main

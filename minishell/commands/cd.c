@@ -6,7 +6,7 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 08:22:00 by lantonio          #+#    #+#             */
-/*   Updated: 2024/11/25 14:07:10 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/11/27 08:48:48 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	cd(char **str, int *g_returns, t_env **env)
 	getcwd(path, sizeof(path));
 	while (str[vet_len])
 		vet_len++;
-	*g_returns = 1;
+	*g_returns = 0;
 	if (vet_len == 0)
 	{
 		if (chdir(getenv("HOME")) != 0)
