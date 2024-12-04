@@ -3,14 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:52:12 by lantonio          #+#    #+#             */
-/*   Updated: 2024/11/27 08:48:54 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/12/04 10:53:30 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int matrix_len(char **matrix)
+{
+    int len = 0;
+
+    if (!matrix)
+        return (0);
+    while (matrix[len])
+        len++;
+    return (len);
+}
+
 
 void	echo(char **str, int *g_returns)
 {
@@ -19,7 +31,7 @@ void	echo(char **str, int *g_returns)
 
 	i = 1;
 	fd = dup(STDOUT_FILENO);
-	if (!str[0])
+	if (matrix_len(str) == 1)
 	{
 		ft_putstr_fd("\n", fd);
 		return ;

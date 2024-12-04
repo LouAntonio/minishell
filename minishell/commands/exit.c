@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 08:23:31 by hmateque          #+#    #+#             */
-/*   Updated: 2024/12/02 08:52:56 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/12/04 10:57:30 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,18 +102,18 @@ void	free_matrix(char **matrix)
 	free(matrix);
 }
 
-void	free_classified_tokens(Token **classified_tokens)
-{
-	int	i;
+// void	free_classified_tokens(Token **classified_tokens)
+// {
+// 	int	i;
 
-	i = 0;
-	if (!classified_tokens)
-		return ;
-	while (classified_tokens[i] != NULL)
-	{
-		free(classified_tokens[i]->value);
-		free(classified_tokens[i]);
-		i++;
-	}
-	free(classified_tokens);
-}
+// 	i = 0;
+// 	if (!classified_tokens)
+// 		return ;
+// 	while (classified_tokens[i] != NULL)
+// 	{
+// 		free(classified_tokens[i]->value);
+// 		free(classified_tokens[i]);
+// 		i++;
+// 	}
+// 	free(classified_tokens);
+// }

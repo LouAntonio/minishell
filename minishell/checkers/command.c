@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 10:28:57 by hmateque          #+#    #+#             */
-/*   Updated: 2024/12/02 11:19:33 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/12/04 11:12:38 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -324,41 +324,56 @@ char	*close_pipe(char *command)
 	return (command);
 }
 
-char	**expander(char **str, t_env **env, int *g_returns)
+static char *expand_variable(char *var, t_env *env, int *g_returns)
 {
-	int		i;
-	t_env	*cur;
-
-	i = -1;
-	cur = *env;
-	while (str[++i])
-	{
-		if (!ft_strcmp("$?", str[i]))
-			str[i] = ft_strdup(ft_itoa(*g_returns));
-		else
-		{
-			cur = *env;
-			while (cur)
+	char *name;
+	
+    if (ft_strcmp(var, "$?") == 0)
+        return ft_itoa(*g_returns);
+    if (var[0] == '$')
+    {
+		name = ft_strdup(var + 1);
+        while (env)
+        {
+            if (ft_strcmp(env->name, name) == 0)
 			{
-				if (!ft_strcmp(cur->name, str[i] + 1))
-				{
-					str[i] = ft_strdup(cur->value);
-					break ;
-				}
-				cur = cur->next;
+				free(name);
+                return ft_strdup(env->value);
 			}
-		}
-	}
-	return (str);
+            env = env->next;
+        }
+		free(name);
+    }
+	if (var[0] == '$' && var[1] != '\0')
+        return ft_strdup("");
+    return (ft_strdup(var));
 }
 
-void	create_files(char **str)
+char **expander(char **str, t_env *env, int *g_returns, int wordcount)
+{
+	int i;
+	
+	i = -1;
+    while (++i < wordcount)
+    {
+        char *expanded = expand_variable(str[i], env, g_returns);
+        if (expanded)
+        {
+            free(str[i]);
+            str[i] = expanded;
+        }
+    }
+    return (str);
+}
+
+
+void	create_files(char **str, int wordcount)
 {
 	int	i;
 	int	fd;
 
 	i = -1;
-	while (str[++i])
+	while (++i < wordcount)
 	{
 		if (!ft_strcmp(str[i], ">>"))
 		{
@@ -385,6 +400,7 @@ void	identify_command(char *command, t_env **env, char **envp, int *g_returns)
 {
 	Token	**classified_tokens;
 	char	**str;
+	int word_count;
 	Command	*command_tree;
 
 	str = NULL;
@@ -392,18 +408,13 @@ void	identify_command(char *command, t_env **env, char **envp, int *g_returns)
 	command = trim_spaces(command);
 	if (!command)
 		return ;
-	str = tokenize(command);
-	if (!str)
-	{
-		printf("Erro na tokenização!\n");
-		return ;
-	}
-	str = expander(str, env, g_returns);
-	classified_tokens = classify_tokens(str);
-	command_tree = build_command_tree(classified_tokens);
-	create_files(str);
+	str = ft_tokens(command, &word_count);
+	str = expander(str, *env, g_returns, word_count);
+	classified_tokens = classify_tokens(str, word_count);
+	command_tree = build_command_tree(classified_tokens, word_count);
+	create_files(str, word_count);
 	print_command_tree(command_tree);
 	if (command_tree)
 		run_commands(command_tree, str, env, envp, g_returns);
-	free_matrix(str);
+	free_matrix_tokens(str, word_count);
 }
