@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 08:22:00 by lantonio          #+#    #+#             */
-/*   Updated: 2024/12/04 11:15:29 by hmateque         ###   ########.fr       */
+/*   Updated: 2024/12/10 13:17:32 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,24 @@ void	change_oldpwd(char *path, t_env **env, int *g_returns)
 
 int	cd(char **str, int *g_returns, t_env **env)
 {
+	t_env	*env_cpy;
 	char	path[PATH_MAX];
 
+	env_cpy = *env;
+	while (env_cpy)
+	{
+		if (!ft_strcmp(env_cpy->name, "HOME"))
+			break ;
+		env_cpy = env_cpy->next;
+	}
+	if (!env_cpy->value || !*env_cpy->value)
+		return (printf("Command not found\n"), 0);
 	getcwd(path, sizeof(path));
 	*g_returns = 0;
-	if (matrix_len(str) == 1)
+	printf("HOME = %s\n", env_cpy->value);
+	if (matrix_len(str) == 0)
 	{
-		if (chdir(getenv("HOME")) != 0)
+		if (chdir(env_cpy->value) != 0)
 			return (perror("Erro ao mudar de diretório"), 0);
 		else
 			change_oldpwd(path, env, g_returns);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 10:06:57 by lantonio          #+#    #+#             */
-/*   Updated: 2024/12/04 11:01:35 by hmateque         ###   ########.fr       */
+/*   Updated: 2024/12/10 11:13:11 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,18 @@
 # include <stdlib.h>
 # include <sys/wait.h>
 # include <unistd.h>
+
+typedef struct s_result
+{
+	char *result;
+	size_t res_index;
+} t_result;
+
+typedef struct s_quote_state
+{
+	int dob_quote;
+	int sin_quote;
+} t_quote_state;
 
 typedef struct s_env
 {
@@ -73,11 +85,11 @@ int					check_cipher(char *str, int fd, t_env *env);
 int					check_arg(char *str);
 int					ft_isspace(char c);
 int					matrix_len(char **matrix);
+char				*expand_variable(char *var, t_env *env, int *g_returns);
 
 // Signal
 void				signal_new_line(int signum);
 void				signal_new_line_2(int signum);
-void				signal_new_line_3(int signum);
 void				configure_signal(void);
 
 // aux_funct args main
@@ -101,6 +113,7 @@ int					cd(char **str, int *g_returns, t_env **env);
 int					ft_export(char **command, t_env **env, int *g_returns);
 int					ft_unset(char **command, t_env **env, int *g_returns);
 void				ft_exit(Command *command_tree, t_env **env);
+void				ft_env(char **args, int *g_returns, t_env **env);
 
 // env
 void				print_all_var(char **env);
@@ -113,7 +126,7 @@ void				search_and_print_list(t_env *list, char *str, int fd);
 // Token
 char				**ft_tokens(const char *input, int *word_count);
 TokenType			identify_token(char *token);
-Token				**classify_tokens(char **tokens, int word_count);
+Token				**classify_tokens(char **tokens, int word_count, t_env **env, int *g_returns);
 Command				*build_command_tree(Token **tokens, int word_count);
 int					validate_command_tree(Command *root);
 

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+         #
+#    By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/11 16:35:01 by lantonio          #+#    #+#              #
-#    Updated: 2024/12/03 11:37:04 by hmateque         ###   ########.fr        #
+#    Updated: 2024/12/10 11:11:23 by lantonio         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,7 @@ SRCS	= minishell.c\
 			./commands/export.c\
 			./commands/unset.c\
 			./commands/cd.c\
+			./commands/env.c\
 			./commands/exit.c\
 			./env/print_var.c\
 
