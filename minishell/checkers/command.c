@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 10:28:57 by hmateque          #+#    #+#             */
-/*   Updated: 2024/12/04 11:12:38 by hmateque         ###   ########.fr       */
+/*   Updated: 2024/12/10 13:31:53 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int	built_ins(Command *command_tree, t_env **env, int *g_returns)
 	else if (!ft_strcmp(command_tree->command, "export"))
 		return (ft_export(command_tree->args, env, g_returns), 1);
 	else if (!ft_strcmp(command_tree->command, "env"))
-		return (print_list(*env, 1), 1);
+		return (ft_env(command_tree->args, g_returns, env), 1);
 	else if (!ft_strcmp(command_tree->command, "pwd"))
 		return (pwd(command_tree->args, g_returns), 1);
 	else if (!ft_strcmp(command_tree->command, "unset"))
@@ -107,6 +107,8 @@ int	path_commands(Command *command_tree, t_env **env, char **envp, int *g_return
 
 	i = -1;
 	env_copy = *env;
+	if (!env_copy)
+		return (printf("Env Error\n"), -1);
 	if (access(command_tree->command, X_OK) == 0)
 	{
 		pid = fork();
@@ -129,13 +131,13 @@ int	path_commands(Command *command_tree, t_env **env, char **envp, int *g_return
 			return (*g_returns);
 		}
 	}
-	while (env_copy != NULL)
+	while (env_copy)
 	{
 		if (!ft_strcmp(env_copy->name, "PATH"))
 			break ;
 		env_copy = env_copy->next;
 	}
-	if (env_copy == NULL)
+	if (!env_copy->value || !*env_copy->value)
 		return (printf("Command not found\n"), -1);
 	paths = ft_split(env_copy->value, ':');
 	while (paths[++i] != NULL)
@@ -177,6 +179,7 @@ int	run_commands(Command *command_tree, char **str, t_env **env, char **envp, in
 	pid_t	pid;
 	int		status;
 	int		fd_in;
+	int		heredoc_fd[2];
 
 	old_fd[0] = dup(STDOUT_FILENO);
 	if (old_fd[0] == -1)
@@ -184,10 +187,8 @@ int	run_commands(Command *command_tree, char **str, t_env **env, char **envp, in
 	old_fd[1] = dup(STDIN_FILENO);
 	if (old_fd[1] == -1)
 		return (perror("dup error"), close(old_fd[0]), -1);
-
 	if (command_tree->heredoc)
 	{
-		int heredoc_fd[2];
 		if (pipe(heredoc_fd) == -1)
 			return (perror("Pipe error"), close(old_fd[1]), close(old_fd[0]), -1);
 		pid = fork();
@@ -223,14 +224,11 @@ int	run_commands(Command *command_tree, char **str, t_env **env, char **envp, in
 			waitpid(pid, &status, 0);
 		}
 	}
-
 	fd[1] = handle_redirection(command_tree);
 	if (fd[1] == -1) 
 		return (close(old_fd[0]), close(old_fd[1]), -1);
 	if (check_red_in(command_tree, &fd_in))
 		return (close(old_fd[0]), close(old_fd[1]), -1);
-
-	// Execução do comando
 	if (command_tree->command)
 	{
 		if (command_tree->next != NULL) {
@@ -300,6 +298,8 @@ char	*close_pipe(char *command)
 	complete = NULL;
 	while (command[i])
 		i++;
+	if (command[0] == '|')
+		return (printf("minishell: parse error near '|'\n"), NULL);
 	if (command[--i] == '|')
 	{
 		complete = readline("pipe> ");
@@ -324,48 +324,52 @@ char	*close_pipe(char *command)
 	return (command);
 }
 
-static char *expand_variable(char *var, t_env *env, int *g_returns)
+char	*expand_variable(char *var, t_env *env, int *g_returns)
 {
-	char *name;
-	
-    if (ft_strcmp(var, "$?") == 0)
-        return ft_itoa(*g_returns);
-    if (var[0] == '$')
-    {
+	char	*name;
+	char	*fim;
+	char	*new_str;
+
+	if (ft_strcmp(var, "$?") == 0)
+		return ft_itoa(*g_returns);
+	if (var[0] == '$')
+	{
 		name = ft_strdup(var + 1);
-        while (env)
-        {
-            if (ft_strcmp(env->name, name) == 0)
+		while (env)
+		{
+			if (!ft_strncmp(env->name, name, ft_strlen(env->name)))
 			{
+				fim = var + (ft_strlen(env->name) + 1);
+				new_str = ft_strjoin(env->value, fim);
 				free(name);
-                return ft_strdup(env->value);
+				free(var);
+				return (new_str);
 			}
-            env = env->next;
-        }
+			env = env->next;
+		}
 		free(name);
-    }
-	if (var[0] == '$' && var[1] != '\0')
-        return ft_strdup("");
-    return (ft_strdup(var));
+		return (ft_strdup(""));
+	}
+	return (ft_strdup(var));
 }
 
 char **expander(char **str, t_env *env, int *g_returns, int wordcount)
 {
-	int i;
+	int		i;
+	char	*expanded;
 	
 	i = -1;
-    while (++i < wordcount)
-    {
-        char *expanded = expand_variable(str[i], env, g_returns);
-        if (expanded)
-        {
-            free(str[i]);
-            str[i] = expanded;
-        }
-    }
-    return (str);
+	while (++i < wordcount)
+	{
+		expanded = expand_variable(str[i], env, g_returns);
+		if (expanded)
+		{
+			free(str[i]);
+			str[i] = expanded;
+		}
+	}
+	return (str);
 }
-
 
 void	create_files(char **str, int wordcount)
 {
@@ -400,7 +404,7 @@ void	identify_command(char *command, t_env **env, char **envp, int *g_returns)
 {
 	Token	**classified_tokens;
 	char	**str;
-	int word_count;
+	int		word_count;
 	Command	*command_tree;
 
 	str = NULL;
@@ -409,8 +413,9 @@ void	identify_command(char *command, t_env **env, char **envp, int *g_returns)
 	if (!command)
 		return ;
 	str = ft_tokens(command, &word_count);
-	str = expander(str, *env, g_returns, word_count);
-	classified_tokens = classify_tokens(str, word_count);
+	classified_tokens = classify_tokens(str, word_count, env, g_returns);
+	if (!classified_tokens)
+		return ;
 	command_tree = build_command_tree(classified_tokens, word_count);
 	create_files(str, word_count);
 	print_command_tree(command_tree);

@@ -6,7 +6,7 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 12:32:54 by lantonio          #+#    #+#             */
-/*   Updated: 2024/12/02 10:21:41 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/12/10 13:23:19 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,6 @@ void	signal_new_line_2(int signum)
 	printf("\n");
 }
 
-void	signal_new_line_3(int signum)
-{
-	(void)signum;
-	printf("\n");
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
-}
-
 int	main(int ac, char **av, char **env)
 {
 	char	*command;
@@ -48,6 +39,7 @@ int	main(int ac, char **av, char **env)
 	configure_signal();
 	while (1)
 	{
+		command = NULL;
 		signal(SIGINT, signal_new_line);
 		command = readline("minishell$ ");
 		if (command != NULL)
