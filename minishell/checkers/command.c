@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 10:28:57 by hmateque          #+#    #+#             */
-/*   Updated: 2024/12/11 11:24:20 by hmateque         ###   ########.fr       */
+/*   Updated: 2024/12/11 15:37:17 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,7 @@ int	path_commands(Command *command_tree, t_env **env, char **envp, int *g_return
 		ft_strlcpy(path, paths[i], sizeof(path));
 		ft_strlcat(path, "/", sizeof(path));
 		ft_strlcat(path, command_tree->command, sizeof(path));
+		//free_matrix(paths);
 		if (access(path, X_OK) == 0)
 		{
 			pid = fork();
@@ -417,6 +418,8 @@ void	identify_command(char *command, t_env **env, char **envp, int *g_returns)
 	if (!classified_tokens)
 		return ;
 	command_tree = build_command_tree(classified_tokens, word_count);
+	if (command_tree->heredoc == 0)
+		add_history(command);
 	create_files(str, word_count);
 	print_command_tree(command_tree);
 	if (command_tree)

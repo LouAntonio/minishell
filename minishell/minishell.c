@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 12:32:54 by lantonio          #+#    #+#             */
-/*   Updated: 2024/12/11 12:34:23 by hmateque         ###   ########.fr       */
+/*   Updated: 2024/12/11 15:36:23 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ int	main(int ac, char **av, char **env)
 		command = int_read(&all_env);
 		if (!ft_strlen(command))
 			continue ;
-		add_history(command);
 		identify_command(command, &all_env, env, &g_return);
 		free(command);
 	}
