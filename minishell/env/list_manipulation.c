@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   list_manipulation.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:08:30 by hmateque          #+#    #+#             */
-/*   Updated: 2024/12/10 13:30:47 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/12/11 11:57:48 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ void	ft_list_add_back(t_env **lst, t_env *new)
 {
 	t_env	*t;
 
+	if (!lst || !new)
+		return ;
 	if (*lst)
 	{
 		t = ft_list_last(*lst);
@@ -27,14 +29,8 @@ void	ft_list_add_back(t_env **lst, t_env *new)
 
 t_env	*ft_list_last(t_env *lst)
 {
-	if (lst == NULL)
-		return (0);
-	while (lst)
-	{
-		if (lst->next == NULL)
-			return (lst);
+	while (lst && lst->next)
 		lst = lst->next;
-	}
 	return (lst);
 }
 

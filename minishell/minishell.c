@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 12:32:54 by lantonio          #+#    #+#             */
-/*   Updated: 2024/12/10 13:23:19 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/12/11 12:34:23 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./includes/minishell.h"
 
-int	g_return;
+int g_return ;
 
 void	signal_new_line(int signum)
 {
@@ -29,6 +29,23 @@ void	signal_new_line_2(int signum)
 	printf("\n");
 }
 
+static char	*int_read(t_env **env)
+{
+	char	*input;
+
+	configure_signal();
+	g_return = 0;
+	input = readline("minishell$ ");
+	if (!input)
+	{
+		// Liberar all_env;
+		free_env_list(env);
+		ft_putstr_fd("exit\n", 1);
+		exit(0);
+	}
+	return (input);
+}
+
 int	main(int ac, char **av, char **env)
 {
 	char	*command;
@@ -36,21 +53,14 @@ int	main(int ac, char **av, char **env)
 
 	all_env = NULL;
 	ft_set_value(ac, av, env, &all_env);
-	configure_signal();
 	while (1)
 	{
-		command = NULL;
-		signal(SIGINT, signal_new_line);
-		command = readline("minishell$ ");
-		if (command != NULL)
-		{
-			signal(SIGINT, signal_new_line_2);
-			identify_command(command, &all_env, env, &g_return);
-			add_history(command);
-			free(command);
-		}
-		else
-			break ;
+		command = int_read(&all_env);
+		if (!ft_strlen(command))
+			continue ;
+		add_history(command);
+		identify_command(command, &all_env, env, &g_return);
+		free(command);
 	}
 	rl_clear_history();
 	return (0);

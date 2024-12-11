@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_args_main.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 10:34:06 by hmateque          #+#    #+#             */
-/*   Updated: 2024/11/19 15:38:43 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/12/11 11:55:54 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	ft_set_value(int ac, char **av, char **env, t_env **all_env)
 		new = (t_env *)malloc(sizeof(t_env));
 		new->name = ft_char_cpy(env[i], 0, 0, 1);
 		new->value = ft_char_cpy(env[i], 0, 0, 2);
+		new->next = NULL;
 		ft_list_add_back(all_env, new);
 	}
 }

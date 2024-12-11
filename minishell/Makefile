@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+         #
+#    By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/11 16:35:01 by lantonio          #+#    #+#              #
-#    Updated: 2024/12/10 11:11:23 by lantonio         ###   ########.fr        #
+#    Updated: 2024/12/11 12:33:09 by hmateque         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -65,5 +65,11 @@ fclean : clean
 	@echo "cleaning executable"
 
 re : fclean all
+
+valgrind:
+	valgrind  --leak-check=full ./minishell
+	
+valgrind_all:
+	valgrind  --leak-check=full --show-leak-kinds=all ./minishell
 
 .PHONY : all clean fclean re
