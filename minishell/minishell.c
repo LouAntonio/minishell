@@ -6,7 +6,7 @@
 /*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 12:32:54 by lantonio          #+#    #+#             */
-/*   Updated: 2024/12/11 12:34:23 by hmateque         ###   ########.fr       */
+/*   Updated: 2024/12/12 09:02:07 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ static char	*int_read(t_env **env)
 	char	*input;
 
 	configure_signal();
-	g_return = 0;
 	input = readline("minishell$ ");
 	if (!input)
 	{

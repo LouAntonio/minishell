@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_aux_str.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 11:56:22 by hmateque          #+#    #+#             */
-/*   Updated: 2024/11/15 15:58:19 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/12/12 12:22:51 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,70 +33,53 @@ int	ft_strcmp(char *s1, char *s2)
 	return ((int)((unsigned char)s1[i] - (unsigned char)s2[i]));
 }
 
-char	*remove_quote(char *str)
+char *ft_strjoin_free(char *s1, const char *s2)
 {
-	int		i;
-	int		j;
-	int		len;
-	char	*new_str;
+    char *result;
+    size_t len1, len2;
 
-	i = 0;
-	j = 0;
-	len = 0;
-	while (str[i])
-	{
-		if (str[i] != '"' && str[i] != '\'')
-			len++;
-		i++;
-	}
-	new_str = (char *)malloc(sizeof(char) * (len + 1));
-	if (!new_str)
-		return (NULL);
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] != '"' && str[i] != '\'')
-			new_str[j++] = str[i];
-		i++;
-	}
-	new_str[j] = '\0';
-	return (new_str);
+    if (!s1 && !s2)
+        return NULL;
+    if (!s1)
+        return strdup(s2);
+    if (!s2)
+        return s1;
+
+    len1 = strlen(s1);
+    len2 = strlen(s2);
+
+    result = (char *)malloc(len1 + len2 + 1);
+    if (!result)
+    {
+        free(s1);
+        return NULL;
+    }
+
+    strcpy(result, s1);
+    strcat(result, s2);
+
+    free(s1);
+    return result;
 }
 
-char	**remove_quotes(char **str)
+char *ft_strndup(const char *s, size_t n)
 {
-	int		i;
-	int		j;
-	int		qtd_quotes;
-	char	*new_str;
+    char *result;
+    size_t len;
 
-	i = 0;
-	while (str[i])
-	{
-		j = 0;
-		qtd_quotes = 0;
-		while (str[i][j])
-		{
-			if (str[i][j] == '"')
-				qtd_quotes++;
-			if (str[i][j] == '\'')
-				qtd_quotes++;
-			j++;
-		}
-		if (qtd_quotes % 2 == 0)
-		{
-			new_str = remove_quote(str[i]);
-			if (new_str)
-			{
-				free(str[i]);
-				str[i] = new_str;
-			}
-			else
-				return (NULL);
-		}
-		else
-			return (NULL);
-		i++;
-	}
-	return (str);
+    if (!s)
+        return NULL;
+
+    len = strlen(s);
+    if (n < len)
+        len = n;
+
+    result = (char *)malloc(len + 1);
+    if (!result)
+        return NULL;
+
+    ft_memcpy(result, s, len);
+    result[len] = '\0';
+
+    return result;
 }

@@ -3,14 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   string.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 10:30:56 by hmateque          #+#    #+#             */
-/*   Updated: 2024/11/19 15:09:08 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/12/12 08:45:56 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int check_quote_syntax(char *input)
+{
+	int		inside_quote;
+	char	quote_type;
+
+	inside_quote = 0;
+	quote_type = '\0';
+	while (*input)
+	{
+		if (*input == '"' || *input == '\'')
+		{
+			if (!inside_quote)
+			{
+				inside_quote = 1;
+				quote_type = *input;
+			}
+			else if (*input == quote_type)
+			{
+				inside_quote = 0;
+				quote_type = '\0';
+			}
+		}
+		input++;
+	}
+	if (inside_quote)
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
+}
 
 int	check_read_from(char **str)
 {

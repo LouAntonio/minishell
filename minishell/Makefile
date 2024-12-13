@@ -6,7 +6,7 @@
 #    By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/11 16:35:01 by lantonio          #+#    #+#              #
-#    Updated: 2024/12/11 12:33:09 by hmateque         ###   ########.fr        #
+#    Updated: 2024/12/12 12:01:45 by hmateque         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ SRCS	= minishell.c\
 			./src/ft_aux_str.c\
 			./src/ft_args_main.c\
 			./src/tokenizer.c\
+			./src/mudar_dps.c\
 			./src/build_command.c\
 			./env/list_manipulation.c\
 			./checkers/command.c\
@@ -33,7 +34,7 @@ SRCS	= minishell.c\
 			./commands/cd.c\
 			./commands/env.c\
 			./commands/exit.c\
-			./env/print_var.c\
+			./env/env_utils.c\
 
 OBJS	= $(SRCS:.c=.o)
 
