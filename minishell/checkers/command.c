@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 10:28:57 by hmateque          #+#    #+#             */
-/*   Updated: 2024/12/12 12:37:11 by hmateque         ###   ########.fr       */
+/*   Updated: 2024/12/13 10:42:23 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,20 +42,26 @@ static void	print_command_tree(Command *root)
 int	handle_redirection(Command *command_tree)
 {
 	int	fd;
+	int	saved_stdout;
 
-	fd = dup(STDOUT_FILENO);
-	if (command_tree->redirect_out != NULL)
+	saved_stdout = dup(STDOUT_FILENO);
+	if (saved_stdout == -1)
+		return (perror("Error duplicating STDOUT"), -1);
+	if (command_tree->redirect_out)
 	{
 		if (command_tree->redirect_out_type == 1)
-			fd = open(command_tree->redirect_out, O_WRONLY
-					| O_CREAT | O_TRUNC, 0644);
+			fd = open(command_tree->redirect_out, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		else if (command_tree->redirect_out_type == 2)
+			fd = open(command_tree->redirect_out, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		else
-			fd = open(command_tree->redirect_out, O_WRONLY
-					| O_CREAT | O_APPEND, 0644);
-		dup2(fd, STDOUT_FILENO);
+			fd = -1;
+		if (fd == -1)
+			return (perror("Error opening redirection file"), -1);
+		if (dup2(fd, STDOUT_FILENO) == -1)            
+			return (perror("Error redirecting output"), close(fd), -1);
 		close(fd);
 	}
-	return (fd);
+	return (saved_stdout);
 }
 
 int	check_red_in(Command *command_tree, int *fd_in)
@@ -326,120 +332,113 @@ char	*close_pipe(char *command)
 
 char *expand_variable(char *var, t_env *env, int *g_returns)
 {
-    char *result = ft_strdup("");
-    char *current = var;
-    char *dollar_sign;
+	char *result = ft_strdup("");
+	char *current = var;
+	char *dollar_sign;
 
-    while ((dollar_sign = ft_strchr(current, '$')))
-    {
-        char *temp = ft_strndup(current, dollar_sign - current);
-        result = ft_strjoin_free(result, temp);
-        free(temp);
+	while ((dollar_sign = ft_strchr(current, '$')))
+	{
+		char *temp = ft_strndup(current, dollar_sign - current);
+		result = ft_strjoin_free(result, temp);
+		free(temp);
 
-        current = dollar_sign + 1;
-        if (*current == '?')
-        {
-            char *exit_status = ft_itoa(*g_returns);
-            result = ft_strjoin_free(result, exit_status);
-            free(exit_status);
-            current++;
-        }
-        else
-        {
-            char *var_end = current;
-            while (*var_end && (ft_isalnum(*var_end) || *var_end == '_'))
-                var_end++;
-            
-            char *var_name = ft_strndup(current, var_end - current);
-            t_env *env_var = find_env_var(env, var_name);
-            if (env_var)
-                result = ft_strjoin_free(result, env_var->value);
-            free(var_name);
-            current = var_end;
-        }
-    }
-    result = ft_strjoin_free(result, current);
-    return result;
+		current = dollar_sign + 1;
+		if (*current == '?')
+		{
+			char *exit_status = ft_itoa(*g_returns);
+			result = ft_strjoin_free(result, exit_status);
+			free(exit_status);
+			current++;
+		}
+		else
+		{
+			char *var_end = current;
+			while (*var_end && (ft_isalnum(*var_end) || *var_end == '_'))
+				var_end++;
+			
+			char *var_name = ft_strndup(current, var_end - current);
+			t_env *env_var = find_env_var(env, var_name);
+			if (env_var)
+				result = ft_strjoin_free(result, env_var->value);
+			free(var_name);
+			current = var_end;
+		}
+	}
+	result = ft_strjoin_free(result, current);
+	return result;
 }
 
 char **expander(char **str, t_env *env, int *g_returns, int wordcount)
 {
-    int i;
-    char *expanded;
-    
-    i = -1;
-    while (++i < wordcount)
-    {
-        if (str[i][0] == '\'' && str[i][ft_strlen(str[i]) - 1] == '\'')
-        {
-            // Remove as aspas simples
-            char *temp = ft_strndup(str[i] + 1, ft_strlen(str[i]) - 2);
-            free(str[i]);
-            str[i] = temp;
-        }
-        else if (str[i][0] == '"' && str[i][ft_strlen(str[i]) - 1] == '"')
-        {
-            // Remove as aspas duplas e expande as variáveis
-            char *temp = ft_strndup(str[i] + 1, ft_strlen(str[i]) - 2);
-            expanded = expand_variable(temp, env, g_returns);
-            free(temp);
-            free(str[i]);
-            str[i] = expanded;
-        }
-        else
-        {
-            // Expande as variáveis normalmente
-            expanded = expand_variable(str[i], env, g_returns);
-            free(str[i]);
-            str[i] = expanded;
-        }
-    }
-    return str;
-}
-
-void	create_files(char **str, int wordcount)
-{
-	int	i;
-	int	fd;
-
+	int i;
+	char *expanded;
+	
 	i = -1;
 	while (++i < wordcount)
 	{
-		if (!ft_strcmp(str[i], ">>"))
+		if (str[i][0] == '\'' && str[i][ft_strlen(str[i]) - 1] == '\'')
 		{
-			if (str[i + 1])
-			{
-				fd = open(str[++i], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-				if (fd != -1)
-					close(fd);
-			}
+			// Remove as aspas simples
+			char *temp = ft_strndup(str[i] + 1, ft_strlen(str[i]) - 2);
+			free(str[i]);
+			str[i] = temp;
 		}
-		else if (!ft_strcmp(str[i], ">"))
+		else if (str[i][0] == '"' && str[i][ft_strlen(str[i]) - 1] == '"')
 		{
-			if (str[i + 1])
-			{
-				fd = open(str[++i], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-				if (fd != -1)
-					close(fd);
-			}
+			// Remove as aspas duplas e expande as variáveis
+			char *temp = ft_strndup(str[i] + 1, ft_strlen(str[i]) - 2);
+			expanded = expand_variable(temp, env, g_returns);
+			free(temp);
+			free(str[i]);
+			str[i] = expanded;
+		}
+		else
+		{
+			// Expande as variáveis normalmente
+			expanded = expand_variable(str[i], env, g_returns);
+			free(str[i]);
+			str[i] = expanded;
 		}
 	}
+	return str;
 }
+void create_files(Command *command_tree) {
+	int		fd;
+	Command	*command;
+
+	command = command_tree;
+	while (command)
+	{
+		if (command->redirect_out)
+		{
+			if (command->redirect_out_type == 1)
+				fd = open(command->redirect_out, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			else if (command->redirect_out_type == 2)
+				fd = open(command->redirect_out, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			else
+				fd = -1;
+			if (fd != -1)
+				close(fd);
+		}
+		command = command->next;
+	}
+}
+
 void print_classified_tokens(Token **tokens) {
-    for (int i = 0; tokens[i] != NULL; i++) {
-        printf("Token %d: Value = '%s', Type = ", i, tokens[i]->value);
-        switch (tokens[i]->type) {
-            case TOKEN_ARG: printf("ARG\n"); break;
-            case TOKEN_PIPE: printf("PIPE\n"); break;
-            case TOKEN_APPEND_OUT: printf("APPEND_OUT\n"); break;
-            case TOKEN_REDIRECT_OUT: printf("REDIRECT_OUT\n"); break;
-            case TOKEN_HEREDOC: printf("HEREDOC\n"); break;
-            case TOKEN_REDIRECT_IN: printf("REDIRECT_IN\n"); break;
-            case TOKEN_COMMAND: printf("COMMAND\n"); break;
-            default: printf("UNKNOWN\n");
-        }
-    }
-    printf("\n");
+	for (int i = 0; tokens[i] != NULL; i++) {
+		printf("Token %d: Value = '%s', Type = ", i, tokens[i]->value);
+		switch (tokens[i]->type) {
+			case TOKEN_ARG: printf("ARG\n"); break;
+			case TOKEN_PIPE: printf("PIPE\n"); break;
+			case TOKEN_APPEND_OUT: printf("APPEND_OUT\n"); break;
+			case TOKEN_REDIRECT_OUT: printf("REDIRECT_OUT\n"); break;
+			case TOKEN_HEREDOC: printf("HEREDOC\n"); break;
+			case TOKEN_REDIRECT_IN: printf("REDIRECT_IN\n"); break;
+			case TOKEN_COMMAND: printf("COMMAND\n"); break;
+			default: printf("UNKNOWN\n");
+		}
+	}
+	printf("\n");
 }
 
 void	identify_command(char *command, t_env **env, char **envp, int *g_returns)
@@ -462,20 +461,14 @@ void	identify_command(char *command, t_env **env, char **envp, int *g_returns)
 		return ;
 	str = ft_tokens(command, &word_count);
 	str = expander(str, *env, g_returns, word_count);
-	printf("1\n");
 	if (!str)
 		return ;
-	for (int i = 0; str[i] != NULL; i++)
-	{
-		printf("[%d] %s\n",i,  str[i]);
-	}
 	classified_tokens = classify_tokens(str, word_count, env, g_returns);
 	if (!classified_tokens)
 		return ;
-	print_classified_tokens(classified_tokens);
-	return ;
+	//print_classified_tokens(classified_tokens);
 	command_tree = build_command_tree(classified_tokens, word_count);
-	create_files(str, word_count);
+	create_files(command_tree);
 	print_command_tree(command_tree);
 	if (command_tree)
 		run_commands(command_tree, str, env, envp, g_returns);

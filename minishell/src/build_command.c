@@ -6,12 +6,11 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 11:35:13 by hmateque          #+#    #+#             */
-/*   Updated: 2024/12/10 13:18:39 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/12/13 10:43:02 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
 
 Command	*build_command_tree(Token **tokens, int wordcount)
 {

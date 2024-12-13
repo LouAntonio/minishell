@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 10:06:57 by lantonio          #+#    #+#             */
-/*   Updated: 2024/12/12 12:23:15 by hmateque         ###   ########.fr       */
+/*   Updated: 2024/12/13 09:29:08 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,6 @@ TokenType			identify_token(char *token);
 Token				**classify_tokens(char **tokens, int word_count,
 						t_env **env, int *g_returns);
 Command				*build_command_tree(Token **tokens, int word_count);
-int					validate_command_tree(Command *root);
 
 // Liberacao de memoria
 // void				free_command_tree(CommandTree *command_tree);
