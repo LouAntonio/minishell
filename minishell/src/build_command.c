@@ -6,7 +6,7 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 11:35:13 by hmateque          #+#    #+#             */
-/*   Updated: 2024/12/13 10:43:02 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/12/14 17:16:51 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ Command	*build_command_tree(Token **tokens, int wordcount)
 		if (tokens[i]->type == TOKEN_COMMAND || current == NULL)
 		{
 			new_cmd = malloc(sizeof(Command));
-			new_cmd->command = tokens[i]->value;
+			new_cmd->command = NULL;
 			new_cmd->args = ft_calloc((wordcount + 1), sizeof(char *));
 			new_cmd->redirect_out = NULL;
 			new_cmd->redirect_in = NULL;
@@ -37,6 +37,8 @@ Command	*build_command_tree(Token **tokens, int wordcount)
 			new_cmd->heredoc = 0;
 			new_cmd->heredoc_end = NULL;
 			arg_index = 0;
+			if (tokens[i]->type == TOKEN_COMMAND)
+				new_cmd->command = tokens[i]->value;
 			if (root == NULL)
 			{
 				root = new_cmd;

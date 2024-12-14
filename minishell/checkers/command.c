@@ -6,7 +6,7 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 10:28:57 by hmateque          #+#    #+#             */
-/*   Updated: 2024/12/13 10:42:23 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/12/14 21:02:51 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	print_command_tree(Command *root)
 	Command	*current;
 
 	current = root;
-	return ;
+	//return ;
 	while (current != NULL)
 	{
 		printf("Comando: \033[0;32m%s\033[0m\n", current->command);
@@ -295,39 +295,67 @@ int	run_commands(Command *command_tree, char **str, t_env **env, char **envp, in
 	return (1);
 }
 
+void	handle_sigint_child(int sig)
+{
+    (void)sig;
+    exit(0);
+}
+
 char	*close_pipe(char *command)
 {
-	int		i;
-	char	*complete;
+    int		i;
+    int		j;
+    char	*complete;
+    pid_t	pid;
 
-	i = 0;
-	complete = NULL;
-	while (command[i])
-		i++;
-	if (command[0] == '|')
-		return (printf("minishell: parse error near '|'\n"), NULL);
-	if (command[--i] == '|')
-	{
-		complete = readline("pipe> ");
-		if (!complete)
-		{
-			printf("minishell: syntax error: unexpected end of file\n");
-			ft_exit(NULL, NULL);
-		}
-		while (complete[0] == '\0')
-		{
-			if (command[0] == '\0')
-				printf("KO\n");
-			free(complete);
-			complete = readline("pipe> ");
-		}
-	}
-	else
-		return (command);
-	command = ft_strjoin(command, " ");
-	command = ft_strjoin(command, complete);
-	free(complete);
-	return (command);
+    i = 0;
+    complete = NULL;
+    while (command[i])
+        i++;
+    if (command[0] == '|')
+        return (printf("minishell: parse error near '|'\n"), NULL);
+    j = i - 2;
+    if (command[--i] == '|')
+    {
+        while (command[j] == ' ' || command[j] <= 13)
+            j--;
+        if (command[j] == '|')
+            return (printf("minishell: parse error near '|'\n"), NULL);
+        pid = fork();
+        if (pid == -1)
+            return (perror("Fork failed"), NULL);
+        if (pid == 0)
+        {
+            signal(SIGINT, handle_sigint_child);
+            complete = readline("> ");
+            if (!complete)
+            {
+                printf("minishell: syntax error: unexpected end of file\n");
+                exit(1);
+            }
+            while (complete[0] == '\0')
+            {
+                free(complete);
+                complete = readline("pipe> ");
+                if (!complete)
+                {
+                    printf("minishell: syntax error: unexpected end of file\n");
+                    exit(1);
+                }
+            }
+            exit(0);
+        }
+        else
+        {
+            wait(NULL);
+            command = ft_strjoin(command, " ");
+            command = ft_strjoin(command, complete);
+            free(complete);
+        }
+    }
+    else
+        return (command);
+    return (command);
 }
 
 char *expand_variable(char *var, t_env *env, int *g_returns)
@@ -335,7 +363,11 @@ char *expand_variable(char *var, t_env *env, int *g_returns)
 	char *result = ft_strdup("");
 	char *current = var;
 	char *dollar_sign;
-
+	if (ft_strcmp(var, "$") == 0)
+	{
+		result = ft_strdup("$");
+		return result;
+	}
 	while ((dollar_sign = ft_strchr(current, '$')))
 	{
 		char *temp = ft_strndup(current, dollar_sign - current);
@@ -372,11 +404,13 @@ char **expander(char **str, t_env *env, int *g_returns, int wordcount)
 {
 	int i;
 	char *expanded;
-	
+
 	i = -1;
 	while (++i < wordcount)
 	{
-		if (str[i][0] == '\'' && str[i][ft_strlen(str[i]) - 1] == '\'')
+		if (str[i][1] == '|' || str[i][1] == '>' || str[i][1] == '<' || str[i][1] == '$')
+			continue;
+		else if (str[i][0] == '\'' && str[i][ft_strlen(str[i]) - 1] == '\'')
 		{
 			// Remove as aspas simples
 			char *temp = ft_strndup(str[i] + 1, ft_strlen(str[i]) - 2);
@@ -457,6 +491,7 @@ void	identify_command(char *command, t_env **env, char **envp, int *g_returns)
 	}
 	command = trim_spaces(command);
 	command = close_pipe(command);
+	signal(SIGINT, signal_new_line_2);
 	if (!command)
 		return ;
 	str = ft_tokens(command, &word_count);
