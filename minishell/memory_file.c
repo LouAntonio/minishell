@@ -6,7 +6,7 @@
 /*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 00:04:17 by hmateque          #+#    #+#             */
-/*   Updated: 2024/12/15 02:46:58 by hmateque         ###   ########.fr       */
+/*   Updated: 2024/12/15 06:30:31 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,27 @@ void	free_all_mem(void)
 	t_list	*next;
 
 	mem_list = get_mem_address();
-
 	current = *mem_list;
 	while (current)
 	{
 		next = current->next;
 		if (current->content)
-			free(current->content);
+		{
+			void **matrix = (void **)current->content;
+			size_t i = 0;
+			if (matrix)
+			{
+				while (matrix[i])
+				{
+					free(matrix[i]);
+					i++;
+				}
+			}
+			free(matrix);
+		}
 		free(current);
 		current = next;
 	}
 	*mem_list = NULL;
 }
+

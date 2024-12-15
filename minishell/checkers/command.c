@@ -6,7 +6,7 @@
 /*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 10:28:57 by hmateque          #+#    #+#             */
-/*   Updated: 2024/12/15 02:49:10 by hmateque         ###   ########.fr       */
+/*   Updated: 2024/12/15 08:29:42 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -360,6 +360,8 @@ char	*close_pipe(char *command, int i, int j)
     return (command);
 }
 
+
+
 char *expand_variable(char *var, t_env *env, int *g_returns)
 {
     char *result = ft_strdup("");
@@ -423,10 +425,28 @@ char *remove_single_quotes(char *str)
         i++;
     }
     result[j] = '\0';
-    return result;
+    return (result);
 }
 
-int avoid_quote_error(char *str)
+char *remove_double_quotes(char *str)
+{
+    char *result = malloc(strlen(str) + 1);
+    int i = 0, j = 0;
+
+    while (str[i])
+    {
+        if (str[i] != '"')
+        {
+            result[j] = str[i];
+            j++;
+        }
+        i++;
+    }
+    result[j] = '\0';
+    return (result);
+}
+
+int avoid_single_quote_error(char *str)
 {
     int i;
     int quote_count;
@@ -445,6 +465,25 @@ int avoid_quote_error(char *str)
     return 0;
 }
 
+int avoid_double_quote_error(char *str)
+{
+    int i;
+    int quote_count;
+
+    i = 0;
+    quote_count = 0;
+    while (str[i])
+    {
+        if (str[i] == '"')
+            quote_count++;
+        i++;
+    }
+    
+    if (quote_count > 1)
+        return 1;
+    return 0;
+}
+
 char **expander(char **str, t_env *env, int *g_returns, int wordcount)
 {
 	int i;
@@ -452,6 +491,8 @@ char **expander(char **str, t_env *env, int *g_returns, int wordcount)
 	char *temp;
 
 	i = -1;
+	if (!str)
+		return (NULL);
 	while (++i < wordcount)
 	{
 		if (str[i][1] == '|' || str[i][1] == '>' || str[i][1] == '<' || str[i][1] == '$')
@@ -460,6 +501,7 @@ char **expander(char **str, t_env *env, int *g_returns, int wordcount)
 		{
 			// Remove as aspas simples
 			temp = ft_strndup(str[i] + 1, ft_strlen(str[i]) - 2);
+			collect_mem(temp);
 			free(str[i]);
 			str[i] = temp;
 		}
@@ -468,6 +510,7 @@ char **expander(char **str, t_env *env, int *g_returns, int wordcount)
 			// Remove as aspas duplas e expande as variáveis
 			temp = ft_strndup(str[i] + 1, ft_strlen(str[i]) - 2);
 			expanded = expand_variable(temp, env, g_returns);
+			collect_mem(expanded);
 			free(temp);
 			free(str[i]);
 			str[i] = expanded;
@@ -475,18 +518,29 @@ char **expander(char **str, t_env *env, int *g_returns, int wordcount)
 		else
 		{
 			// Expande as variáveis normalmente
-			if (avoid_quote_error(str[i]))
+			expanded = expand_variable(str[i], env, g_returns);
+			if (avoid_double_quote_error(expanded))
+    		{
+				temp = remove_double_quotes(expanded);
+				collect_mem(temp);
+				free(expanded);
+        		free(str[i]);
+        		str[i] = temp;
+    		}
+			else if (avoid_single_quote_error(expanded))
 			{	
-				temp = remove_single_quotes(str[i]);
+				temp = remove_single_quotes(expanded);
+				collect_mem(temp);
+				free(expanded);
             	free(str[i]);
             	str[i] = temp;
 			}
-			expanded = expand_variable(str[i], env, g_returns);
-			if (ft_strcmp(expanded,str[i]) != 0)  // Verifica se a string foi realmente expandida
-    		{
-        		free(str[i]);
+			else
+			{
+			 	collect_mem(expanded);
+        	 	free(str[i]);
         		str[i] = expanded;
-    		}
+			}
 		}
 	}
 	return str;

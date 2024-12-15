@@ -6,7 +6,7 @@
 /*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 10:30:56 by hmateque          #+#    #+#             */
-/*   Updated: 2024/12/15 02:39:11 by hmateque         ###   ########.fr       */
+/*   Updated: 2024/12/15 06:58:16 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,24 +111,6 @@ int	ft_isspace(char c)
 	return (0);
 }
 
-// char *ft_strncpy(char *dest, char *src, size_t n)
-// {
-//     size_t i;
-
-//     i = 0;
-//     while (i < n && src[i] != '\0')
-//     {
-//         dest[i] = src[i];
-//         i++;
-//     }
-//     while (i < n)
-//     {
-//         dest[i] = '\0';
-//         i++;
-//     }
-//     return dest;
-// }
-
 char *trim_spaces(char *str, size_t i)
 {
     char *start;
@@ -155,7 +137,7 @@ char *trim_spaces(char *str, size_t i)
         trimmed[i] = start[i];
     trimmed[new_length] = '\0';
     free(str);
-    return trimmed;
+    return (trimmed);
 }
 
 

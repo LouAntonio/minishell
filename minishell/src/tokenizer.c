@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 09:39:33 by hmateque          #+#    #+#             */
-/*   Updated: 2024/12/14 15:58:00 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/12/15 08:22:14 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,11 @@ static char	*resize_word(char *word, int *capacity)
 	i = -1;
 	new_capacity = *capacity * 2;
 	new_word = (char *)malloc(new_capacity * sizeof(char));
+	collect_mem(new_word);
 	if (new_word == NULL)
 		return (NULL);
 	while (++i < *capacity)
 		new_word[i] = word[i];
-	free(word);
 	*capacity = new_capacity;
 	return (new_word);
 }
@@ -118,6 +118,7 @@ static int	extract_words(const char *input, char **matrix, int *word_count)
 			{
 				in_word = true;
 				word = allocate_word(word_capacity);
+				collect_mem(word);
 				if (word == NULL)
 					return (-1);
 			}
@@ -142,6 +143,7 @@ static int	extract_words(const char *input, char **matrix, int *word_count)
 			{
 				in_word = true;
 				word = allocate_word(word_capacity);
+				collect_mem(word);
 				if (word == NULL)
 					return (-1);
 			}
@@ -166,34 +168,22 @@ static int	extract_words(const char *input, char **matrix, int *word_count)
 
 char	**ft_tokens(const char *input, int *word_count)
 {
-	int		j;
 	char	**matrix;
 
-	j = -1;
 	*word_count = count_words(input);
 	matrix = (char **)malloc((*word_count + 1) * sizeof(char *));
+	collect_mem(matrix);
 	if (matrix == NULL)
 	{
+		free_all_mem();
 		*word_count = 0;
 		return (NULL);
 	}
 	if (extract_words(input, matrix, word_count) == -1)
 	{
-		while (++j < *word_count)
-			free(matrix[j]);
-		free(matrix);
+		free_all_mem();
 		*word_count = 0;
 		return (NULL);
 	}
 	return (matrix);
-}
-
-void	free_matrix_tokens(char **matrix, int word_count)
-{
-	int	i;
-
-	i = -1;
-	while (++i < word_count)
-		free(matrix[i]);
-	free(matrix);
 }

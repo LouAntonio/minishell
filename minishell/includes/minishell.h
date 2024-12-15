@@ -6,7 +6,7 @@
 /*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 10:06:57 by lantonio          #+#    #+#             */
-/*   Updated: 2024/12/15 02:47:24 by hmateque         ###   ########.fr       */
+/*   Updated: 2024/12/15 06:54:59 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,6 @@ void				free_all_mem(void);
 // void				free_command_tree(CommandTree *command_tree);
 void				free_env_list(t_env **env);
 void				free_matrix(char **matrix);
-void				free_matrix_tokens(char **matrix, int word_count);
 void				free_classified_tokens(Token **classified_tokens);
 
 #endif
