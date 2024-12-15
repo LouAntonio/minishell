@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 10:06:57 by lantonio          #+#    #+#             */
-/*   Updated: 2024/12/14 19:12:02 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/12/15 02:47:24 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 # include "../libft/libft.h"
+# include <errno.h>
 # include <fcntl.h>
 # include <limits.h>
 # include <readline/history.h>
@@ -101,7 +102,7 @@ void				ft_set_value(int ac, char **av, char **env,
 char				*ft_char_cpy(char *src, int len_src, int len_dest,
 						int limit);
 char				*ft_strncpy(char *dest, const char *src, int n);
-char				*trim_spaces(char *str);
+char				*trim_spaces(char *str, size_t i);
 
 // aux_funct str
 int					ft_strcmp(char *s1, char *s2);
@@ -136,6 +137,10 @@ Token				**classify_tokens(char **tokens, int word_count,
 Command				*build_command_tree(Token **tokens, int word_count);
 
 // Liberacao de memoria
+void				*allocate_mem(size_t nmemb, size_t size);
+void				collect_mem(void *content);
+t_list				**get_mem_address(void);
+void				free_all_mem(void);
 // void				free_command_tree(CommandTree *command_tree);
 void				free_env_list(t_env **env);
 void				free_matrix(char **matrix);

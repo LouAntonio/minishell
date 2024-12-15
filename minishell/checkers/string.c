@@ -6,7 +6,7 @@
 /*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 10:30:56 by hmateque          #+#    #+#             */
-/*   Updated: 2024/12/12 08:45:56 by hmateque         ###   ########.fr       */
+/*   Updated: 2024/12/15 02:39:11 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int	check_cipher(char *str, int fd, t_env *env)
 	result++;
 	while (result[i] != '\0')
 		i++;
-	new_str = (char *)malloc(sizeof(char) * (i + 1));
+	new_str = allocate_mem((i + 1), sizeof(char));
 	i = 0;
 	while (result[i] != '\0')
 	{
@@ -91,7 +91,6 @@ int	check_cipher(char *str, int fd, t_env *env)
 	}
 	new_str[i] = '\0';
 	search_and_print_list(env, new_str, fd);
-	free(new_str);
 	return (1);
 }
 
@@ -112,46 +111,51 @@ int	ft_isspace(char c)
 	return (0);
 }
 
-char	*trim_spaces(char *str)
-{
-	char	*start;
-	char	*end;
-	char	*trimmed;
-	int		new_length;
+// char *ft_strncpy(char *dest, char *src, size_t n)
+// {
+//     size_t i;
 
-	if (!str)
-		return (NULL);
-	start = str;
-	while (*start && ft_isspace((unsigned char)*start))
-		start++;
-	if (*start == '\0')
-		return (NULL);
-	end = str + ft_strlen(str) - 1;
-	while (end > start && ft_isspace((unsigned char)*end))
-		end--;
-	new_length = end - start + 1;
-	trimmed = (char *)malloc(new_length + 1);
-	if (!trimmed)
-		return (NULL);
-	ft_strncpy(trimmed, start, new_length);
-	trimmed[new_length] = '\0';
-	return (trimmed);
+//     i = 0;
+//     while (i < n && src[i] != '\0')
+//     {
+//         dest[i] = src[i];
+//         i++;
+//     }
+//     while (i < n)
+//     {
+//         dest[i] = '\0';
+//         i++;
+//     }
+//     return dest;
+// }
+
+char *trim_spaces(char *str, size_t i)
+{
+    char *start;
+    char *end;
+    char *trimmed;
+    size_t new_length;
+
+    if (!str)
+        return NULL;
+    start = str;
+    while (*start && ft_isspace((unsigned char)*start))
+        start++;
+    if (*start == '\0')
+    {
+        free(str);
+        return NULL;
+    }
+    end = str + ft_strlen(str) - 1;
+    while (end > start && ft_isspace((unsigned char)*end))
+        end--;
+    new_length = end - start + 1;
+    trimmed = allocate_mem(new_length + 1, sizeof(char));
+    while (++i < new_length)
+        trimmed[i] = start[i];
+    trimmed[new_length] = '\0';
+    free(str);
+    return trimmed;
 }
 
-char	*ft_strncpy(char *dest, const char *src, int n)
-{
-	int	i;
 
-	i = 0;
-	while (i < n && src[i] != '\0')
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	while (i < n)
-	{
-		dest[i] = '\0';
-		i++;
-	}
-	return (dest);
-}

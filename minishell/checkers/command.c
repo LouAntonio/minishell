@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 10:28:57 by hmateque          #+#    #+#             */
-/*   Updated: 2024/12/14 21:02:51 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/12/15 02:49:10 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	print_command_tree(Command *root)
 	Command	*current;
 
 	current = root;
-	//return ;
+	return ;
 	while (current != NULL)
 	{
 		printf("Comando: \033[0;32m%s\033[0m\n", current->command);
@@ -301,17 +301,13 @@ void	handle_sigint_child(int sig)
     exit(0);
 }
 
-char	*close_pipe(char *command)
+char	*close_pipe(char *command, int i, int j)
 {
-    int		i;
-    int		j;
     char	*complete;
+	char	*temp;
     pid_t	pid;
-
-    i = 0;
+    i = ft_strlen(command);
     complete = NULL;
-    while (command[i])
-        i++;
     if (command[0] == '|')
         return (printf("minishell: parse error near '|'\n"), NULL);
     j = i - 2;
@@ -330,6 +326,7 @@ char	*close_pipe(char *command)
             complete = readline("> ");
             if (!complete)
             {
+				free(complete);
                 printf("minishell: syntax error: unexpected end of file\n");
                 exit(1);
             }
@@ -339,6 +336,7 @@ char	*close_pipe(char *command)
                 complete = readline("pipe> ");
                 if (!complete)
                 {
+					free(complete);
                     printf("minishell: syntax error: unexpected end of file\n");
                     exit(1);
                 }
@@ -348,8 +346,12 @@ char	*close_pipe(char *command)
         else
         {
             wait(NULL);
-            command = ft_strjoin(command, " ");
-            command = ft_strjoin(command, complete);
+            temp = ft_strjoin(command, " ");
+			collect_mem(temp);
+			command = temp;
+			temp = ft_strjoin(command, complete);
+			collect_mem(temp);
+			command = temp;
             free(complete);
         }
     }
@@ -360,50 +362,94 @@ char	*close_pipe(char *command)
 
 char *expand_variable(char *var, t_env *env, int *g_returns)
 {
-	char *result = ft_strdup("");
-	char *current = var;
-	char *dollar_sign;
-	if (ft_strcmp(var, "$") == 0)
-	{
-		result = ft_strdup("$");
-		return result;
-	}
-	while ((dollar_sign = ft_strchr(current, '$')))
-	{
-		char *temp = ft_strndup(current, dollar_sign - current);
-		result = ft_strjoin_free(result, temp);
-		free(temp);
+    char *result = ft_strdup("");
+    char *current = var;
+    int inside_single_quotes = 0;
 
-		current = dollar_sign + 1;
-		if (*current == '?')
-		{
-			char *exit_status = ft_itoa(*g_returns);
-			result = ft_strjoin_free(result, exit_status);
-			free(exit_status);
-			current++;
-		}
-		else
-		{
-			char *var_end = current;
-			while (*var_end && (ft_isalnum(*var_end) || *var_end == '_'))
-				var_end++;
-			
-			char *var_name = ft_strndup(current, var_end - current);
-			t_env *env_var = find_env_var(env, var_name);
-			if (env_var)
-				result = ft_strjoin_free(result, env_var->value);
-			free(var_name);
-			current = var_end;
-		}
-	}
-	result = ft_strjoin_free(result, current);
-	return result;
+    while (*current)
+    {
+        if (*current == '\'')
+        {
+            inside_single_quotes = !inside_single_quotes;
+            result = ft_strjoin_free(result, ft_strndup(current, 1));
+            current++;
+        }
+        else if (*current == '$' && !inside_single_quotes)
+        {
+            current++;
+            if (*current == '?')
+            {
+                char *exit_status = ft_itoa(*g_returns);
+                result = ft_strjoin_free(result, exit_status);
+                free(exit_status);
+                current++;
+            }
+            else
+            {
+                char *var_end = current;
+                while (*var_end && (ft_isalnum(*var_end) || *var_end == '_'))
+                    var_end++;
+                
+                char *var_name = ft_strndup(current, var_end - current);
+                t_env *env_var = find_env_var(env, var_name);
+                if (env_var)
+                    result = ft_strjoin_free(result, env_var->value);
+                free(var_name);
+                current = var_end;
+            }
+        }
+        else
+        {
+            result = ft_strjoin_free(result, ft_strndup(current, 1));
+            current++;
+        }
+    }
+
+    return result;
+}
+
+char *remove_single_quotes(char *str)
+{
+    char *result = malloc(strlen(str) + 1);
+    int i = 0, j = 0;
+
+    while (str[i])
+    {
+        if (str[i] != '\'')
+        {
+            result[j] = str[i];
+            j++;
+        }
+        i++;
+    }
+    result[j] = '\0';
+    return result;
+}
+
+int avoid_quote_error(char *str)
+{
+    int i;
+    int quote_count;
+
+    i = 0;
+    quote_count = 0;
+    while (str[i])
+    {
+        if (str[i] == '\'')
+            quote_count++;
+        i++;
+    }
+    
+    if (quote_count > 1)
+        return 1;
+    return 0;
 }
 
 char **expander(char **str, t_env *env, int *g_returns, int wordcount)
 {
 	int i;
 	char *expanded;
+	char *temp;
 
 	i = -1;
 	while (++i < wordcount)
@@ -413,14 +459,14 @@ char **expander(char **str, t_env *env, int *g_returns, int wordcount)
 		else if (str[i][0] == '\'' && str[i][ft_strlen(str[i]) - 1] == '\'')
 		{
 			// Remove as aspas simples
-			char *temp = ft_strndup(str[i] + 1, ft_strlen(str[i]) - 2);
+			temp = ft_strndup(str[i] + 1, ft_strlen(str[i]) - 2);
 			free(str[i]);
 			str[i] = temp;
 		}
 		else if (str[i][0] == '"' && str[i][ft_strlen(str[i]) - 1] == '"')
 		{
 			// Remove as aspas duplas e expande as variáveis
-			char *temp = ft_strndup(str[i] + 1, ft_strlen(str[i]) - 2);
+			temp = ft_strndup(str[i] + 1, ft_strlen(str[i]) - 2);
 			expanded = expand_variable(temp, env, g_returns);
 			free(temp);
 			free(str[i]);
@@ -429,9 +475,18 @@ char **expander(char **str, t_env *env, int *g_returns, int wordcount)
 		else
 		{
 			// Expande as variáveis normalmente
+			if (avoid_quote_error(str[i]))
+			{	
+				temp = remove_single_quotes(str[i]);
+            	free(str[i]);
+            	str[i] = temp;
+			}
 			expanded = expand_variable(str[i], env, g_returns);
-			free(str[i]);
-			str[i] = expanded;
+			if (ft_strcmp(expanded,str[i]) != 0)  // Verifica se a string foi realmente expandida
+    		{
+        		free(str[i]);
+        		str[i] = expanded;
+    		}
 		}
 	}
 	return str;
@@ -475,6 +530,30 @@ void print_classified_tokens(Token **tokens) {
 	printf("\n");
 }
 
+int	check_command(char *str, int *g_returns, int status)
+{
+	if (str && status == 1)
+	{
+		ft_putstr_fd("Syntax error\n", 1);
+		free(str);
+		*g_returns = 2;
+		return (1);
+	}
+	else if (!str && status == 2)
+	{
+		free_all_mem();
+		*g_returns = 0;
+		return (1);
+	}
+	else if (!str && status == 3)
+	{
+		free_all_mem();
+		*g_returns = 2;
+		return (1);
+	}
+	return (0);
+}
+
 void	identify_command(char *command, t_env **env, char **envp, int *g_returns)
 {
 	Token	**classified_tokens;
@@ -483,16 +562,14 @@ void	identify_command(char *command, t_env **env, char **envp, int *g_returns)
 	Command	*command_tree;
 
 	str = NULL;
-	if (check_quote_syntax(command))
-	{
-		ft_putstr_fd("Syntax error\n", 1);
-		*g_returns = 2;
+	if (check_command(command , g_returns, check_quote_syntax(command)))
 		return ;
-	}
-	command = trim_spaces(command);
-	command = close_pipe(command);
+	command = trim_spaces(command, -1);
+	if (check_command(command, g_returns, 2))
+		return ;
+	command = close_pipe(command, 0, 0);
 	signal(SIGINT, signal_new_line_2);
-	if (!command)
+	if (check_command(command, g_returns, 3))
 		return ;
 	str = ft_tokens(command, &word_count);
 	str = expander(str, *env, g_returns, word_count);

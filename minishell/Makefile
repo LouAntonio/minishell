@@ -6,7 +6,7 @@
 #    By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/11 16:35:01 by lantonio          #+#    #+#              #
-#    Updated: 2024/12/12 12:01:45 by hmateque         ###   ########.fr        #
+#    Updated: 2024/12/15 00:46:08 by hmateque         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,10 +35,11 @@ SRCS	= minishell.c\
 			./commands/env.c\
 			./commands/exit.c\
 			./env/env_utils.c\
+			memory_file.c\
 
 OBJS	= $(SRCS:.c=.o)
 
-$(NAME): $(OBJS) $(LIBFT_A)
+$(NAME): $(LIBFT_A) $(OBJS)
 	@$(CC) $(FLAGS) $(OBJS) $(LIBFT_A) -Iincludes -o $(NAME) -lreadline
 	@echo "\033[1;32mSUCESS!\033[0m"
 
@@ -46,7 +47,7 @@ $(NAME): $(OBJS) $(LIBFT_A)
 	@$(CC) $(FLAGS) -c $< -o $@
 
 $(LIBFT_A):
-	@$(MAKE) -C $(LIBFT_DIR)
+	@$(MAKE) bonus -C $(LIBFT_DIR)
 
 all: $(NAME)
 

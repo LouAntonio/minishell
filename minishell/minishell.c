@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 12:32:54 by lantonio          #+#    #+#             */
-/*   Updated: 2024/12/14 20:39:33 by lantonio         ###   ########.fr       */
+/*   Updated: 2024/12/14 23:54:31 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ int	main(int ac, char **av, char **env)
 		signal(SIGINT, signal_new_line_2);
 		identify_command(command, &all_env, env, &g_return);
 		signal(SIGINT, signal_new_line);
-		free(command);
 	}
 	rl_clear_history();
 	return (0);
