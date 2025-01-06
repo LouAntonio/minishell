@@ -6,7 +6,7 @@
 #    By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/11 16:35:01 by lantonio          #+#    #+#              #
-#    Updated: 2024/12/15 00:46:08 by hmateque         ###   ########.fr        #
+#    Updated: 2025/01/06 14:13:21 by hmateque         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,7 @@ SRCS	= minishell.c\
 			./commands/env.c\
 			./commands/exit.c\
 			./env/env_utils.c\
-			memory_file.c\
+			memory_file2.c\
 
 OBJS	= $(SRCS:.c=.o)
 

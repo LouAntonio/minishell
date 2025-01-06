@@ -6,7 +6,7 @@
 /*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 12:32:54 by lantonio          #+#    #+#             */
-/*   Updated: 2024/12/14 23:54:31 by hmateque         ###   ########.fr       */
+/*   Updated: 2025/01/06 14:11:33 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,7 @@ static char	*int_read(t_env **env)
 	input = readline("minishell$ ");
 	if (!input)
 	{
-		// Liberar all_env;
-		free_env_list(env);
-		ft_putstr_fd("exit\n", 1);
-		exit(0);
+		ft_exit(env, 0);
 	}
 	return (input);
 }
@@ -65,3 +62,4 @@ int	main(int ac, char **av, char **env)
 	rl_clear_history();
 	return (0);
 }
+

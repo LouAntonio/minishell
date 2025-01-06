@@ -6,7 +6,7 @@
 /*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 09:39:33 by hmateque          #+#    #+#             */
-/*   Updated: 2024/12/15 08:22:14 by hmateque         ###   ########.fr       */
+/*   Updated: 2025/01/06 13:56:11 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,9 @@ static char	*resize_word(char *word, int *capacity)
 	i = -1;
 	new_capacity = *capacity * 2;
 	new_word = (char *)malloc(new_capacity * sizeof(char));
-	collect_mem(new_word);
 	if (new_word == NULL)
 		return (NULL);
+	collect_mem(new_word, MEM_CHAR_PTR, 0);
 	while (++i < *capacity)
 		new_word[i] = word[i];
 	*capacity = new_capacity;
@@ -118,9 +118,9 @@ static int	extract_words(const char *input, char **matrix, int *word_count)
 			{
 				in_word = true;
 				word = allocate_word(word_capacity);
-				collect_mem(word);
 				if (word == NULL)
 					return (-1);
+				collect_mem(word, MEM_CHAR_PTR, 0);
 			}
 			quote = input[i];
 			word[word_len++] = input[i];
@@ -143,9 +143,9 @@ static int	extract_words(const char *input, char **matrix, int *word_count)
 			{
 				in_word = true;
 				word = allocate_word(word_capacity);
-				collect_mem(word);
 				if (word == NULL)
 					return (-1);
+				collect_mem(word, MEM_CHAR_PTR, 0);
 			}
 			if (word_len + 1 >= word_capacity)
 			{
@@ -172,13 +172,13 @@ char	**ft_tokens(const char *input, int *word_count)
 
 	*word_count = count_words(input);
 	matrix = (char **)malloc((*word_count + 1) * sizeof(char *));
-	collect_mem(matrix);
 	if (matrix == NULL)
 	{
 		free_all_mem();
 		*word_count = 0;
 		return (NULL);
 	}
+	collect_mem(matrix, MEM_CHAR_MATRIX, (*word_count + 1));
 	if (extract_words(input, matrix, word_count) == -1)
 	{
 		free_all_mem();

@@ -6,7 +6,7 @@
 /*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 10:28:57 by hmateque          #+#    #+#             */
-/*   Updated: 2024/12/15 08:29:42 by hmateque         ###   ########.fr       */
+/*   Updated: 2025/01/06 14:38:21 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int	built_ins(Command *command_tree, t_env **env, int *g_returns)
 	else if (!ft_strcmp(command_tree->command, "unset"))
 		return (ft_unset(command_tree->args, env, g_returns), 1);
 	else if (!ft_strcmp(command_tree->command, "exit"))
-		return (ft_exit(command_tree, env), 1);
+		return (ft_exit(env, 1), 1);
 	return (0);
 }
 
@@ -347,10 +347,10 @@ char	*close_pipe(char *command, int i, int j)
         {
             wait(NULL);
             temp = ft_strjoin(command, " ");
-			collect_mem(temp);
+			collect_mem(temp, MEM_CHAR_PTR, 0);
 			command = temp;
 			temp = ft_strjoin(command, complete);
-			collect_mem(temp);
+			collect_mem(temp, MEM_CHAR_PTR, 0);
 			command = temp;
             free(complete);
         }
@@ -501,7 +501,7 @@ char **expander(char **str, t_env *env, int *g_returns, int wordcount)
 		{
 			// Remove as aspas simples
 			temp = ft_strndup(str[i] + 1, ft_strlen(str[i]) - 2);
-			collect_mem(temp);
+			collect_mem(temp, MEM_CHAR_PTR, 0);
 			free(str[i]);
 			str[i] = temp;
 		}
@@ -510,7 +510,7 @@ char **expander(char **str, t_env *env, int *g_returns, int wordcount)
 			// Remove as aspas duplas e expande as variáveis
 			temp = ft_strndup(str[i] + 1, ft_strlen(str[i]) - 2);
 			expanded = expand_variable(temp, env, g_returns);
-			collect_mem(expanded);
+			collect_mem(expanded, MEM_CHAR_PTR, 0);
 			free(temp);
 			free(str[i]);
 			str[i] = expanded;
@@ -522,7 +522,7 @@ char **expander(char **str, t_env *env, int *g_returns, int wordcount)
 			if (avoid_double_quote_error(expanded))
     		{
 				temp = remove_double_quotes(expanded);
-				collect_mem(temp);
+				collect_mem(temp, MEM_CHAR_PTR, 0);
 				free(expanded);
         		free(str[i]);
         		str[i] = temp;
@@ -530,25 +530,27 @@ char **expander(char **str, t_env *env, int *g_returns, int wordcount)
 			else if (avoid_single_quote_error(expanded))
 			{	
 				temp = remove_single_quotes(expanded);
-				collect_mem(temp);
+				collect_mem(temp, MEM_CHAR_PTR, 0);
 				free(expanded);
             	free(str[i]);
             	str[i] = temp;
 			}
 			else
 			{
-			 	collect_mem(expanded);
+			 	collect_mem(expanded, MEM_CHAR_PTR, 0);
         	 	free(str[i]);
         		str[i] = expanded;
 			}
 		}
 	}
-	return str;
+	return (str);
 }
 void create_files(Command *command_tree) {
 	int		fd;
 	Command	*command;
 
+	if (!command_tree)
+		return ;
 	command = command_tree;
 	while (command)
 	{
@@ -638,5 +640,4 @@ void	identify_command(char *command, t_env **env, char **envp, int *g_returns)
 	print_command_tree(command_tree);
 	if (command_tree)
 		run_commands(command_tree, str, env, envp, g_returns);
-	//free_matrix_tokens(str, word_count);
 }

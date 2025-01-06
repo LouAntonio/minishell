@@ -6,7 +6,7 @@
 /*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 00:04:17 by hmateque          #+#    #+#             */
-/*   Updated: 2024/12/15 06:30:31 by hmateque         ###   ########.fr       */
+/*   Updated: 2025/01/06 11:43:19 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void	free_all_mem(void)
 					free(matrix[i]);
 					i++;
 				}
+				printf("i = %ld\n", i);
 			}
 			free(matrix);
 		}

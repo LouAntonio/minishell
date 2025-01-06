@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   build_command.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 11:35:13 by hmateque          #+#    #+#             */
-/*   Updated: 2024/12/14 17:16:51 by lantonio         ###   ########.fr       */
+/*   Updated: 2025/01/06 12:55:34 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,10 @@ Command	*build_command_tree(Token **tokens, int wordcount)
 		if (tokens[i]->type == TOKEN_COMMAND || current == NULL)
 		{
 			new_cmd = malloc(sizeof(Command));
+			collect_mem(new_cmd, MEM_COMMAND, 0);
 			new_cmd->command = NULL;
 			new_cmd->args = ft_calloc((wordcount + 1), sizeof(char *));
+			collect_mem(new_cmd->args, MEM_CHAR_MATRIX, matrix_len(new_cmd->args));
 			new_cmd->redirect_out = NULL;
 			new_cmd->redirect_in = NULL;
 			new_cmd->redirect_out_type = 0;
@@ -55,6 +57,7 @@ Command	*build_command_tree(Token **tokens, int wordcount)
 			if (current == NULL)
 			{
 				new_cmd = malloc(sizeof(Command));
+				collect_mem(new_cmd, MEM_COMMAND, 0);
 				new_cmd->command = NULL;
 				new_cmd->args = NULL;
 				new_cmd->redirect_out = NULL;
@@ -78,6 +81,7 @@ Command	*build_command_tree(Token **tokens, int wordcount)
 			if (current == NULL)
 			{
 				new_cmd = malloc(sizeof(Command));
+				collect_mem(new_cmd, MEM_COMMAND, 0);
 				new_cmd->command = NULL;
 				new_cmd->args = NULL;
 				new_cmd->redirect_out = NULL;
@@ -101,6 +105,7 @@ Command	*build_command_tree(Token **tokens, int wordcount)
 			if (current == NULL)
 			{
 				new_cmd = malloc(sizeof(Command));
+				collect_mem(new_cmd, MEM_COMMAND, 0);
 				new_cmd->command = NULL;
 				new_cmd->args = NULL;
 				new_cmd->redirect_out = NULL;
@@ -123,6 +128,7 @@ Command	*build_command_tree(Token **tokens, int wordcount)
 			if (current == NULL)
 			{
 				new_cmd = malloc(sizeof(Command));
+				collect_mem(new_cmd, MEM_COMMAND, 0);
 				new_cmd->command = NULL;
 				new_cmd->args = NULL;
 				new_cmd->redirect_out = NULL;
