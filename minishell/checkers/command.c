@@ -6,7 +6,7 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 10:28:57 by hmateque          #+#    #+#             */
-/*   Updated: 2025/01/07 14:08:50 by lantonio         ###   ########.fr       */
+/*   Updated: 2025/01/07 16:32:23 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,8 @@ int	path_commands(Command *cmd, t_env **env, char **envp, int *g_returns)
 	env_copy = *env;
 	if (!env_copy)
 		return (printf("Env Error\n"), -1);
+	if (cmd->command[0] == 47)
+		return (printf("minishell: %s: No such file or directory\n", cmd->command), -1);
 	if (access(cmd->command, X_OK) == 0)
 	{
 		pid = fork();
