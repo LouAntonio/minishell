@@ -6,27 +6,27 @@
 /*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 12:17:57 by hmateque          #+#    #+#             */
-/*   Updated: 2025/01/06 14:40:27 by hmateque         ###   ########.fr       */
+/*   Updated: 2025/01/07 10:22:21 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./includes/minishell.h"
 
 // Função auxiliar para liberar matriz de strings
-static void free_str_matrix(char **matrix)
-{
-    size_t i;
+// static void free_str_matrix(char **matrix)
+// {
+//     size_t i;
 
-    if (!matrix)
-        return;
-    i = 0;
-    while (matrix[i])
-    {
-        free(matrix[i]);
-        i++;
-    }
-    free(matrix);
-}
+//     if (!matrix)
+//         return;
+//     i = 0;
+//     while (matrix[i])
+//     {
+//         free(matrix[i]);
+//         i++;
+//     }
+//     free(matrix);
+// }
 
 t_list	**get_mem_address(void)
 {
@@ -58,7 +58,6 @@ void	*allocate_mem(size_t nmemb, size_t size)
 	content = ft_calloc(nmemb, size);
 	if (content == NULL)
 		exit(ENOMEM);
-    collect_mem(content, MEM_CHAR_PTR, 0);
 	return (content);
 }
 
@@ -86,24 +85,34 @@ void free_all_mem(void)
                 switch (mem->type)
                 {
                     case MEM_CHAR_PTR:
-                        if (mem->ptr)
+                        if (mem->ptr){
                             free(mem->ptr);
+                            mem->ptr = NULL;
+                        }
                         break;
                     case MEM_CHAR_MATRIX:
-                        if (mem->ptr)
-                            free_str_matrix((char **)mem->ptr);
+                        if (mem->ptr){
+                            free(mem->ptr);
+                            mem->ptr = NULL;
+                        }
                         break;
                     case MEM_TOKEN_PTR:
-                        if (mem->ptr)
+                        if (mem->ptr){
                             free(mem->ptr);
-                        break;
-                    case MEM_TOKEN_MATRIX:
-                        if (mem->ptr)
-                            free(mem->ptr);
+                            mem->ptr = NULL;
+                        }
                         break;
                     case MEM_COMMAND:
-                        if (mem->ptr)
+                        if (mem->ptr){
                             free(mem->ptr);
+                            mem->ptr = NULL;
+                        }
+                        break;
+                    default:
+                        if (mem->ptr){
+                            free(mem->ptr);
+                            mem->ptr = NULL;
+                        }
                         break;
                 }
             }

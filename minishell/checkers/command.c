@@ -6,7 +6,7 @@
 /*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 10:28:57 by hmateque          #+#    #+#             */
-/*   Updated: 2025/01/06 14:38:21 by hmateque         ###   ########.fr       */
+/*   Updated: 2025/01/07 12:55:21 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,11 +170,13 @@ int	path_commands(Command *command_tree, t_env **env, char **envp, int *g_return
 					*g_returns = WEXITSTATUS(status);
 				else if (WIFSIGNALED(status))
 					*g_returns = WTERMSIG(status);
+				free_matrix(paths);
 				return (*g_returns);
 			}
 		}
 	}
 	*g_returns = 127;
+	free_matrix(paths);
 	return (printf("%s: command not found\n", command_tree->command), -1);
 }
 
@@ -269,7 +271,10 @@ int	run_commands(Command *command_tree, char **str, t_env **env, char **envp, in
 					}
 					close(fd[0]);
 					if (command_tree->next != NULL)
+					{
 						run_commands(command_tree->next, str, env, envp, g_returns);
+						free_all_mem();
+					}
 					exit(EXIT_SUCCESS);
 				}
 				else
@@ -502,7 +507,6 @@ char **expander(char **str, t_env *env, int *g_returns, int wordcount)
 			// Remove as aspas simples
 			temp = ft_strndup(str[i] + 1, ft_strlen(str[i]) - 2);
 			collect_mem(temp, MEM_CHAR_PTR, 0);
-			free(str[i]);
 			str[i] = temp;
 		}
 		else if (str[i][0] == '"' && str[i][ft_strlen(str[i]) - 1] == '"')
@@ -512,7 +516,6 @@ char **expander(char **str, t_env *env, int *g_returns, int wordcount)
 			expanded = expand_variable(temp, env, g_returns);
 			collect_mem(expanded, MEM_CHAR_PTR, 0);
 			free(temp);
-			free(str[i]);
 			str[i] = expanded;
 		}
 		else
@@ -524,7 +527,6 @@ char **expander(char **str, t_env *env, int *g_returns, int wordcount)
 				temp = remove_double_quotes(expanded);
 				collect_mem(temp, MEM_CHAR_PTR, 0);
 				free(expanded);
-        		free(str[i]);
         		str[i] = temp;
     		}
 			else if (avoid_single_quote_error(expanded))
@@ -532,13 +534,11 @@ char **expander(char **str, t_env *env, int *g_returns, int wordcount)
 				temp = remove_single_quotes(expanded);
 				collect_mem(temp, MEM_CHAR_PTR, 0);
 				free(expanded);
-            	free(str[i]);
             	str[i] = temp;
 			}
 			else
 			{
 			 	collect_mem(expanded, MEM_CHAR_PTR, 0);
-        	 	free(str[i]);
         		str[i] = expanded;
 			}
 		}

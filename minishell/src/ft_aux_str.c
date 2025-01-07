@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_aux_str.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 11:56:22 by hmateque          #+#    #+#             */
-/*   Updated: 2024/12/13 09:26:12 by lantonio         ###   ########.fr       */
+/*   Updated: 2025/01/07 10:50:56 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ char	*ft_strndup(const char *s, size_t n)
 	result = (char *)malloc(len + 1);
 	if (!result)
 		return (NULL);
+	collect_mem(result, MEM_CHAR_PTR, 0);
 	ft_memcpy(result, s, len);
 	result[len] = '\0';
 	return (result);

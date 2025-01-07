@@ -6,7 +6,7 @@
 /*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 11:13:21 by hmateque          #+#    #+#             */
-/*   Updated: 2025/01/06 12:49:18 by hmateque         ###   ########.fr       */
+/*   Updated: 2025/01/07 10:46:11 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ Token	**classify_tokens(char **tokens, int word_count, t_env **env, int *g_retur
 	classified_tokens = malloc((word_count + 1) * sizeof(Token *));
 	if (!classified_tokens)
 		return (NULL);
-	collect_mem(tokens, MEM_TOKEN_MATRIX, (word_count + 1));
+	collect_mem(classified_tokens, MEM_CHAR_MATRIX, (word_count + 1));
 	for (i = 0; i < word_count; i++)
 	{
 		classified_tokens[i] = malloc(sizeof(Token));

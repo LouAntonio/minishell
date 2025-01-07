@@ -6,7 +6,7 @@
 /*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 08:23:55 by hmateque          #+#    #+#             */
-/*   Updated: 2024/05/21 09:32:11 by hmateque         ###   ########.fr       */
+/*   Updated: 2025/01/07 12:05:48 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	while (++i < len_s2 && s2[i] != '\0')
 		result[len_s1 + i] = s2[i];
 	result[len_s1 + i] = '\0';
+	s1 = NULL;
 	return (result);
 }

@@ -6,7 +6,7 @@
 /*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 12:32:54 by lantonio          #+#    #+#             */
-/*   Updated: 2025/01/06 14:11:33 by hmateque         ###   ########.fr       */
+/*   Updated: 2025/01/07 10:56:54 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ int	main(int ac, char **av, char **env)
 		signal(SIGINT, signal_new_line_2);
 		identify_command(command, &all_env, env, &g_return);
 		signal(SIGINT, signal_new_line);
+		free_all_mem();
 	}
 	rl_clear_history();
 	return (0);

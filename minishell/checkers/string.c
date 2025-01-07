@@ -6,7 +6,7 @@
 /*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 10:30:56 by hmateque          #+#    #+#             */
-/*   Updated: 2024/12/15 06:58:16 by hmateque         ###   ########.fr       */
+/*   Updated: 2025/01/07 10:33:02 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,7 @@ char *trim_spaces(char *str, size_t i)
         end--;
     new_length = end - start + 1;
     trimmed = allocate_mem(new_length + 1, sizeof(char));
+	collect_mem(trimmed, MEM_CHAR_PTR, 0);
     while (++i < new_length)
         trimmed[i] = start[i];
     trimmed[new_length] = '\0';

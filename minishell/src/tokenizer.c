@@ -6,7 +6,7 @@
 /*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 09:39:33 by hmateque          #+#    #+#             */
-/*   Updated: 2025/01/06 13:56:11 by hmateque         ###   ########.fr       */
+/*   Updated: 2025/01/07 10:28:01 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,8 @@ char	**ft_tokens(const char *input, int *word_count)
 	char	**matrix;
 
 	*word_count = count_words(input);
-	matrix = (char **)malloc((*word_count + 1) * sizeof(char *));
+	//matrix = (char **)malloc((*word_count + 1) * sizeof(char *));
+	matrix = (char **)allocate_mem((*word_count + 1), sizeof(char *));
 	if (matrix == NULL)
 	{
 		free_all_mem();
