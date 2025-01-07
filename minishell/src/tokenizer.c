@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 09:39:33 by hmateque          #+#    #+#             */
-/*   Updated: 2025/01/07 10:28:01 by hmateque         ###   ########.fr       */
+/*   Updated: 2025/01/07 14:32:30 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,13 @@ static int	count_words(const char *input)
 	int		count;
 	bool	in_word;
 	char	quote;
+	int		i;
 
 	count = 0;
 	in_word = false;
 	quote = '\0';
-	for (int i = 0; input[i] != '\0'; i++)
+	i = 0;
+	while (input[i] != '\0')
 	{
 		if (quote)
 		{
@@ -44,6 +46,7 @@ static int	count_words(const char *input)
 			count++;
 			in_word = true;
 		}
+		i++;
 	}
 	return (count);
 }
@@ -79,14 +82,16 @@ static int	extract_words(const char *input, char **matrix, int *word_count)
 	int		word_len;
 	int		word_capacity;
 	char	quote;
+	int		i;
 
+	i = 0;
 	word_index = 0;
 	in_word = false;
 	word = NULL;
 	word_len = 0;
 	word_capacity = 16;
 	quote = '\0';
-	for (int i = 0; input[i] != '\0'; i++)
+	while (input[i] != '\0')
 	{
 		if (quote)
 		{
@@ -155,6 +160,7 @@ static int	extract_words(const char *input, char **matrix, int *word_count)
 			}
 			word[word_len++] = input[i];
 		}
+		i++;
 	}
 	if (in_word)
 	{
@@ -171,7 +177,6 @@ char	**ft_tokens(const char *input, int *word_count)
 	char	**matrix;
 
 	*word_count = count_words(input);
-	//matrix = (char **)malloc((*word_count + 1) * sizeof(char *));
 	matrix = (char **)allocate_mem((*word_count + 1), sizeof(char *));
 	if (matrix == NULL)
 	{

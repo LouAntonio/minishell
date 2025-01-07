@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   memory_file.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 00:04:17 by hmateque          #+#    #+#             */
-/*   Updated: 2025/01/06 11:43:19 by hmateque         ###   ########.fr       */
+/*   Updated: 2025/01/07 16:06:55 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ void	free_all_mem(void)
 	t_list	**mem_list;
 	t_list	*current;
 	t_list	*next;
+	void	**matrix;
+	size_t	i;
 
 	mem_list = get_mem_address();
 	current = *mem_list;
@@ -48,17 +50,11 @@ void	free_all_mem(void)
 		next = current->next;
 		if (current->content)
 		{
-			void **matrix = (void **)current->content;
-			size_t i = 0;
+			matrix = (void **)current->content;
+			i = -1;
 			if (matrix)
-			{
-				while (matrix[i])
-				{
+				while (matrix[++i])
 					free(matrix[i]);
-					i++;
-				}
-				printf("i = %ld\n", i);
-			}
 			free(matrix);
 		}
 		free(current);
@@ -66,4 +62,3 @@ void	free_all_mem(void)
 	}
 	*mem_list = NULL;
 }
-

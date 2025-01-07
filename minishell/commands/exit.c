@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 08:23:31 by hmateque          #+#    #+#             */
-/*   Updated: 2025/01/06 11:18:55 by hmateque         ###   ########.fr       */
+/*   Updated: 2025/01/07 14:20:11 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ void	free_matrix(char **matrix)
 	}
 	free(matrix);
 }
-
 
 // void	free_all_mem(void)
 // {

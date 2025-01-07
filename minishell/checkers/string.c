@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   string.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 10:30:56 by hmateque          #+#    #+#             */
-/*   Updated: 2025/01/07 10:33:02 by hmateque         ###   ########.fr       */
+/*   Updated: 2025/01/07 14:09:56 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int check_quote_syntax(char *input)
+int	check_quote_syntax(char *input)
 {
 	int		inside_quote;
 	char	quote_type;
@@ -111,34 +111,32 @@ int	ft_isspace(char c)
 	return (0);
 }
 
-char *trim_spaces(char *str, size_t i)
+char	*trim_spaces(char *str, size_t i)
 {
-    char *start;
-    char *end;
-    char *trimmed;
-    size_t new_length;
+	char	*start;
+	char	*end;
+	char	*trimmed;
+	size_t	new_length;
 
-    if (!str)
-        return NULL;
-    start = str;
-    while (*start && ft_isspace((unsigned char)*start))
-        start++;
-    if (*start == '\0')
-    {
-        free(str);
-        return NULL;
-    }
-    end = str + ft_strlen(str) - 1;
-    while (end > start && ft_isspace((unsigned char)*end))
-        end--;
-    new_length = end - start + 1;
-    trimmed = allocate_mem(new_length + 1, sizeof(char));
+	if (!str)
+		return (NULL);
+	start = str;
+	while (*start && ft_isspace((unsigned char)*start))
+		start++;
+	if (*start == '\0')
+	{
+		free(str);
+		return (NULL);
+	}
+	end = str + ft_strlen(str) - 1;
+	while (end > start && ft_isspace((unsigned char)*end))
+		end--;
+	new_length = end - start + 1;
+	trimmed = allocate_mem(new_length + 1, sizeof(char));
 	collect_mem(trimmed, MEM_CHAR_PTR, 0);
-    while (++i < new_length)
-        trimmed[i] = start[i];
-    trimmed[new_length] = '\0';
-    free(str);
-    return (trimmed);
+	while (++i < new_length)
+		trimmed[i] = start[i];
+	trimmed[new_length] = '\0';
+	free(str);
+	return (trimmed);
 }
-
-

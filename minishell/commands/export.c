@@ -6,7 +6,7 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 14:39:54 by hmateque          #+#    #+#             */
-/*   Updated: 2024/12/06 08:59:19 by lantonio         ###   ########.fr       */
+/*   Updated: 2025/01/07 14:19:49 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,8 @@ int	ft_export(char **command, t_env **env, int *g_returns)
 	{
 		if (!check_arg(command[len_str]))
 		{
-			printf("minishell: export: '%s': not a valid identifier\n", command[len_str]);
+			printf("minishell: export: '%s': not a valid identifier\n",
+				command[len_str]);
 			break ;
 		}
 		add_var_of_env(command[len_str], env);
