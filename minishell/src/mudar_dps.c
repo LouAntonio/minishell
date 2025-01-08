@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mudar_dps.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 11:13:21 by hmateque          #+#    #+#             */
-/*   Updated: 2025/01/07 10:46:11 by hmateque         ###   ########.fr       */
+/*   Updated: 2025/01/07 14:28:54 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ TokenType	identify_token(char *token)
 	return (TOKEN_ARG);
 }
 
-Token	**classify_tokens(char **tokens, int word_count, t_env **env, int *g_returns)
+Token	**classify_tokens(char **tokens, int wc, t_env **env, int *g_returns)
 {
 	Token	**classified_tokens;
 	char	*token;
@@ -37,11 +37,12 @@ Token	**classify_tokens(char **tokens, int word_count, t_env **env, int *g_retur
 
 	(void)env;
 	(void)g_returns;
-	classified_tokens = malloc((word_count + 1) * sizeof(Token *));
+	classified_tokens = malloc((wc + 1) * sizeof(Token *));
 	if (!classified_tokens)
 		return (NULL);
-	collect_mem(classified_tokens, MEM_CHAR_MATRIX, (word_count + 1));
-	for (i = 0; i < word_count; i++)
+	collect_mem(classified_tokens, MEM_CHAR_MATRIX, (wc + 1));
+	i = -1;
+	while (++i < wc)
 	{
 		classified_tokens[i] = malloc(sizeof(Token));
 		if (!classified_tokens[i])
@@ -51,8 +52,8 @@ Token	**classify_tokens(char **tokens, int word_count, t_env **env, int *g_retur
 		}
 		collect_mem(classified_tokens[i], MEM_TOKEN_PTR, 0);
 		classified_tokens[i]->type = identify_token(tokens[i]);
-		if (classified_tokens[i]->type == TOKEN_ARG && i > 0 &&
-			classified_tokens[i - 1]->type == TOKEN_PIPE)
+		if (classified_tokens[i]->type == TOKEN_ARG && i > 0
+			&& classified_tokens[i - 1]->type == TOKEN_PIPE)
 		{
 			classified_tokens[i]->type = TOKEN_COMMAND;
 		}

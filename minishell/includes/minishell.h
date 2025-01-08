@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 10:06:57 by lantonio          #+#    #+#             */
-/*   Updated: 2025/01/06 12:27:49 by hmateque         ###   ########.fr       */
+/*   Updated: 2025/01/07 14:23:16 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,23 +82,23 @@ typedef struct CommandTree
 // Tipos de alocação para identificar como liberar a memória
 typedef enum e_mem_type
 {
-    MEM_CHAR_PTR,     // char *
-    MEM_CHAR_MATRIX,  // char **
-    MEM_TOKEN_PTR,    // Token *
-    MEM_TOKEN_MATRIX, // Token **
-    MEM_COMMAND       // Command *
-} t_mem_type;
+	MEM_CHAR_PTR,
+	MEM_CHAR_MATRIX,
+	MEM_TOKEN_PTR,
+	MEM_TOKEN_MATRIX,
+	MEM_COMMAND
+}	t_mem_type;
 
 // Estrutura para armazenar informações sobre a memória alocada
 typedef struct s_memory
 {
-    void        *ptr;
-    t_mem_type  type;
-    size_t      size;  // para matrizes
-} t_memory;
+	void		*ptr;
+	t_mem_type	type;
+	size_t		size;
+}	t_memory;
 
 // checkers
-void				identify_command(char *command, t_env **env, char **envp,
+void				identify_command(char *line, t_env **env, char **envp,
 						int *g_returns);
 int					check_read_from(char **str);
 int					check_cipher(char *str, int fd, t_env *env);
@@ -152,10 +152,10 @@ char				**ft_tokens(const char *input, int *word_count);
 TokenType			identify_token(char *token);
 Token				**classify_tokens(char **tokens, int word_count,
 						t_env **env, int *g_returns);
-Command				*build_command_tree(Token **tokens, int word_count);
+Command				*build_cmd(Token **tokens, int word_count);
 
 // Liberacao de memoria
-void	*allocate_mem(size_t nmemb, size_t size);
+void				*allocate_mem(size_t nmemb, size_t size);
 void				collect_mem(void *ptr, t_mem_type type, size_t size);
 t_list				**get_mem_address(void);
 void				free_all_mem(void);
