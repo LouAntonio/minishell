@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 10:28:57 by hmateque          #+#    #+#             */
-/*   Updated: 2025/01/07 16:32:23 by lantonio         ###   ########.fr       */
+/*   Updated: 2025/01/08 14:30:07 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -413,7 +413,6 @@ char	*expand_variable(char *var, t_env *env, int *g_returns)
 				env_var = find_env_var(env, var_name);
 				if (env_var)
 					result = ft_strjoin_free(result, env_var->value);
-				free(var_name);
 				current = var_end;
 			}
 		}
