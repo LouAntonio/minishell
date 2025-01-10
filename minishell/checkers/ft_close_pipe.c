@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_close_pipe.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 18:03:06 by hmateque          #+#    #+#             */
-/*   Updated: 2025/01/10 18:35:10 by hmateque         ###   ########.fr       */
+/*   Updated: 2025/01/10 21:50:37 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,11 +66,7 @@ char	*close_pipe(char *command, int i, int j)
 			return (perror("Pipe failed"), NULL);
 		pid = fork();
 		if (pid == -1)
-		{
-			close(pipefd[0]);
-			close(pipefd[1]);
-			return (perror("Fork failed"), NULL);
-		}
+			return (close(pipefd[0]), close(pipefd[1]), perror("KO"), NULL);
 		if (pid == 0)
 			handle_child_process(pipefd);
 		else

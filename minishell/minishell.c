@@ -6,13 +6,13 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 12:32:54 by lantonio          #+#    #+#             */
-/*   Updated: 2025/01/10 15:36:50 by lantonio         ###   ########.fr       */
+/*   Updated: 2025/01/10 21:22:02 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./includes/minishell.h"
 
-int	g_return ;
+int	g_return = 0;
 
 void	collect_mem(void *ptr, t_mem_type type, size_t size)
 {

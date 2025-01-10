@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 10:06:57 by lantonio          #+#    #+#             */
-/*   Updated: 2025/01/10 18:29:22 by hmateque         ###   ########.fr       */
+/*   Updated: 2025/01/10 22:02:07 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 # include <stdlib.h>
 # include <sys/wait.h>
 # include <unistd.h>
+
+extern int	g_return ;
 
 typedef struct s_result
 {
@@ -108,6 +110,15 @@ typedef struct s_expander_variables
 	char			*var_name;
 }					t_expander_variables;
 
+int		path_commands(Command *cmd, t_env **env, char **envp, int *g_returns);
+bool	validate_env(t_env **env);
+bool	is_absolute_path(const char *command);
+int		execute_absolute_path(Command *cmd, char **envp, int *g_returns);
+char	**get_env_paths(t_env *env);
+int		try_paths(char **paths, Command *cmd, char **envp, int *g_returns);
+void	build_path(const char *dir, const char *command, char *buffer, size_t size);
+int		execute_command(const char *path, char **args, char **envp, int *g_returns);
+
 // checkers
 int					identify_command(char *line, t_env **env, char **envp,
 						int *g_returns);
@@ -144,6 +155,7 @@ char				*ft_strndup(const char *s, size_t n);
 void				pwd(char **str, int *g_returns);
 void				echo(char **str, int *g_returns);
 int					cd(char **str, int *g_returns, t_env **env);
+void				update_oldpwd_pwd(char *old_path, t_env **env, int *g_returns);
 int					ft_export(char **command, t_env **env, int *g_returns);
 int					ft_unset(char **command, t_env **env, int *g_returns);
 void				ft_exit(t_env **env, int status);
@@ -155,8 +167,8 @@ void				handle_sigint_child(int sig);
 int					check_command(char *str, int *g_returns, int status);
 int					check_quote_syntax_return(char *line);
 char				*close_pipe(char *command, int i, int j);
-int					run_commands(Command *cmd, char **str, t_env **env,
-						char **envp, int *g_returns);
+int					run_commands(Command *cmd, t_env **env,
+						char **envp);
 int					built_ins(Command *cmd, t_env **env, int *g_returns);
 int					check_red_in(Command *cmd, int *fd_in);
 int					handle_redirection(Command *cmd);

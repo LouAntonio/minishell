@@ -6,13 +6,11 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 10:41:02 by hmateque          #+#    #+#             */
-/*   Updated: 2025/01/10 15:31:46 by lantonio         ###   ########.fr       */
+/*   Updated: 2025/01/10 22:02:13 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-void				update_oldpwd_pwd(char *old_path, t_env **env, int *g_returns);
 
 int	navigate_to_directory(char *path, t_env **env, int *g_returns)
 {

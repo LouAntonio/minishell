@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   identify_command.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 15:29:53 by hmateque          #+#    #+#             */
-/*   Updated: 2025/01/10 17:46:07 by hmateque         ###   ########.fr       */
+/*   Updated: 2025/01/10 21:36:20 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,6 @@ int	identify_command(char *line, t_env **env, char **envp, int *g_returns)
 	create_files(cmd);
 	print_cmd(cmd);
 	if (cmd)
-		run_commands(cmd, str, env, envp, g_returns);
+		run_commands(cmd, env, envp);
 	return (1);
 }
