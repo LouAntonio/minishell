@@ -6,16 +6,16 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 15:29:53 by hmateque          #+#    #+#             */
-/*   Updated: 2025/01/10 21:36:20 by lantonio         ###   ########.fr       */
+/*   Updated: 2025/01/10 22:49:35 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static void	print_cmd(Command *root)
+static void	print_cmd(t_cmd *root)
 {
 	int		i;
-	Command	*current;
+	t_cmd	*current;
 
 	return ;
 	current = root;
@@ -62,10 +62,10 @@ static int	prepare_command_tokens(char *line, t_env **env, int *g_returns,
 
 int	identify_command(char *line, t_env **env, char **envp, int *g_returns)
 {
-	Token	**classified_tokens;
+	t_token	**classified_tokens;
 	char	**str;
 	int		word_count;
-	Command	*cmd;
+	t_cmd	*cmd;
 
 	str = NULL;
 	word_count = prepare_command_tokens(line, env, g_returns, &str);

@@ -6,7 +6,7 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 12:32:54 by lantonio          #+#    #+#             */
-/*   Updated: 2025/01/10 21:22:02 by lantonio         ###   ########.fr       */
+/*   Updated: 2025/01/10 23:05:38 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static char	*int_read(t_env **env)
 	input = readline("minishell$ ");
 	if (!input)
 	{
-		ft_exit(env, 0);
+		ft_exit(env, 0, "");
 	}
 	return (input);
 }

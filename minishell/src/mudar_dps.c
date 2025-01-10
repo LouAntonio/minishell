@@ -6,13 +6,13 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 11:13:21 by hmateque          #+#    #+#             */
-/*   Updated: 2025/01/10 15:42:30 by lantonio         ###   ########.fr       */
+/*   Updated: 2025/01/10 22:37:01 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-TokenType	identify_token(char *token)
+t_token_type	identify_token(char *token)
 {
 	if (ft_strncmp(token, "|", 1) == 0)
 		return (TOKEN_PIPE);
@@ -27,41 +27,22 @@ TokenType	identify_token(char *token)
 	return (TOKEN_ARG);
 }
 
-Token	**allocate_classified_tokens(int wc);
-Token	*allocate_token(void);
-char	*strip_quotes(const char *token);
-void	classify_token_type(Token **classified_tokens, char **tokens, int wc);
-
-Token	**classify_tokens(char **tokens, int wc, t_env **env, int *g_returns)
+t_token	**allocate_classified_tokens(int wc)
 {
-	Token	**classified_tokens;
+	t_token	**classified_tokens;
 
-	(void)env;
-	(void)g_returns;
-	classified_tokens = allocate_classified_tokens(wc);
-	if (!classified_tokens)
-		return (NULL);
-	classify_token_type(classified_tokens, tokens, wc);
-	classified_tokens[wc] = NULL;
-	return (classified_tokens);
-}
-
-Token	**allocate_classified_tokens(int wc)
-{
-	Token	**classified_tokens;
-
-	classified_tokens = malloc((wc + 1) * sizeof(Token *));
+	classified_tokens = malloc((wc + 1) * sizeof(t_token *));
 	if (!classified_tokens)
 		return (NULL);
 	collect_mem(classified_tokens, MEM_CHAR_MATRIX, (wc + 1));
 	return (classified_tokens);
 }
 
-Token	*allocate_token(void)
+t_token	*allocate_token(void)
 {
-	Token	*token;
+	t_token	*token;
 
-	token = malloc(sizeof(Token));
+	token = malloc(sizeof(t_token));
 	if (!token)
 	{
 		free_all_mem();
@@ -94,7 +75,7 @@ char	*strip_quotes(const char *token)
 	return ((char *)token);
 }
 
-void	classify_token_type(Token **classified_tokens, char **tokens, int wc)
+void	classify_token_type(t_token **classified_tokens, char **tokens, int wc)
 {
 	int	i;
 
