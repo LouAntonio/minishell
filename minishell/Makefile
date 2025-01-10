@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+         #
+#    By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/11 16:35:01 by lantonio          #+#    #+#              #
-#    Updated: 2025/01/10 18:31:11 by hmateque         ###   ########.fr        #
+#    Updated: 2025/01/10 22:31:03 by lantonio         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,9 +22,16 @@ SRCS	= minishell.c\
 			./src/ft_args_main.c\
 			./src/tokenizer.c\
 			./src/mudar_dps.c\
+			./src/aux_file.c\
+			./src/aux_file2.c\
+			./src/tokenizer_aux.c\
+			./src/tokenizer_aux2.c\
 			./src/build_command.c\
 			./env/list_manipulation.c\
 			./checkers/command.c\
+			./checkers/command_aux.c\
+			./checkers/command_aux2.c\
+			./checkers/command_aux3.c\
 			./checkers/identify_command.c\
 			./checkers/aux_command.c\
 			./checkers/aux_command_1.c\
@@ -41,6 +48,7 @@ SRCS	= minishell.c\
 			./commands/export.c\
 			./commands/unset.c\
 			./commands/cd.c\
+			./commands/cd_aux.c\
 			./commands/env.c\
 			./commands/exit.c\
 			./env/env_utils.c\

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   aux_command_1.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 16:02:08 by hmateque          #+#    #+#             */
-/*   Updated: 2025/01/10 16:45:22 by hmateque         ###   ########.fr       */
+/*   Updated: 2025/01/10 23:06:59 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	check_red_in(Command *cmd, int *fd_in)
+int	check_red_in(t_cmd *cmd, int *fd_in)
 {
 	if (cmd->redirect_in != NULL)
 	{
@@ -31,7 +31,7 @@ int	check_red_in(Command *cmd, int *fd_in)
 	return (0);
 }
 
-int	built_ins(Command *cmd, t_env **env, int *g_returns)
+int	built_ins(t_cmd *cmd, t_env **env, int *g_returns)
 {
 	if (!ft_strcmp(cmd->command, "echo"))
 		return (echo(cmd->args, g_returns), 1);
@@ -46,7 +46,7 @@ int	built_ins(Command *cmd, t_env **env, int *g_returns)
 	else if (!ft_strcmp(cmd->command, "unset"))
 		return (ft_unset(cmd->args, env, g_returns), 1);
 	else if (!ft_strcmp(cmd->command, "exit"))
-		return (ft_exit(env, 1), 1);
+		return (ft_exit(env, 1, cmd->args[1]), 1);
 	return (0);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   aux_command.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 16:02:08 by hmateque          #+#    #+#             */
-/*   Updated: 2025/01/10 16:06:21 by hmateque         ###   ########.fr       */
+/*   Updated: 2025/01/10 22:49:35 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,10 @@ int	check_command(char *str, int *g_returns, int status)
 	return (0);
 }
 
-void	create_files(Command *command)
+void	create_files(t_cmd *command)
 {
 	int		fd;
-	Command	*cmd;
+	t_cmd	*cmd;
 
 	if (!command)
 		return ;
@@ -73,7 +73,7 @@ void	create_files(Command *command)
 	}
 }
 
-int	handle_redirection(Command *cmd)
+int	handle_redirection(t_cmd *cmd)
 {
 	int	fd;
 	int	saved_stdout;
