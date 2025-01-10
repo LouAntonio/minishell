@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   string.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 10:30:56 by hmateque          #+#    #+#             */
-/*   Updated: 2025/01/07 14:09:56 by lantonio         ###   ########.fr       */
+/*   Updated: 2025/01/10 10:45:40 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,12 @@ int	check_arg(char *str)
 	int	i;
 
 	i = 0;
-	if (!ft_isalpha(str[i]) && str[i] != '_')
+	if (!ft_isalpha(str[i]) && str[i] != '_' && str[i] != '/')
 		return (0);
 	i++;
 	while (str[i] && str[i] != '=')
 	{
-		if (!ft_isalnum(str[i]) && str[i] != '_')
+		if (!ft_isalnum(str[i]) && str[i] != '_' && str[i] != '/')
 			return (0);
 		i++;
 	}

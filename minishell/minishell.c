@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 12:32:54 by lantonio          #+#    #+#             */
-/*   Updated: 2025/01/07 16:33:36 by lantonio         ###   ########.fr       */
+/*   Updated: 2025/01/10 11:07:40 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int	main(int ac, char **av, char **env)
 {
 	char	*command;
 	t_env	*all_env;
+	int		status;
 
 	all_env = NULL;
 	ft_set_value(ac, av, env, &all_env);
@@ -57,9 +58,10 @@ int	main(int ac, char **av, char **env)
 			continue ;
 		add_history(command);
 		signal(SIGINT, signal_new_line_2);
-		identify_command(command, &all_env, env, &g_return);
+		status = identify_command(command, &all_env, env, &g_return);
 		signal(SIGINT, signal_new_line);
-		free_all_mem();
+		if (status != -1)
+			free_all_mem();
 	}
 	rl_clear_history();
 	return (0);

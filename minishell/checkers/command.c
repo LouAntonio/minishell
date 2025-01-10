@@ -6,7 +6,7 @@
 /*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 10:28:57 by hmateque          #+#    #+#             */
-/*   Updated: 2025/01/08 14:30:07 by hmateque         ###   ########.fr       */
+/*   Updated: 2025/01/10 15:05:10 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ static void	print_cmd(Command *root)
 	int		i;
 	Command	*current;
 
-	current = root;
 	return ;
+	current = root;
 	while (current != NULL)
 	{
 		printf("Comando: \033[0;32m%s\033[0m\n", current->command);
@@ -115,8 +115,6 @@ int	path_commands(Command *cmd, t_env **env, char **envp, int *g_returns)
 	env_copy = *env;
 	if (!env_copy)
 		return (printf("Env Error\n"), -1);
-	if (cmd->command[0] == 47)
-		return (printf("minishell: %s: No such file or directory\n", cmd->command), -1);
 	if (access(cmd->command, X_OK) == 0)
 	{
 		pid = fork();
@@ -139,6 +137,8 @@ int	path_commands(Command *cmd, t_env **env, char **envp, int *g_returns)
 			return (*g_returns);
 		}
 	}
+	if (cmd->command[0] == 47)
+		return (printf("minishell: %s: No such file or directory\n", cmd->command), -1);
 	while (env_copy)
 	{
 		if (!ft_strcmp(env_copy->name, "PATH"))
@@ -224,6 +224,8 @@ int	run_commands(Command *cmd, char **str, t_env **env, char **envp, int *g_retu
 				free(str2);
 			}
 			close(heredoc_fd[1]);
+			free_env_list(env);
+			free_all_mem();
 			exit(EXIT_SUCCESS);
 		}
 		else
@@ -262,6 +264,8 @@ int	run_commands(Command *cmd, char **str, t_env **env, char **envp, int *g_retu
 				close(fd[1]);
 				if (!built_ins(cmd, env, g_returns))
 					path_commands(cmd, env, envp, g_returns);
+				free_env_list(env);
+				free_all_mem();
 				exit(EXIT_SUCCESS);
 			}
 			else
@@ -279,6 +283,7 @@ int	run_commands(Command *cmd, char **str, t_env **env, char **envp, int *g_retu
 					if (cmd->next != NULL)
 					{
 						run_commands(cmd->next, str, env, envp, g_returns);
+						free_env_list(env);
 						free_all_mem();
 					}
 					exit(EXIT_SUCCESS);
@@ -486,7 +491,7 @@ int	avoid_single_quote_error(char *str)
 		return (1);
 	return (0);
 }
-
+		
 int	avoid_double_quote_error(char *str)
 {
 	int	i;
@@ -521,7 +526,6 @@ char	**expander(char **str, t_env *env, int *g_returns, int wordcount)
 		else if (str[i][0] == '\'' && str[i][ft_strlen(str[i]) - 1] == '\'')
 		{
 			temp = ft_strndup(str[i] + 1, ft_strlen(str[i]) - 2);
-			collect_mem(temp, MEM_CHAR_PTR, 0);
 			str[i] = temp;
 		}
 		else if (str[i][0] == '"' && str[i][ft_strlen(str[i]) - 1] == '"')
@@ -529,7 +533,6 @@ char	**expander(char **str, t_env *env, int *g_returns, int wordcount)
 			temp = ft_strndup(str[i] + 1, ft_strlen(str[i]) - 2);
 			expanded = expand_variable(temp, env, g_returns);
 			collect_mem(expanded, MEM_CHAR_PTR, 0);
-			free(temp);
 			str[i] = expanded;
 		}
 		else
@@ -610,7 +613,18 @@ int	check_command(char *str, int *g_returns, int status)
 	return (0);
 }
 
-void	identify_command(char *line, t_env **env, char **envp, int *g_returns)
+//Cria uma funcao para retornar -1 em caso da string ser igual a "" ou ''
+int	check_quote_syntax_return(char *line)
+{
+	if (ft_strcmp(line, "\"\"") == 0 || ft_strcmp(line, "''") == 0)
+	{
+		free(line);
+		return (1);
+	}
+	return (0);
+}
+
+int	identify_command(char *line, t_env **env, char **envp, int *g_returns)
 {
 	Token	**classified_tokens;
 	char	**str;
@@ -619,24 +633,25 @@ void	identify_command(char *line, t_env **env, char **envp, int *g_returns)
 
 	str = NULL;
 	if (check_command(line, g_returns, check_quote_syntax(line)))
-		return ;
+		return (-1);
 	line = trim_spaces(line, -1);
-	if (check_command(line, g_returns, 2))
-		return ;
+	if (check_command(line, g_returns, 2) || check_quote_syntax_return(line))
+		return (-1);
 	line = close_pipe(line, 0, 0);
 	signal(SIGINT, signal_new_line_2);
 	if (check_command(line, g_returns, 3))
-		return ;
+		return (-1);
 	str = ft_tokens(line, &word_count);
 	str = expander(str, *env, g_returns, word_count);
 	if (!str)
-		return ;
+		return (1);
 	classified_tokens = classify_tokens(str, word_count, env, g_returns);
 	if (!classified_tokens)
-		return ;
+		return (1);
 	cmd = build_cmd(classified_tokens, word_count);
 	create_files(cmd);
 	print_cmd(cmd);
 	if (cmd)
 		run_commands(cmd, str, env, envp, g_returns);
+	return (1);
 }

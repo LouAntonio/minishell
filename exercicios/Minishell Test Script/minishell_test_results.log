@@ -1,0 +1,1320 @@
+[INICIANDO TESTE 1 - COMANDOS SIMPLES]
+[TEST] Comando simples absoluto
+Comando: /bin/ls
+[PASS] Comando simples absoluto: Executado com sucesso.
+Saída do comando:
+minishell$ /bin/ls
+minishell: /bin/ls: No such file or directory
+minishell$ exit
+Erro (se houver):
+
+[TEST] Comando vazio
+Comando: 
+[FAIL] Comando vazio: Saída inesperada. Verifique logs abaixo.
+minishell$ 
+minishell$ exit
+Saída do comando:
+minishell$ 
+minishell$ exit
+Erro (se houver):
+
+[TEST] Apenas espaços
+Comando:    
+[FAIL] Apenas espaços: Saída inesperada. Verifique logs abaixo.
+minishell$    
+minishell$ exit
+Saída do comando:
+minishell$    
+minishell$ exit
+Erro (se houver):
+
+[TEST] Apenas tabulações
+Comando: \t\t\t
+[FAIL] Apenas tabulações: Saída inesperada. Verifique logs abaixo.
+minishell$ \t\t\t
+\t\t\t: command not found
+minishell$ exit
+Saída do comando:
+minishell$ \t\t\t
+\t\t\t: command not found
+minishell$ exit
+Erro (se houver):
+
+
+[INICIANDO TESTE 2 - ARGUMENTOS]
+[TEST] Comando com argumentos
+Comando: /bin/ls -l
+[PASS] Comando com argumentos: Executado com sucesso.
+Saída do comando:
+minishell$ /bin/ls -l
+minishell: /bin/ls: No such file or directory
+minishell$ exit
+Erro (se houver):
+
+[TEST] Comando com múltiplos argumentos
+Comando: /bin/ls -l -a
+[PASS] Comando com múltiplos argumentos: Executado com sucesso.
+Saída do comando:
+minishell$ /bin/ls -l -a
+minishell: /bin/ls: No such file or directory
+minishell$ exit
+Erro (se houver):
+
+[TEST] Comando inexistente
+Comando: /bin/command_that_does_not_exist
+[FAIL] Comando inexistente: Saída inesperada. Verifique logs abaixo.
+minishell$ /bin/command_that_does_not_exist
+minishell: /bin/command_that_does_not_exist: No such file or directory
+minishell$ exit
+Saída do comando:
+minishell$ /bin/command_that_does_not_exist
+minishell: /bin/command_that_does_not_exist: No such file or directory
+minishell$ exit
+Erro (se houver):
+
+
+[INICIANDO TESTE 3 - ECHO]
+[TEST] Echo comando: 
+Comando: echo 
+[PASS] Echo comando: : Executado com sucesso.
+Saída do comando:
+minishell$ echo 
+
+minishell$ exit
+Erro (se houver):
+
+[TEST] Echo comando: Hello, World!
+Comando: echo Hello, World!
+[PASS] Echo comando: Hello, World!: Executado com sucesso.
+Saída do comando:
+minishell$ echo Hello, World!
+Hello, World!
+minishell$ exit
+Erro (se houver):
+
+[TEST] Echo comando: -n No newline
+Comando: echo -n No newline
+[PASS] Echo comando: -n No newline: Executado com sucesso.
+Saída do comando:
+minishell$ echo -n No newline
+No newline[30m[47m%[0m
+minishell$ exit
+Erro (se houver):
+
+[TEST] Echo comando: -n Multiple - arguments
+Comando: echo -n Multiple - arguments
+[PASS] Echo comando: -n Multiple - arguments: Executado com sucesso.
+Saída do comando:
+minishell$ echo -n Multiple - arguments
+Multiple - arguments[30m[47m%[0m
+minishell$ exit
+Erro (se houver):
+
+
+[INICIANDO TESTE 4 - VALOR DE RETORNO]
+[TEST] Valor de retorno: /bin/ls
+Comando: /bin/ls
+[PASS] Valor de retorno: /bin/ls: Executado com sucesso.
+Saída do comando:
+minishell$ /bin/ls
+minishell: /bin/ls: No such file or directory
+minishell$ exit
+Erro (se houver):
+
+[TEST] Valor de retorno: /bin/ls nonexistentfile
+Comando: /bin/ls nonexistentfile
+[PASS] Valor de retorno: /bin/ls nonexistentfile: Executado com sucesso.
+Saída do comando:
+minishell$ /bin/ls nonexistentfile
+minishell: /bin/ls: No such file or directory
+minishell$ exit
+Erro (se houver):
+
+[TEST] Valor de retorno: /bin/echo 0
+Comando: /bin/echo 0
+[PASS] Valor de retorno: /bin/echo 0: Executado com sucesso.
+Saída do comando:
+minishell$ /bin/echo 0
+minishell: /bin/echo: No such file or directory
+minishell$ exit
+Erro (se houver):
+
+[TEST] Valor de retorno: expr 0 + 0
+Comando: expr 0 + 0
+[PASS] Valor de retorno: expr 0 + 0: Executado com sucesso.
+Saída do comando:
+minishell$ expr 0 + 0
+0
+minishell$ exit
+Erro (se houver):
+
+
+[INICIANDO TESTE 5 - SINAIS]
+[TEST] Sinais: [TEST] Ctrl-C em prompt vazio
+Comando: [TEST] Ctrl-C em prompt vazio
+[PASS] Sinais: [TEST] Ctrl-C em prompt vazio: Executado com sucesso.
+Saída do comando:
+minishell$ [TEST] Ctrl-C em prompt vazio
+[TEST]: command not found
+minishell$ exit
+Erro (se houver):
+
+[TEST] Sinais: sleep 1
+Comando: sleep 1
+[PASS] Sinais: sleep 1: Executado com sucesso.
+Saída do comando:
+minishell$ sleep 1
+minishell$ exit
+Erro (se houver):
+
+[TEST] Sinais: success
+Comando: success
+[PASS] Sinais: success: Executado com sucesso.
+Saída do comando:
+minishell$ success
+success: command not found
+minishell$ exit
+Erro (se houver):
+
+[TEST] Sinais: [TEST] Ctrl-\ em prompt vazio
+Comando: [TEST] Ctrl-\ em prompt vazio
+[PASS] Sinais: [TEST] Ctrl-\ em prompt vazio: Executado com sucesso.
+Saída do comando:
+minishell$ [TEST] Ctrl-\ em prompt vazio
+[TEST]: command not found
+minishell$ exit
+Erro (se houver):
+
+[TEST] Sinais: sleep 1
+Comando: sleep 1
+[PASS] Sinais: sleep 1: Executado com sucesso.
+Saída do comando:
+minishell$ sleep 1
+minishell$ exit
+Erro (se houver):
+
+[TEST] Sinais: success
+Comando: success
+[PASS] Sinais: success: Executado com sucesso.
+Saída do comando:
+minishell$ success
+success: command not found
+minishell$ exit
+Erro (se houver):
+
+[TEST] Sinais: [TEST] Ctrl-D em prompt vazio
+Comando: [TEST] Ctrl-D em prompt vazio
+[PASS] Sinais: [TEST] Ctrl-D em prompt vazio: Executado com sucesso.
+Saída do comando:
+minishell$ [TEST] Ctrl-D em prompt vazio
+[TEST]: command not found
+minishell$ exit
+Erro (se houver):
+
+[TEST] Sinais: exit
+Comando: exit
+[PASS] Sinais: exit: Executado com sucesso.
+Saída do comando:
+minishell$ exit
+exit
+Erro (se houver):
+
+[TEST] Sinais: crash
+Comando: crash
+[PASS] Sinais: crash: Executado com sucesso.
+Saída do comando:
+minishell$ crash
+crash: command not found
+minishell$ exit
+Erro (se houver):
+
+[TEST] Sinais: [TEST] Ctrl-C após entrada
+Comando: [TEST] Ctrl-C após entrada
+[PASS] Sinais: [TEST] Ctrl-C após entrada: Executado com sucesso.
+Saída do comando:
+minishell$ [TEST] Ctrl-C após entrada
+[TEST]: command not found
+minishell$ exit
+Erro (se houver):
+
+[TEST] Sinais: echo test
+Comando: echo test
+[PASS] Sinais: echo test: Executado com sucesso.
+Saída do comando:
+minishell$ echo test
+test
+minishell$ exit
+Erro (se houver):
+
+[TEST] Sinais: success
+Comando: success
+[PASS] Sinais: success: Executado com sucesso.
+Saída do comando:
+minishell$ success
+success: command not found
+minishell$ exit
+Erro (se houver):
+
+[TEST] Sinais: [TEST] Ctrl-D após entrada
+Comando: [TEST] Ctrl-D após entrada
+[PASS] Sinais: [TEST] Ctrl-D após entrada: Executado com sucesso.
+Saída do comando:
+minishell$ [TEST] Ctrl-D após entrada
+[TEST]: command not found
+minishell$ exit
+Erro (se houver):
+
+[TEST] Sinais: echo test
+Comando: echo test
+[PASS] Sinais: echo test: Executado com sucesso.
+Saída do comando:
+minishell$ echo test
+test
+minishell$ exit
+Erro (se houver):
+
+[TEST] Sinais: success
+Comando: success
+[PASS] Sinais: success: Executado com sucesso.
+Saída do comando:
+minishell$ success
+success: command not found
+minishell$ exit
+Erro (se houver):
+
+[TEST] Sinais: [TEST] Ctrl-\ após entrada
+Comando: [TEST] Ctrl-\ após entrada
+[PASS] Sinais: [TEST] Ctrl-\ após entrada: Executado com sucesso.
+Saída do comando:
+minishell$ [TEST] Ctrl-\ após entrada
+[TEST]: command not found
+minishell$ exit
+Erro (se houver):
+
+[TEST] Sinais: echo test
+Comando: echo test
+[PASS] Sinais: echo test: Executado com sucesso.
+Saída do comando:
+minishell$ echo test
+test
+minishell$ exit
+Erro (se houver):
+
+[TEST] Sinais: success
+Comando: success
+[PASS] Sinais: success: Executado com sucesso.
+Saída do comando:
+minishell$ success
+success: command not found
+minishell$ exit
+Erro (se houver):
+
+[TEST] Sinais: [TEST] Ctrl-C durante cat
+Comando: [TEST] Ctrl-C durante cat
+[PASS] Sinais: [TEST] Ctrl-C durante cat: Executado com sucesso.
+Saída do comando:
+minishell$ [TEST] Ctrl-C durante cat
+[TEST]: command not found
+minishell$ exit
+Erro (se houver):
+
+[TEST] Sinais: cat
+Comando: cat
+[PASS] Sinais: cat: Executado com sucesso.
+Saída do comando:
+minishell$ cat
+minishell$ exit
+Erro (se houver):
+
+[TEST] Sinais: success
+Comando: success
+[PASS] Sinais: success: Executado com sucesso.
+Saída do comando:
+minishell$ success
+success: command not found
+minishell$ exit
+Erro (se houver):
+
+[TEST] Sinais: [TEST] Ctrl-\ durante cat
+Comando: [TEST] Ctrl-\ durante cat
+[PASS] Sinais: [TEST] Ctrl-\ durante cat: Executado com sucesso.
+Saída do comando:
+minishell$ [TEST] Ctrl-\ durante cat
+[TEST]: command not found
+minishell$ exit
+Erro (se houver):
+
+[TEST] Sinais: cat
+Comando: cat
+[PASS] Sinais: cat: Executado com sucesso.
+Saída do comando:
+minishell$ cat
+minishell$ exit
+Erro (se houver):
+
+[TEST] Sinais: success
+Comando: success
+[PASS] Sinais: success: Executado com sucesso.
+Saída do comando:
+minishell$ success
+success: command not found
+minishell$ exit
+Erro (se houver):
+
+[TEST] Sinais: [TEST] Ctrl-D durante cat
+Comando: [TEST] Ctrl-D durante cat
+[PASS] Sinais: [TEST] Ctrl-D durante cat: Executado com sucesso.
+Saída do comando:
+minishell$ [TEST] Ctrl-D durante cat
+[TEST]: command not found
+minishell$ exit
+Erro (se houver):
+
+[TEST] Sinais: cat
+Comando: cat
+[PASS] Sinais: cat: Executado com sucesso.
+Saída do comando:
+minishell$ cat
+minishell$ exit
+Erro (se houver):
+
+[TEST] Sinais: success
+Comando: success
+[PASS] Sinais: success: Executado com sucesso.
+Saída do comando:
+minishell$ success
+success: command not found
+minishell$ exit
+Erro (se houver):
+
+[TEST] Sinais: [TEST] Ctrl-C durante grep
+Comando: [TEST] Ctrl-C durante grep
+[PASS] Sinais: [TEST] Ctrl-C durante grep: Executado com sucesso.
+Saída do comando:
+minishell$ [TEST] Ctrl-C durante grep
+[TEST]: command not found
+minishell$ exit
+Erro (se houver):
+
+[TEST] Sinais: grep something
+Comando: grep something
+[PASS] Sinais: grep something: Executado com sucesso.
+Saída do comando:
+minishell$ grep something
+minishell$ exit
+Erro (se houver):
+
+[TEST] Sinais: success
+Comando: success
+[PASS] Sinais: success: Executado com sucesso.
+Saída do comando:
+minishell$ success
+success: command not found
+minishell$ exit
+Erro (se houver):
+
+[TEST] Sinais: [TEST] Ctrl-\ durante grep
+Comando: [TEST] Ctrl-\ durante grep
+[PASS] Sinais: [TEST] Ctrl-\ durante grep: Executado com sucesso.
+Saída do comando:
+minishell$ [TEST] Ctrl-\ durante grep
+[TEST]: command not found
+minishell$ exit
+Erro (se houver):
+
+[TEST] Sinais: grep something
+Comando: grep something
+[PASS] Sinais: grep something: Executado com sucesso.
+Saída do comando:
+minishell$ grep something
+minishell$ exit
+Erro (se houver):
+
+[TEST] Sinais: success
+Comando: success
+[PASS] Sinais: success: Executado com sucesso.
+Saída do comando:
+minishell$ success
+success: command not found
+minishell$ exit
+Erro (se houver):
+
+[TEST] Sinais: [TEST] Ctrl-D durante grep
+Comando: [TEST] Ctrl-D durante grep
+[PASS] Sinais: [TEST] Ctrl-D durante grep: Executado com sucesso.
+Saída do comando:
+minishell$ [TEST] Ctrl-D durante grep
+[TEST]: command not found
+minishell$ exit
+Erro (se houver):
+
+[TEST] Sinais: grep something
+Comando: grep something
+[PASS] Sinais: grep something: Executado com sucesso.
+Saída do comando:
+minishell$ grep something
+minishell$ exit
+Erro (se houver):
+
+[TEST] Sinais: success
+Comando: success
+[PASS] Sinais: success: Executado com sucesso.
+Saída do comando:
+minishell$ success
+success: command not found
+minishell$ exit
+Erro (se houver):
+
+
+[INICIANDO TESTE 6 - ASPAS DUPLAS]
+[TEST] Aspas duplas: echo "cat lol.c | cat > lol.c"
+Comando: echo "cat lol.c | cat > lol.c"
+[PASS] Aspas duplas: echo "cat lol.c | cat > lol.c": Executado com sucesso.
+Saída do comando:
+minishell$ echo "cat lol.c | cat > lol.c"
+cat lol.c | cat > lol.c
+minishell$ exit
+Erro (se houver):
+
+[TEST] Aspas duplas: echo "Hello, World!"
+Comando: echo "Hello, World!"
+[PASS] Aspas duplas: echo "Hello, World!": Executado com sucesso.
+Saída do comando:
+minishell$ echo "Hello, World!"
+Hello, World!
+minishell$ exit
+Erro (se houver):
+
+[TEST] Aspas duplas: echo "Multiple   spaces   inside"
+Comando: echo "Multiple   spaces   inside"
+[FAIL] Aspas duplas: echo "Multiple   spaces   inside": Saída inesperada. Verifique logs abaixo.
+minishell$ echo "Multiple   spaces   inside"
+Multiple   spaces   inside
+free(): double free detected in tcache 2
+Saída do comando:
+minishell$ echo "Multiple   spaces   inside"
+Multiple   spaces   inside
+Erro (se houver):
+free(): double free detected in tcache 2
+
+[TEST] Aspas duplas: echo ""
+Comando: echo ""
+[PASS] Aspas duplas: echo "": Executado com sucesso.
+Saída do comando:
+minishell$ echo ""
+
+minishell$ exit
+Erro (se houver):
+
+
+[INICIANDO TESTE 7 - ASPAS SIMPLES]
+[TEST] Aspas simples: echo '\''
+Comando: echo '\''
+[PASS] Aspas simples: echo '\'': Executado com sucesso.
+Saída do comando:
+minishell$ echo '\''
+Syntax error
+minishell$ exit
+Erro (se houver):
+
+[TEST] Aspas simples: echo 'Hello, World!'
+Comando: echo 'Hello, World!'
+[PASS] Aspas simples: echo 'Hello, World!': Executado com sucesso.
+Saída do comando:
+minishell$ echo 'Hello, World!'
+Hello, World!
+minishell$ exit
+Erro (se houver):
+
+[TEST] Aspas simples: echo 'Multiple   spaces   inside'
+Comando: echo 'Multiple   spaces   inside'
+[FAIL] Aspas simples: echo 'Multiple   spaces   inside': Saída inesperada. Verifique logs abaixo.
+minishell$ echo 'Multiple   spaces   inside'
+Multiple   spaces   inside
+free(): double free detected in tcache 2
+Saída do comando:
+minishell$ echo 'Multiple   spaces   inside'
+Multiple   spaces   inside
+Erro (se houver):
+free(): double free detected in tcache 2
+
+[TEST] Aspas simples: echo 'cat lol.c | cat > lol.c'
+Comando: echo 'cat lol.c | cat > lol.c'
+[PASS] Aspas simples: echo 'cat lol.c | cat > lol.c': Executado com sucesso.
+Saída do comando:
+minishell$ echo 'cat lol.c | cat > lol.c'
+cat lol.c | cat > lol.c
+minishell$ exit
+Erro (se houver):
+
+[TEST] Aspas simples: echo 'hmateque'
+Comando: echo 'hmateque'
+[PASS] Aspas simples: echo 'hmateque': Executado com sucesso.
+Saída do comando:
+minishell$ echo 'hmateque'
+hmateque
+minishell$ exit
+Erro (se houver):
+
+[TEST] Aspas simples: echo 'Text with $ and special ! characters'
+Comando: echo 'Text with $ and special ! characters'
+[FAIL] Aspas simples: echo 'Text with $ and special ! characters': Saída inesperada. Verifique logs abaixo.
+minishell$ echo 'Text with $ and special ! characters'
+Text with $ and special ! characters
+free(): double free detected in tcache 2
+Saída do comando:
+minishell$ echo 'Text with $ and special ! characters'
+Text with $ and special ! characters
+Erro (se houver):
+free(): double free detected in tcache 2
+
+
+[INICIANDO TESTE 8 - VARIÁVEIS DE AMBIENTE]
+[TEST] Variáveis de ambiente
+Comando: env
+[PASS] Variáveis de ambiente: Executado com sucesso.
+Saída do comando:
+minishell$ env
+SHELL=/bin/zsh
+SESSION_MANAGER=local/c1r5s2.42luanda.com:@/tmp/.ICE-unix/194325,unix/c1r5s2.42luanda.com:/tmp/.ICE-unix/194325
+USER_ZDOTDIR=/nfs/homes/hmateque
+QT_ACCESSIBILITY=1
+COLORTERM=truecolor
+XDG_CONFIG_DIRS=/etc/xdg/xdg-ubuntu:/etc/xdg
+SSH_AGENT_LAUNCHER=gnome-keyring
+XDG_SESSION_PATH=/org/freedesktop/DisplayManager/Session3
+XDG_MENU_PREFIX=gnome-
+TERM_PROGRAM_VERSION=1.90.1
+GNOME_DESKTOP_SESSION_ID=this-is-deprecated
+GTK_IM_MODULE=ibus
+LANGUAGE=en
+SSH_AUTH_SOCK=/run/user/101187/keyring/ssh
+XMODIFIERS=@im=ibus
+DESKTOP_SESSION=ubuntu
+GTK_MODULES=gail:atk-bridge
+DBUS_STARTER_BUS_TYPE=session
+PWD=/nfs/homes/hmateque/Common core/minishell/Minishell Test Script
+KRB5CCNAME=FILE:/tmp/krb5cc_101187_jIFiL2
+XDG_SESSION_DESKTOP=ubuntu
+LOGNAME=hmateque
+XDG_SESSION_TYPE=x11
+GPG_AGENT_INFO=/run/user/101187/gnupg/S.gpg-agent:0:1
+SYSTEMD_EXEC_PID=194325
+XAUTHORITY=/nfs/homes/hmateque/.Xauthority
+VSCODE_GIT_ASKPASS_NODE=/var/lib/flatpak/app/com.visualstudio.code/x86_64/stable/01f115d9f43f6cf8215dd70c4ece648c93ea748ca9a0bacbb42ebd6e5b7331e5/files/extra/vscode/code
+XDG_GREETER_DATA_DIR=/var/lib/lightdm-data/hmateque
+VSCODE_INJECTION=1
+GDM_LANG=en
+HOME=/nfs/homes/hmateque
+LANG=en_US.UTF-8
+XDG_CURRENT_DESKTOP=Unity
+VTE_VERSION=6800
+GIT_ASKPASS=/var/lib/flatpak/app/com.visualstudio.code/x86_64/stable/01f115d9f43f6cf8215dd70c4ece648c93ea748ca9a0bacbb42ebd6e5b7331e5/files/extra/vscode/resources/app/extensions/git/dist/askpass.sh
+XDG_SEAT_PATH=/org/freedesktop/DisplayManager/Seat0
+GNOME_TERMINAL_SCREEN=/org/gnome/Terminal/screen/74cdcccb_4f11_4bd0_8582_81b5480c664e
+CHROME_DESKTOP=code-url-handler.desktop
+XDG_SESSION_CLASS=user
+TERM=xterm-256color
+ZDOTDIR=/nfs/homes/hmateque
+LIBVIRT_DEFAULT_URI=qemu:///system
+USER=hmateque
+VSCODE_GIT_IPC_HANDLE=/run/user/101187/vscode-git-6527fd75af.sock
+GNOME_TERMINAL_SERVICE=:1.109
+DISPLAY=:0
+SHLVL=3
+QT_IM_MODULE=ibus
+DBUS_STARTER_ADDRESS=unix:path=/run/user/101187/bus,guid=b13cab58b2a6014044e0c7d1677e6805
+XDG_RUNTIME_DIR=/run/user/101187
+DOCKER_HOST=unix:///run/user/101187/docker.sock
+VSCODE_GIT_ASKPASS_MAIN=/var/lib/flatpak/app/com.visualstudio.code/x86_64/stable/01f115d9f43f6cf8215dd70c4ece648c93ea748ca9a0bacbb42ebd6e5b7331e5/files/extra/vscode/resources/app/extensions/git/dist/askpass-main.js
+XDG_DATA_DIRS=/usr/share/ubuntu:/usr/share/gnome:/nfs/homes/hmateque/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:/var/lib/snapd/desktop
+GDK_BACKEND=x11
+PATH=/nfs/homes/hmateque/bin:/nfs/homes/hmateque/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+GDMSESSION=ubuntu
+ORIGINAL_XDG_CURRENT_DESKTOP=ubuntu:GNOME
+DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/101187/bus,guid=b13cab58b2a6014044e0c7d1677e6805
+OLDPWD=/nfs/homes/hmateque/Common core/minishell/Minishell Test Script
+TERM_PROGRAM=vscode
+_=../minishell/minishell
+minishell$ exit
+Erro (se houver):
+
+
+[INICIANDO TESTE 9 - EXPORT E VARIÁVEIS DE AMBIENTE]
+[TEST] Export: export NEW_VAR=test
+Comando: export NEW_VAR=test
+[PASS] Export: export NEW_VAR=test: Executado com sucesso.
+Saída do comando:
+minishell$ export NEW_VAR=test
+minishell$ exit
+Erro (se houver):
+
+[TEST] Export: export HOME=new_value
+Comando: export HOME=new_value
+[PASS] Export: export HOME=new_value: Executado com sucesso.
+Saída do comando:
+minishell$ export HOME=new_value
+minishell$ exit
+Erro (se houver):
+
+[TEST] Export: export PATH=/new/path:/nfs/homes/hmateque/bin:/nfs/homes/hmateque/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+Comando: export PATH=/new/path:/nfs/homes/hmateque/bin:/nfs/homes/hmateque/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+[PASS] Export: export PATH=/new/path:/nfs/homes/hmateque/bin:/nfs/homes/hmateque/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin: Executado com sucesso.
+Saída do comando:
+minishell$ export PATH=/new/path:/nfs/homes/hmateque/bin:/nfs/homes/hmateque/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+minishell$ exit
+Erro (se houver):
+
+[TEST] Export: export
+Comando: export
+[PASS] Export: export: Executado com sucesso.
+Saída do comando:
+minishell$ export
+SHELL=/bin/zsh
+SESSION_MANAGER=local/c1r5s2.42luanda.com:@/tmp/.ICE-unix/194325,unix/c1r5s2.42luanda.com:/tmp/.ICE-unix/194325
+USER_ZDOTDIR=/nfs/homes/hmateque
+QT_ACCESSIBILITY=1
+COLORTERM=truecolor
+XDG_CONFIG_DIRS=/etc/xdg/xdg-ubuntu:/etc/xdg
+SSH_AGENT_LAUNCHER=gnome-keyring
+XDG_SESSION_PATH=/org/freedesktop/DisplayManager/Session3
+XDG_MENU_PREFIX=gnome-
+TERM_PROGRAM_VERSION=1.90.1
+GNOME_DESKTOP_SESSION_ID=this-is-deprecated
+GTK_IM_MODULE=ibus
+LANGUAGE=en
+SSH_AUTH_SOCK=/run/user/101187/keyring/ssh
+XMODIFIERS=@im=ibus
+DESKTOP_SESSION=ubuntu
+GTK_MODULES=gail:atk-bridge
+DBUS_STARTER_BUS_TYPE=session
+PWD=/nfs/homes/hmateque/Common core/minishell/Minishell Test Script
+KRB5CCNAME=FILE:/tmp/krb5cc_101187_jIFiL2
+XDG_SESSION_DESKTOP=ubuntu
+LOGNAME=hmateque
+XDG_SESSION_TYPE=x11
+GPG_AGENT_INFO=/run/user/101187/gnupg/S.gpg-agent:0:1
+SYSTEMD_EXEC_PID=194325
+XAUTHORITY=/nfs/homes/hmateque/.Xauthority
+VSCODE_GIT_ASKPASS_NODE=/var/lib/flatpak/app/com.visualstudio.code/x86_64/stable/01f115d9f43f6cf8215dd70c4ece648c93ea748ca9a0bacbb42ebd6e5b7331e5/files/extra/vscode/code
+XDG_GREETER_DATA_DIR=/var/lib/lightdm-data/hmateque
+VSCODE_INJECTION=1
+GDM_LANG=en
+HOME=/nfs/homes/hmateque
+LANG=en_US.UTF-8
+XDG_CURRENT_DESKTOP=Unity
+VTE_VERSION=6800
+GIT_ASKPASS=/var/lib/flatpak/app/com.visualstudio.code/x86_64/stable/01f115d9f43f6cf8215dd70c4ece648c93ea748ca9a0bacbb42ebd6e5b7331e5/files/extra/vscode/resources/app/extensions/git/dist/askpass.sh
+XDG_SEAT_PATH=/org/freedesktop/DisplayManager/Seat0
+GNOME_TERMINAL_SCREEN=/org/gnome/Terminal/screen/74cdcccb_4f11_4bd0_8582_81b5480c664e
+CHROME_DESKTOP=code-url-handler.desktop
+VSCODE_GIT_ASKPASS_EXTRA_ARGS
+XDG_SESSION_CLASS=user
+TERM=xterm-256color
+ZDOTDIR=/nfs/homes/hmateque
+LIBVIRT_DEFAULT_URI=qemu:///system
+USER=hmateque
+VSCODE_GIT_IPC_HANDLE=/run/user/101187/vscode-git-6527fd75af.sock
+GNOME_TERMINAL_SERVICE=:1.109
+DISPLAY=:0
+SHLVL=3
+QT_IM_MODULE=ibus
+DBUS_STARTER_ADDRESS=unix:path=/run/user/101187/bus,guid=b13cab58b2a6014044e0c7d1677e6805
+XDG_RUNTIME_DIR=/run/user/101187
+DOCKER_HOST=unix:///run/user/101187/docker.sock
+VSCODE_GIT_ASKPASS_MAIN=/var/lib/flatpak/app/com.visualstudio.code/x86_64/stable/01f115d9f43f6cf8215dd70c4ece648c93ea748ca9a0bacbb42ebd6e5b7331e5/files/extra/vscode/resources/app/extensions/git/dist/askpass-main.js
+XDG_DATA_DIRS=/usr/share/ubuntu:/usr/share/gnome:/nfs/homes/hmateque/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:/var/lib/snapd/desktop
+GDK_BACKEND=x11
+PATH=/nfs/homes/hmateque/bin:/nfs/homes/hmateque/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+GDMSESSION=ubuntu
+ORIGINAL_XDG_CURRENT_DESKTOP=ubuntu:GNOME
+DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/101187/bus,guid=b13cab58b2a6014044e0c7d1677e6805
+OLDPWD=/nfs/homes/hmateque/Common core/minishell/Minishell Test Script
+TERM_PROGRAM=vscode
+_=../minishell/minishell
+minishell$ exit
+Erro (se houver):
+
+[TEST] Export: env
+Comando: env
+[PASS] Export: env: Executado com sucesso.
+Saída do comando:
+minishell$ env
+SHELL=/bin/zsh
+SESSION_MANAGER=local/c1r5s2.42luanda.com:@/tmp/.ICE-unix/194325,unix/c1r5s2.42luanda.com:/tmp/.ICE-unix/194325
+USER_ZDOTDIR=/nfs/homes/hmateque
+QT_ACCESSIBILITY=1
+COLORTERM=truecolor
+XDG_CONFIG_DIRS=/etc/xdg/xdg-ubuntu:/etc/xdg
+SSH_AGENT_LAUNCHER=gnome-keyring
+XDG_SESSION_PATH=/org/freedesktop/DisplayManager/Session3
+XDG_MENU_PREFIX=gnome-
+TERM_PROGRAM_VERSION=1.90.1
+GNOME_DESKTOP_SESSION_ID=this-is-deprecated
+GTK_IM_MODULE=ibus
+LANGUAGE=en
+SSH_AUTH_SOCK=/run/user/101187/keyring/ssh
+XMODIFIERS=@im=ibus
+DESKTOP_SESSION=ubuntu
+GTK_MODULES=gail:atk-bridge
+DBUS_STARTER_BUS_TYPE=session
+PWD=/nfs/homes/hmateque/Common core/minishell/Minishell Test Script
+KRB5CCNAME=FILE:/tmp/krb5cc_101187_jIFiL2
+XDG_SESSION_DESKTOP=ubuntu
+LOGNAME=hmateque
+XDG_SESSION_TYPE=x11
+GPG_AGENT_INFO=/run/user/101187/gnupg/S.gpg-agent:0:1
+SYSTEMD_EXEC_PID=194325
+XAUTHORITY=/nfs/homes/hmateque/.Xauthority
+VSCODE_GIT_ASKPASS_NODE=/var/lib/flatpak/app/com.visualstudio.code/x86_64/stable/01f115d9f43f6cf8215dd70c4ece648c93ea748ca9a0bacbb42ebd6e5b7331e5/files/extra/vscode/code
+XDG_GREETER_DATA_DIR=/var/lib/lightdm-data/hmateque
+VSCODE_INJECTION=1
+GDM_LANG=en
+HOME=/nfs/homes/hmateque
+LANG=en_US.UTF-8
+XDG_CURRENT_DESKTOP=Unity
+VTE_VERSION=6800
+GIT_ASKPASS=/var/lib/flatpak/app/com.visualstudio.code/x86_64/stable/01f115d9f43f6cf8215dd70c4ece648c93ea748ca9a0bacbb42ebd6e5b7331e5/files/extra/vscode/resources/app/extensions/git/dist/askpass.sh
+XDG_SEAT_PATH=/org/freedesktop/DisplayManager/Seat0
+GNOME_TERMINAL_SCREEN=/org/gnome/Terminal/screen/74cdcccb_4f11_4bd0_8582_81b5480c664e
+CHROME_DESKTOP=code-url-handler.desktop
+XDG_SESSION_CLASS=user
+TERM=xterm-256color
+ZDOTDIR=/nfs/homes/hmateque
+LIBVIRT_DEFAULT_URI=qemu:///system
+USER=hmateque
+VSCODE_GIT_IPC_HANDLE=/run/user/101187/vscode-git-6527fd75af.sock
+GNOME_TERMINAL_SERVICE=:1.109
+DISPLAY=:0
+SHLVL=3
+QT_IM_MODULE=ibus
+DBUS_STARTER_ADDRESS=unix:path=/run/user/101187/bus,guid=b13cab58b2a6014044e0c7d1677e6805
+XDG_RUNTIME_DIR=/run/user/101187
+DOCKER_HOST=unix:///run/user/101187/docker.sock
+VSCODE_GIT_ASKPASS_MAIN=/var/lib/flatpak/app/com.visualstudio.code/x86_64/stable/01f115d9f43f6cf8215dd70c4ece648c93ea748ca9a0bacbb42ebd6e5b7331e5/files/extra/vscode/resources/app/extensions/git/dist/askpass-main.js
+XDG_DATA_DIRS=/usr/share/ubuntu:/usr/share/gnome:/nfs/homes/hmateque/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:/var/lib/snapd/desktop
+GDK_BACKEND=x11
+PATH=/nfs/homes/hmateque/bin:/nfs/homes/hmateque/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+GDMSESSION=ubuntu
+ORIGINAL_XDG_CURRENT_DESKTOP=ubuntu:GNOME
+DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/101187/bus,guid=b13cab58b2a6014044e0c7d1677e6805
+OLDPWD=/nfs/homes/hmateque/Common core/minishell/Minishell Test Script
+TERM_PROGRAM=vscode
+_=../minishell/minishell
+minishell$ exit
+Erro (se houver):
+
+
+[INICIANDO TESTE 10 - UNSET E VARIÁVEIS DE AMBIENTE]
+[TEST] Unset e ENV: export TEST_VAR1=value1
+Comando: export TEST_VAR1=value1
+[PASS] Unset e ENV: export TEST_VAR1=value1: Executado com sucesso.
+Saída do comando:
+minishell$ export TEST_VAR1=value1
+minishell$ exit
+Erro (se houver):
+
+[TEST] Unset e ENV: export TEST_VAR2=value2
+Comando: export TEST_VAR2=value2
+[PASS] Unset e ENV: export TEST_VAR2=value2: Executado com sucesso.
+Saída do comando:
+minishell$ export TEST_VAR2=value2
+minishell$ exit
+Erro (se houver):
+
+[TEST] Unset e ENV: export TEST_VAR3=value3
+Comando: export TEST_VAR3=value3
+[PASS] Unset e ENV: export TEST_VAR3=value3: Executado com sucesso.
+Saída do comando:
+minishell$ export TEST_VAR3=value3
+minishell$ exit
+Erro (se houver):
+
+[TEST] Unset e ENV: env | grep TEST_VAR
+Comando: env | grep TEST_VAR
+[PASS] Unset e ENV: env | grep TEST_VAR: Executado com sucesso.
+Saída do comando:
+minishell$ env | grep TEST_VAR
+minishell$ exit
+Erro (se houver):
+
+[TEST] Unset e ENV: unset TEST_VAR1
+Comando: unset TEST_VAR1
+[PASS] Unset e ENV: unset TEST_VAR1: Executado com sucesso.
+Saída do comando:
+minishell$ unset TEST_VAR1
+minishell$ exit
+Erro (se houver):
+
+[TEST] Unset e ENV: unset TEST_VAR2
+Comando: unset TEST_VAR2
+[PASS] Unset e ENV: unset TEST_VAR2: Executado com sucesso.
+Saída do comando:
+minishell$ unset TEST_VAR2
+minishell$ exit
+Erro (se houver):
+
+[TEST] Unset e ENV: env | grep TEST_VAR
+Comando: env | grep TEST_VAR
+[PASS] Unset e ENV: env | grep TEST_VAR: Executado com sucesso.
+Saída do comando:
+minishell$ env | grep TEST_VAR
+minishell$ exit
+Erro (se houver):
+
+[TEST] Unset e ENV: echo $TEST_VAR1
+Comando: echo $TEST_VAR1
+[PASS] Unset e ENV: echo $TEST_VAR1: Executado com sucesso.
+Saída do comando:
+minishell$ echo $TEST_VAR1
+
+minishell$ exit
+Erro (se houver):
+
+[TEST] Unset e ENV: echo $TEST_VAR3
+Comando: echo $TEST_VAR3
+[PASS] Unset e ENV: echo $TEST_VAR3: Executado com sucesso.
+Saída do comando:
+minishell$ echo $TEST_VAR3
+
+minishell$ exit
+Erro (se houver):
+
+[TEST] Unset e ENV: unset NONEXISTENT_VAR
+Comando: unset NONEXISTENT_VAR
+[PASS] Unset e ENV: unset NONEXISTENT_VAR: Executado com sucesso.
+Saída do comando:
+minishell$ unset NONEXISTENT_VAR
+minishell$ exit
+Erro (se houver):
+
+[TEST] Unset e ENV: env
+Comando: env
+[PASS] Unset e ENV: env: Executado com sucesso.
+Saída do comando:
+minishell$ env
+SHELL=/bin/zsh
+SESSION_MANAGER=local/c1r5s2.42luanda.com:@/tmp/.ICE-unix/194325,unix/c1r5s2.42luanda.com:/tmp/.ICE-unix/194325
+USER_ZDOTDIR=/nfs/homes/hmateque
+QT_ACCESSIBILITY=1
+COLORTERM=truecolor
+XDG_CONFIG_DIRS=/etc/xdg/xdg-ubuntu:/etc/xdg
+SSH_AGENT_LAUNCHER=gnome-keyring
+XDG_SESSION_PATH=/org/freedesktop/DisplayManager/Session3
+XDG_MENU_PREFIX=gnome-
+TERM_PROGRAM_VERSION=1.90.1
+GNOME_DESKTOP_SESSION_ID=this-is-deprecated
+GTK_IM_MODULE=ibus
+LANGUAGE=en
+SSH_AUTH_SOCK=/run/user/101187/keyring/ssh
+XMODIFIERS=@im=ibus
+DESKTOP_SESSION=ubuntu
+GTK_MODULES=gail:atk-bridge
+DBUS_STARTER_BUS_TYPE=session
+PWD=/nfs/homes/hmateque/Common core/minishell/Minishell Test Script
+KRB5CCNAME=FILE:/tmp/krb5cc_101187_jIFiL2
+XDG_SESSION_DESKTOP=ubuntu
+LOGNAME=hmateque
+XDG_SESSION_TYPE=x11
+GPG_AGENT_INFO=/run/user/101187/gnupg/S.gpg-agent:0:1
+SYSTEMD_EXEC_PID=194325
+XAUTHORITY=/nfs/homes/hmateque/.Xauthority
+VSCODE_GIT_ASKPASS_NODE=/var/lib/flatpak/app/com.visualstudio.code/x86_64/stable/01f115d9f43f6cf8215dd70c4ece648c93ea748ca9a0bacbb42ebd6e5b7331e5/files/extra/vscode/code
+XDG_GREETER_DATA_DIR=/var/lib/lightdm-data/hmateque
+VSCODE_INJECTION=1
+GDM_LANG=en
+HOME=/nfs/homes/hmateque
+LANG=en_US.UTF-8
+XDG_CURRENT_DESKTOP=Unity
+VTE_VERSION=6800
+GIT_ASKPASS=/var/lib/flatpak/app/com.visualstudio.code/x86_64/stable/01f115d9f43f6cf8215dd70c4ece648c93ea748ca9a0bacbb42ebd6e5b7331e5/files/extra/vscode/resources/app/extensions/git/dist/askpass.sh
+XDG_SEAT_PATH=/org/freedesktop/DisplayManager/Seat0
+GNOME_TERMINAL_SCREEN=/org/gnome/Terminal/screen/74cdcccb_4f11_4bd0_8582_81b5480c664e
+CHROME_DESKTOP=code-url-handler.desktop
+XDG_SESSION_CLASS=user
+TERM=xterm-256color
+ZDOTDIR=/nfs/homes/hmateque
+LIBVIRT_DEFAULT_URI=qemu:///system
+USER=hmateque
+VSCODE_GIT_IPC_HANDLE=/run/user/101187/vscode-git-6527fd75af.sock
+GNOME_TERMINAL_SERVICE=:1.109
+DISPLAY=:0
+SHLVL=3
+QT_IM_MODULE=ibus
+DBUS_STARTER_ADDRESS=unix:path=/run/user/101187/bus,guid=b13cab58b2a6014044e0c7d1677e6805
+XDG_RUNTIME_DIR=/run/user/101187
+DOCKER_HOST=unix:///run/user/101187/docker.sock
+VSCODE_GIT_ASKPASS_MAIN=/var/lib/flatpak/app/com.visualstudio.code/x86_64/stable/01f115d9f43f6cf8215dd70c4ece648c93ea748ca9a0bacbb42ebd6e5b7331e5/files/extra/vscode/resources/app/extensions/git/dist/askpass-main.js
+XDG_DATA_DIRS=/usr/share/ubuntu:/usr/share/gnome:/nfs/homes/hmateque/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:/var/lib/snapd/desktop
+GDK_BACKEND=x11
+PATH=/nfs/homes/hmateque/bin:/nfs/homes/hmateque/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+GDMSESSION=ubuntu
+ORIGINAL_XDG_CURRENT_DESKTOP=ubuntu:GNOME
+DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/101187/bus,guid=b13cab58b2a6014044e0c7d1677e6805
+OLDPWD=/nfs/homes/hmateque/Common core/minishell/Minishell Test Script
+TERM_PROGRAM=vscode
+_=../minishell/minishell
+minishell$ exit
+Erro (se houver):
+
+
+[INICIANDO TESTE 11 - COMANDO CD]
+[TEST] CD: cd /home
+Comando: cd /home
+[PASS] CD: cd /home: Executado com sucesso.
+Saída do comando:
+minishell$ cd /home
+minishell: export: 'core/minishell/Minishell': not a valid identifier
+minishell$ exit
+Erro (se houver):
+
+[TEST] CD: cd /tmp
+Comando: cd /tmp
+[PASS] CD: cd /tmp: Executado com sucesso.
+Saída do comando:
+minishell$ cd /tmp
+minishell: export: 'core/minishell/Minishell': not a valid identifier
+minishell$ exit
+Erro (se houver):
+
+[TEST] CD: cd /etc
+Comando: cd /etc
+[PASS] CD: cd /etc: Executado com sucesso.
+Saída do comando:
+minishell$ cd /etc
+minishell: export: 'core/minishell/Minishell': not a valid identifier
+minishell$ exit
+Erro (se houver):
+
+[TEST] CD: cd
+Comando: cd
+[PASS] CD: cd: Executado com sucesso.
+Saída do comando:
+minishell$ cd
+minishell: export: 'core/minishell/Minishell': not a valid identifier
+minishell$ exit
+Erro (se houver):
+
+[TEST] CD: cd ..
+Comando: cd ..
+[PASS] CD: cd ..: Executado com sucesso.
+Saída do comando:
+minishell$ cd ..
+minishell: export: 'core/minishell/Minishell': not a valid identifier
+minishell: export: 'core/minishell': not a valid identifier
+minishell$ exit
+Erro (se houver):
+
+[TEST] CD: cd ../..
+Comando: cd ../..
+[PASS] CD: cd ../..: Executado com sucesso.
+Saída do comando:
+minishell$ cd ../..
+minishell: export: 'core/minishell/Minishell': not a valid identifier
+minishell$ exit
+Erro (se houver):
+
+[TEST] CD: cd .
+Comando: cd .
+[PASS] CD: cd .: Executado com sucesso.
+Saída do comando:
+minishell$ cd .
+minishell: export: 'core/minishell/Minishell': not a valid identifier
+minishell: export: 'core/minishell/Minishell': not a valid identifier
+minishell$ exit
+Erro (se houver):
+
+[TEST] CD: cd ./
+Comando: cd ./
+[PASS] CD: cd ./: Executado com sucesso.
+Saída do comando:
+minishell$ cd ./
+minishell: export: 'core/minishell/Minishell': not a valid identifier
+minishell: export: 'core/minishell/Minishell': not a valid identifier
+minishell$ exit
+Erro (se houver):
+
+[TEST] CD: cd /diretorio_inexistente
+Comando: cd /diretorio_inexistente
+[PASS] CD: cd /diretorio_inexistente: Executado com sucesso.
+Saída do comando:
+minishell$ cd /diretorio_inexistente
+minishell$ exit
+Erro (se houver):
+Erro ao mudar de diretório: No such file or directory
+
+[TEST] CD: cd /root
+Comando: cd /root
+[PASS] CD: cd /root: Executado com sucesso.
+Saída do comando:
+minishell$ cd /root
+minishell$ exit
+Erro (se houver):
+Erro ao mudar de diretório: Permission denied
+
+[TEST] CD: cd /tmp /home
+Comando: cd /tmp /home
+[PASS] CD: cd /tmp /home: Executado com sucesso.
+Saída do comando:
+minishell$ cd /tmp /home
+minishell: cd: too many arguments
+minishell$ exit
+Erro (se houver):
+
+[TEST] CD: cd ""
+Comando: cd ""
+[PASS] CD: cd "": Executado com sucesso.
+Saída do comando:
+minishell$ cd ""
+minishell$ exit
+Erro (se houver):
+Erro ao mudar de diretório: No such file or directory
+
+[TEST] CD: cd /tmp
+Comando: cd /tmp
+[PASS] CD: cd /tmp: Executado com sucesso.
+Saída do comando:
+minishell$ cd /tmp
+minishell: export: 'core/minishell/Minishell': not a valid identifier
+minishell$ exit
+Erro (se houver):
+
+[TEST] CD: pwd
+Comando: pwd
+[PASS] CD: pwd: Executado com sucesso.
+Saída do comando:
+minishell$ pwd
+/nfs/homes/hmateque/Common core/minishell/Minishell Test Script
+minishell$ exit
+Erro (se houver):
+
+[TEST] CD: cd ..
+Comando: cd ..
+[PASS] CD: cd ..: Executado com sucesso.
+Saída do comando:
+minishell$ cd ..
+minishell: export: 'core/minishell/Minishell': not a valid identifier
+minishell: export: 'core/minishell': not a valid identifier
+minishell$ exit
+Erro (se houver):
+
+[TEST] CD: pwd
+Comando: pwd
+[PASS] CD: pwd: Executado com sucesso.
+Saída do comando:
+minishell$ pwd
+/nfs/homes/hmateque/Common core/minishell/Minishell Test Script
+minishell$ exit
+Erro (se houver):
+
+[TEST] CD: cd
+Comando: cd
+[PASS] CD: cd: Executado com sucesso.
+Saída do comando:
+minishell$ cd
+minishell: export: 'core/minishell/Minishell': not a valid identifier
+minishell$ exit
+Erro (se houver):
+
+[TEST] CD: pwd
+Comando: pwd
+[PASS] CD: pwd: Executado com sucesso.
+Saída do comando:
+minishell$ pwd
+/nfs/homes/hmateque/Common core/minishell/Minishell Test Script
+minishell$ exit
+Erro (se houver):
+
+
+[INICIANDO TESTE 12 - REDIRECIONAMENTOS]
+[TEST] Redirecionamento: echo 'test' > output1.txt
+Comando: echo 'test' > output1.txt
+[PASS] Redirecionamento: echo 'test' > output1.txt: Executado com sucesso.
+Saída do comando:
+minishell$ echo 'test' > output1.txt
+minishell$ exit
+Erro (se houver):
+
+[TEST] Redirecionamento: /bin/ls > output2.txt
+Comando: /bin/ls > output2.txt
+[PASS] Redirecionamento: /bin/ls > output2.txt: Executado com sucesso.
+Saída do comando:
+minishell$ /bin/ls > output2.txt
+minishell: /bin/ls: No such file or directory
+minishell$ exit
+Erro (se houver):
+
+[TEST] Redirecionamento: echo 'overwrite' > output1.txt
+Comando: echo 'overwrite' > output1.txt
+[PASS] Redirecionamento: echo 'overwrite' > output1.txt: Executado com sucesso.
+Saída do comando:
+minishell$ echo 'overwrite' > output1.txt
+minishell$ exit
+Erro (se houver):
+
+[TEST] Redirecionamento: echo 'append1' >> output3.txt
+Comando: echo 'append1' >> output3.txt
+[PASS] Redirecionamento: echo 'append1' >> output3.txt: Executado com sucesso.
+Saída do comando:
+minishell$ echo 'append1' >> output3.txt
+minishell$ exit
+Erro (se houver):
+
+[TEST] Redirecionamento: echo 'append2' >> output3.txt
+Comando: echo 'append2' >> output3.txt
+[PASS] Redirecionamento: echo 'append2' >> output3.txt: Executado com sucesso.
+Saída do comando:
+minishell$ echo 'append2' >> output3.txt
+minishell$ exit
+Erro (se houver):
+
+[TEST] Redirecionamento: echo 'append3' >> output3.txt
+Comando: echo 'append3' >> output3.txt
+[PASS] Redirecionamento: echo 'append3' >> output3.txt: Executado com sucesso.
+Saída do comando:
+minishell$ echo 'append3' >> output3.txt
+minishell$ exit
+Erro (se houver):
+
+[TEST] Redirecionamento: cat < temp_input.txt
+Comando: cat < temp_input.txt
+[PASS] Redirecionamento: cat < temp_input.txt: Executado com sucesso.
+Saída do comando:
+minishell$ cat < temp_input.txt
+Hello World
+Second line
+Third line
+minishell$ exit
+Erro (se houver):
+
+[TEST] Redirecionamento: grep 'Second' < temp_input.txt
+Comando: grep 'Second' < temp_input.txt
+[PASS] Redirecionamento: grep 'Second' < temp_input.txt: Executado com sucesso.
+Saída do comando:
+minishell$ grep 'Second' < temp_input.txt
+Second line
+minishell$ exit
+Erro (se houver):
+
+[TEST] Redirecionamento: wc -l < temp_input.txt
+Comando: wc -l < temp_input.txt
+[PASS] Redirecionamento: wc -l < temp_input.txt: Executado com sucesso.
+Saída do comando:
+minishell$ wc -l < temp_input.txt
+3
+minishell$ exit
+Erro (se houver):
+
+[TEST] Redirecionamento: cat < temp_input.txt > output4.txt
+Comando: cat < temp_input.txt > output4.txt
+[PASS] Redirecionamento: cat < temp_input.txt > output4.txt: Executado com sucesso.
+Saída do comando:
+minishell$ cat < temp_input.txt > output4.txt
+minishell$ exit
+Erro (se houver):
+
+[TEST] Redirecionamento: cat < nonexistent_file.txt
+Comando: cat < nonexistent_file.txt
+[PASS] Redirecionamento: cat < nonexistent_file.txt: Executado com sucesso.
+Saída do comando:
+minishell$ cat < nonexistent_file.txt
+minishell: nonexistent_file.txt: No such file or directory
+minishell$ exit
+Erro (se houver):
+
+[TEST] Redirecionamento: echo 'test' > /root/test.txt
+Comando: echo 'test' > /root/test.txt
+[PASS] Redirecionamento: echo 'test' > /root/test.txt: Executado com sucesso.
+Saída do comando:
+minishell$ echo 'test' > /root/test.txt
+minishell$ exit
+Erro (se houver):
+Error opening redirection file: Permission denied
+
+[TEST] Redirecionamento: cat << EOF
+First Line
+Second Line
+Third Line
+EOF
+Comando: cat << EOF
+First Line
+Second Line
+Third Line
+EOF
+[PASS] Redirecionamento: cat << EOF
+First Line
+Second Line
+Third Line
+EOF: Executado com sucesso.
+Saída do comando:
+minishell$ cat << EOF
+> First Line
+> Second Line
+> Third Line
+> EOF
+First Line
+Second Line
+Third Line
+minishell$ exit
+Erro (se houver):
+
+[TEST] Redirecionamento: cat << LIMIT
+Testing here document
+with multiple lines
+LIMIT
+Comando: cat << LIMIT
+Testing here document
+with multiple lines
+LIMIT
+[PASS] Redirecionamento: cat << LIMIT
+Testing here document
+with multiple lines
+LIMIT: Executado com sucesso.
+Saída do comando:
+minishell$ cat << LIMIT
+> Testing here document
+> with multiple lines
+> LIMIT
+Testing here document
+with multiple lines
+minishell$ exit
+Erro (se houver):
+
+[TEST] Redirecionamento: cat << CUSTOM
+Custom delimiter
+testing
+CUSTOM
+Comando: cat << CUSTOM
+Custom delimiter
+testing
+CUSTOM
+[PASS] Redirecionamento: cat << CUSTOM
+Custom delimiter
+testing
+CUSTOM: Executado com sucesso.
+Saída do comando:
+minishell$ cat << CUSTOM
+> Custom delimiter
+> testing
+> CUSTOM
+Custom delimiter
+testing
+minishell$ exit
+Erro (se houver):
+
+Verificando conteúdo dos arquivos:
+Conteúdo de output1.txt:
+overwrite
+---
+Conteúdo de output2.txt:
+---
+Conteúdo de output3.txt:
+append1
+append2
+append3
+---
+Conteúdo de output4.txt:
+Hello World
+Second line
+Third line
+---

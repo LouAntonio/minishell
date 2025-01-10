@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 10:06:57 by lantonio          #+#    #+#             */
-/*   Updated: 2025/01/07 14:23:16 by lantonio         ###   ########.fr       */
+/*   Updated: 2025/01/10 11:04:28 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ typedef struct s_memory
 }	t_memory;
 
 // checkers
-void				identify_command(char *line, t_env **env, char **envp,
+int				identify_command(char *line, t_env **env, char **envp,
 						int *g_returns);
 int					check_read_from(char **str);
 int					check_cipher(char *str, int fd, t_env *env);
