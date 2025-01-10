@@ -6,7 +6,7 @@
 /*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 10:06:57 by lantonio          #+#    #+#             */
-/*   Updated: 2025/01/10 16:45:48 by hmateque         ###   ########.fr       */
+/*   Updated: 2025/01/10 18:29:22 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,18 +87,29 @@ typedef enum e_mem_type
 	MEM_TOKEN_PTR,
 	MEM_TOKEN_MATRIX,
 	MEM_COMMAND
-}	t_mem_type;
+}					t_mem_type;
 
 // Estrutura para armazenar informações sobre a memória alocada
 typedef struct s_memory
 {
-	void		*ptr;
-	t_mem_type	type;
-	size_t		size;
-}	t_memory;
+	void			*ptr;
+	t_mem_type		type;
+	size_t			size;
+}					t_memory;
+
+typedef struct s_expander_variables
+{
+	char			*result;
+	char			*current;
+	int				inside_single_quotes;
+	char			*exit_status;
+	char			*var_end;
+	t_env			*env_var;
+	char			*var_name;
+}					t_expander_variables;
 
 // checkers
-int				identify_command(char *line, t_env **env, char **envp,
+int					identify_command(char *line, t_env **env, char **envp,
 						int *g_returns);
 int					check_read_from(char **str);
 int					check_cipher(char *str, int fd, t_env *env);
@@ -139,22 +150,28 @@ void				ft_exit(t_env **env, int status);
 void				ft_env(char **args, int *g_returns, t_env **env);
 
 // file command.c
-void	create_files(Command *command);
-void	handle_sigint_child(int sig);
-int	check_command(char *str, int *g_returns, int status);
-int	check_quote_syntax_return(char *line);
-char	*close_pipe(char *command, int i, int j);
-int	run_commands(Command *cmd, char **str, t_env **env, char **envp, int *g_returns);
-int	built_ins(Command *cmd, t_env **env, int *g_returns);
-int	check_red_in(Command *cmd, int *fd_in);
-int	handle_redirection(Command *cmd);
-int	avoid_double_quote_error(char *str);
-int	avoid_single_quote_error(char *str);
-char	*remove_double_quotes(char *str);
-char	*remove_single_quotes(char *str);
+void				create_files(Command *command);
+void				handle_sigint_child(int sig);
+int					check_command(char *str, int *g_returns, int status);
+int					check_quote_syntax_return(char *line);
+char				*close_pipe(char *command, int i, int j);
+int					run_commands(Command *cmd, char **str, t_env **env,
+						char **envp, int *g_returns);
+int					built_ins(Command *cmd, t_env **env, int *g_returns);
+int					check_red_in(Command *cmd, int *fd_in);
+int					handle_redirection(Command *cmd);
+int					avoid_double_quote_error(char *str);
+int					avoid_single_quote_error(char *str);
+char				*remove_double_quotes(char *str);
+char				*remove_single_quotes(char *str);
 
 // file aux_command_1.c
-bool	should_skip_expansion(char *str);
+bool				should_skip_expansion(char *str);
+
+// ft_aux_close_pipe.c
+int					handle_pipe_error(char *message);
+char				*read_complete_command(void);
+char				*join_command(char *command, char *complete);
 
 // env
 void				print_all_var(char **env);

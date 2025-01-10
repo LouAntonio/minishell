@@ -6,7 +6,7 @@
 /*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 10:28:57 by hmateque          #+#    #+#             */
-/*   Updated: 2025/01/10 16:43:47 by hmateque         ###   ########.fr       */
+/*   Updated: 2025/01/10 18:15:29 by hmateque         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,115 +222,86 @@ int	run_commands(Command *cmd, char **str, t_env **env, char **envp, int *g_retu
 	return (1);
 }
 
-char	*close_pipe(char *command, int i, int j)
-{
-	char	*complete;
-	char	*temp;
-	pid_t	pid;
+// char	*close_pipe(char *command, int i, int j)
+// {
+// 	char	*complete;
+// 	char	*temp;
+// 	pid_t	pid;
+// 	int		status;
 
-	i = ft_strlen(command);
-	complete = NULL;
-	if (command[0] == '|')
-		return (printf("minishell: parse error near '|'\n"), NULL);
-	j = i - 2;
-	if (command[--i] == '|')
-	{
-		while (command[j] == ' ' || command[j] <= 13)
-			j--;
-		if (command[j] == '|')
-			return (printf("minishell: parse error near '|'\n"), NULL);
-		pid = fork();
-		if (pid == -1)
-			return (perror("Fork failed"), NULL);
-		if (pid == 0)
-		{
-			signal(SIGINT, handle_sigint_child);
-			complete = readline("> ");
-			if (!complete)
-			{
-				free(complete);
-				printf("minishell: syntax error: unexpected end of file\n");
-				exit(1);
-			}
-			while (complete[0] == '\0')
-			{
-				free(complete);
-				complete = readline("pipe> ");
-				if (!complete)
-				{
-					free(complete);
-					printf("minishell: syntax error: unexpected end of file\n");
-					exit(1);
-				}
-			}
-			exit(0);
-		}
-		else
-		{
-			wait(NULL);
-			temp = ft_strjoin(command, " ");
-			collect_mem(temp, MEM_CHAR_PTR, 0);
-			command = temp;
-			temp = ft_strjoin(command, complete);
-			collect_mem(temp, MEM_CHAR_PTR, 0);
-			command = temp;
-			free(complete);
-		}
-	}
-	else
-		return (command);
-	return (command);
-}
-
-char	*expand_variable(char *var, t_env *env, int *g_returns)
-{
-	char	*result;
-	char	*current;
-	int		inside_single_quotes;
-	char	*exit_status;
-	char	*var_end;
-	t_env	*env_var;
-	char	*var_name;
-
-	result = ft_strdup("");
-	current = var;
-	inside_single_quotes = 0;
-	while (*current)
-	{
-		if (*current == '\'')
-		{
-			inside_single_quotes = !inside_single_quotes;
-			result = ft_strjoin_free(result, ft_strndup(current, 1));
-			current++;
-		}
-		else if (*current == '$' && !inside_single_quotes)
-		{
-			current++;
-			if (*current == '?')
-			{
-				exit_status = ft_itoa(*g_returns);
-				result = ft_strjoin_free(result, exit_status);
-				free(exit_status);
-				current++;
-			}
-			else
-			{
-				var_end = current;
-				while (*var_end && (ft_isalnum(*var_end) || *var_end == '_'))
-					var_end++;
-				var_name = ft_strndup(current, var_end - current);
-				env_var = find_env_var(env, var_name);
-				if (env_var)
-					result = ft_strjoin_free(result, env_var->value);
-				current = var_end;
-			}
-		}
-		else
-		{
-			result = ft_strjoin_free(result, ft_strndup(current, 1));
-			current++;
-		}
-	}
-	return (result);
-}
-
+// 	i = ft_strlen(command);
+// 	complete = NULL;
+// 	if (command[0] == '|')
+// 		return (printf("minishell: parse error near '|'\n"), NULL);
+// 	j = i - 2;
+// 	if (command[--i] == '|')
+// 	{
+// 		while (command[j] == ' ' || command[j] <= 13)
+// 			j--;
+// 		if (command[j] == '|')
+// 			return (printf("minishell: parse error near '|'\n"), NULL);
+// 		int pipefd[2];
+// 		if (pipe(pipefd) == -1) {
+// 			perror("Pipe failed");
+// 			return NULL;
+// 		}
+// 		pid = fork();
+// 		if (pid == -1)
+// 		{
+// 			close(pipefd[0]);
+// 			close(pipefd[1]);
+// 			return (perror("Fork failed"), NULL);
+// 		}
+// 		if (pid == 0)
+// 		{
+// 			signal(SIGINT, handle_sigint_child);
+// 			complete = readline("> ");
+// 			if (!complete)
+// 			{
+// 				free(complete);
+// 				printf("minishell: syntax error: unexpected end of file\n");
+// 				exit(1);
+// 			}
+// 			while (complete[0] == '\0')
+// 			{
+// 				free(complete);
+// 				complete = readline("> ");
+// 				if (!complete)
+// 				{
+// 					free(complete);
+// 					printf("minishell: syntax error: unexpected end of file\n");
+// 					exit(1);
+// 				}
+// 			}
+// 			write(pipefd[1], complete, strlen(complete));
+// 			close(pipefd[0]);
+// 			close(pipefd[1]);
+// 			exit(0);
+// 		}
+// 		else
+// 		{
+// 			close(pipefd[1]);
+// 			waitpid(pid, &status, 0);
+// 			char buffer[1024];
+// 			int nbytes = read(pipefd[0], buffer, sizeof(buffer));
+// 			if (nbytes == -1) {
+// 				perror("Read failed");
+// 				close(pipefd[0]);
+// 				return NULL;
+// 			}
+// 			buffer[nbytes] = '\0';
+// 			complete = strdup(buffer);
+// 			close(pipefd[0]);
+// 			temp = ft_strjoin(command, " ");
+// 			collect_mem(temp, MEM_CHAR_PTR, 0);
+// 			command = temp;
+// 			temp = ft_strjoin(command, complete);
+// 			collect_mem(temp, MEM_CHAR_PTR, 0);
+// 			command = temp;
+// 			free(complete);
+// 		}
+// 	}
+// 	else
+// 		return (command);
+// 	return (command);
+// }

@@ -6,7 +6,7 @@
 #    By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/11 16:35:01 by lantonio          #+#    #+#              #
-#    Updated: 2025/01/10 16:34:00 by hmateque         ###   ########.fr        #
+#    Updated: 2025/01/10 18:31:11 by hmateque         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,11 @@ SRCS	= minishell.c\
 			./checkers/aux_command_1.c\
 			./checkers/aux_command_2.c\
 			./checkers/ft_expander.c\
+			./checkers/ft_expander_variable.c\
+			./checkers/ft_aux_close_pipe.c\
+			./checkers/ft_close_pipe.c\
 			./checkers/string.c\
+			./checkers/string_2.c\
 			./signal/signal.c\
 			./commands/pwd.c\
 			./commands/echo.c\
