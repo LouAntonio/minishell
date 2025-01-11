@@ -3,37 +3,46 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmateque <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: cogata <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/21 09:22:41 by hmateque          #+#    #+#             */
-/*   Updated: 2024/05/21 09:22:47 by hmateque         ###   ########.fr       */
+/*   Created: 2023/07/28 14:24:45 by cogata            #+#    #+#             */
+/*   Updated: 2023/07/28 14:24:48 by cogata           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+void	ft_logic_putnbr(int fd, long nb)
+{
+	char	c;
+
+	if (nb > 9)
+	{
+		ft_logic_putnbr(fd, nb / 10);
+		c = nb % 10 + '0';
+		write(fd, &c, 1);
+	}
+	else
+	{
+		c = nb + '0';
+		write(fd, &c, 1);
+	}
+}
+
 void	ft_putnbr_fd(int n, int fd)
 {
-	char	a;
+	long	nb;
 
-	a = ' ';
-	if (n == -2147483648)
-		write(fd, "-2147483648", 11);
-	else if (n > -2147483648 && n < 0)
+	nb = n;
+	if (fd > 0)
 	{
-		a = '-';
-		write(fd, &a, 1);
-		ft_putnbr_fd(n *= -1, fd);
-	}
-	else if (n < 10)
-	{
-		a = n + '0';
-		write(fd, &a, 1);
-	}
-	else if (n > -2147483648 && n <= 2147483647)
-	{
-		a = (n % 10) + '0';
-		ft_putnbr_fd(n /= 10, fd);
-		write(fd, &a, 1);
+		if (nb < 0)
+		{
+			write(fd, "-", 1);
+			nb = nb * (-1);
+			ft_logic_putnbr(fd, nb);
+		}
+		else
+			ft_logic_putnbr(fd, nb);
 	}
 }

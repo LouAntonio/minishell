@@ -1,62 +1,47 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/05/15 15:11:45 by hmateque          #+#    #+#              #
-#    Updated: 2024/12/15 00:46:00 by hmateque         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+CC = cc
+CFLAGS = -Wall -Wextra -Werror -g3
 
-CFLAGS		= -Wall -Wextra -Werror -g
-CC			= cc
-NAME		= libft.a
-FLAGLIB		= -rcs
-RM			= /bin/rm -f
+NAME = libft.a
 
-SRC		= ft_atoi.c ft_isalnum.c ft_isalpha.c ft_isascii.c ft_isdigit.c\
-				ft_isprint.c ft_memcmp.c ft_memset.c ft_strchr.c ft_strlcat.c\
-				ft_strlcpy.c ft_strlen.c ft_strncmp.c ft_strnstr.c ft_strrchr.c\
-				ft_tolower.c ft_toupper.c ft_bzero.c ft_calloc.c ft_memchr.c\
-				ft_memcpy.c ft_memmove.c ft_strdup.c ft_itoa.c ft_strtrim.c\
-				ft_strmapi.c ft_striteri.c ft_putchar_fd.c ft_putstr_fd.c\
-				ft_putendl_fd.c ft_putnbr_fd.c ft_substr.c ft_strjoin.c\
-				ft_split.c
+SRC = ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c \
+    ft_strlen.c ft_memset.c ft_bzero.c ft_memcpy.c ft_memmove.c \
+    ft_strlcpy.c ft_strlcat.c ft_toupper.c ft_tolower.c ft_strchr.c \
+    ft_strrchr.c ft_strncmp.c ft_memchr.c ft_memcmp.c ft_strnstr.c \
+    ft_atoi.c ft_atol.c ft_calloc.c ft_strdup.c ft_substr.c ft_strjoin.c ft_strtrim.c ft_split.c \
+	ft_itoa.c ft_strmapi.c ft_striteri.c ft_putchar_fd.c ft_putstr_fd.c \
+	ft_putendl_fd.c ft_putnbr_fd.c \
+	get_next_line.c get_next_line_utils.c ft_atoi_base.c \
+	ft_printf.c ft_printf_utils.c \
+	ft_lstnew_bonus.c ft_lstadd_front_bonus.c ft_lstsize_bonus.c ft_lstlast_bonus.c ft_lstadd_back_bonus.c ft_lstdelone_bonus.c \
+	ft_lstclear_bonus.c ft_lstiter_bonus.c ft_lstmap_bonus.c ft_strndup.c ft_strstr.c allocate_mem.c free_mem.c \
+	ft_put_strjoin_fd.c pipex_split_1.c pipex_split_2.c pipex_split_3.c ft_strcmp.c\
 
-OBJ			= $(SRC:.c=.o)
+BONUS_SRC = ft_lstnew_bonus.c ft_lstadd_front_bonus.c ft_lstsize_bonus.c ft_lstlast_bonus.c ft_lstadd_back_bonus.c ft_lstdelone_bonus.c \
+	ft_lstclear_bonus.c ft_lstiter_bonus.c ft_lstmap_bonus.c \
 
-BONUS		= ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c\
-				ft_lstadd_back.c ft_lstdelone.c ft_lstclear.c ft_lstiter.c\
-				ft_lstmap.c
+OBJ = $(SRC:%.c=%.o)
 
+BONUS_OBJ = $(BONUS_SRC:%.c=%.o)
 
-BONUS_OBJ	= $(BONUS:.c=.o)
+all: $(NAME)
 
-all:		$(NAME)
+$(NAME): $(OBJ)
 
-$(NAME):	$(OBJ) libft.h
-			@echo "Linking $(NAME)"
-			@ar $(FLAGLIB) $(NAME) $(OBJ)
-			@ranlib $(NAME)
+bonus: $(BONUS_OBJ)
 
-bonus:		$(BONUS_OBJ) $(NAME)
-			@echo "Linking bonus"
-			@ar $(FLAGLIB) $(NAME) $(BONUS_OBJ)
-			@ranlib $(NAME)
+%.o: %.c libft.h
+	@$(CC) $(CFLAGS) -c $< -o $@ && printf "Compiling: $(notdir $<\n)"
+	@ar rc $(NAME) $@
+	
+norm:
+	norminette -R CheckForbiddenSourceHeader $(SRC) $(BONUS_SRC) libft.h
 
-%.o:%.c
-			@$(CC) $(CFLAGS) -I . -c $< -o $@
+clean: 
+	rm -f $(OBJ) $(BONUS_OBJ)
 
-clean:
-			@echo "Cleaning"
-			@$(RM) $(OBJ) $(BONUS_OBJ)
+fclean: clean
+	rm -f $(NAME)
 
-fclean:		clean
-			@echo "Cleaning headers"
-			@$(RM) $(NAME)
+re: fclean all
 
-re:			fclean all
-
-.PHONY:		all re clean fclean
+.PHONY: all clean fclean re bonus

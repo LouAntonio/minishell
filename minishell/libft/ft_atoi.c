@@ -3,37 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmateque <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: cogata <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/16 15:39:08 by hmateque          #+#    #+#             */
-/*   Updated: 2024/05/21 12:48:25 by hmateque         ###   ########.fr       */
+/*   Created: 2023/07/22 14:26:21 by cogata            #+#    #+#             */
+/*   Updated: 2023/07/22 14:26:22 by cogata           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
 int	ft_atoi(const char *nptr)
 {
-	int	i;
-	int	sign;
-	int	nb;
+	char	*nbr;
+	int		i;
+	int		sign;
+	int		res;
 
+	nbr = (char *)nptr;
 	i = 0;
-	while (nptr[i] == ' ' || nptr[i] == '\f' || nptr[i] == '\n'
-		|| nptr[i] == '\r' || nptr[i] == '\t' || nptr[i] == '\v')
-		i++;
 	sign = 1;
-	if (nptr[i] == '-' || nptr[i] == '+')
+	res = 0;
+	while (nbr[i] == 32 || (nbr[i] >= 9 && nbr[i] <= 13))
 	{
-		if (nptr[i] == '-')
-			sign *= -1;
 		i++;
 	}
-	nb = 0;
-	while (ft_isdigit(nptr[i]))
+	if (nbr[i] == '-' || nbr[i] == '+')
 	{
-		nb = nb * 10 + nptr[i] - '0';
+		if (nbr[i] == '-')
+			sign = -1;
 		i++;
 	}
-	return (nb * sign);
+	while (nbr[i] >= '0' && nbr[i] <= '9')
+	{
+		res = res * 10 + nbr[i] - '0';
+		i++;
+	}
+	return (res * sign);
 }

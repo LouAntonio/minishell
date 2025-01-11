@@ -3,17 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isascii.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmateque <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: cogata <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/14 09:35:16 by hmateque          #+#    #+#             */
-/*   Updated: 2024/05/14 09:36:25 by hmateque         ###   ########.fr       */
+/*   Created: 2023/07/19 13:46:29 by cogata            #+#    #+#             */
+/*   Updated: 2023/07/19 13:46:31 by cogata           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_isascii(int c)
+int	ft_isascii(unsigned int c)
 {
-	if (c >= 0 && c <= 127)
+	if (c <= 127)
+	{
 		return (1);
-	else
-		return (0);
+	}
+	return (0);
 }

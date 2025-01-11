@@ -3,26 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmateque <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: cogata <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/15 13:45:50 by hmateque          #+#    #+#             */
-/*   Updated: 2024/05/15 14:31:39 by hmateque         ###   ########.fr       */
+/*   Created: 2023/07/21 15:29:13 by cogata            #+#    #+#             */
+/*   Updated: 2023/07/21 15:29:14 by cogata           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "libft.h"
 
-char	*ft_strrchr(const char *str, int c)
+char	*ft_strrchr(const char *s, int c)
 {
-	const char	*last_occurrence;
+	size_t			size;
+	unsigned char	u;
 
-	last_occurrence = NULL;
-	while (*str != '\0')
+	u = (unsigned char)c;
+	size = ft_strlen(s);
+	while (size + 1 > 0)
 	{
-		if (*str == (char)c)
-			last_occurrence = str;
-		str++;
+		if (s[size] == u)
+			return ((char *)&s[size]);
+		size--;
 	}
-	if (c == '\0')
-		return ((char *)str);
-	return ((char *)last_occurrence);
+	return (0);
 }

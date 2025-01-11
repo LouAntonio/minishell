@@ -3,93 +3,121 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+         #
+#    By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/09/11 16:35:01 by lantonio          #+#    #+#              #
-#    Updated: 2025/01/11 00:37:55 by lantonio         ###   ########.fr        #
+#    Created: 2025/01/11 09:30:23 by hmateque          #+#    #+#              #
+#    Updated: 2025/01/11 09:30:25 by hmateque         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME	= minishell
-CC		= cc
-FLAGS	= -Wall -Wextra -Werror -g
+NAME = minishell
 
-LIBFT_DIR = ./libft
-LIBFT_A = $(LIBFT_DIR)/libft.a
+NAME_BONUS = minishell_bonus
 
-SRCS	= minishell.c\
-			./src/ft_aux_str.c\
-			./src/ft_args_main.c\
-			./src/tokenizer.c\
-			./src/mudar_dps.c\
-			./src/aux_file.c\
-			./src/aux_file2.c\
-			./src/aux_file3.c\
-			./src/tokenizer_aux.c\
-			./src/tokenizer_aux2.c\
-			./src/build_command.c\
-			./env/list_manipulation.c\
-			./checkers/command.c\
-			./checkers/command_aux.c\
-			./checkers/command_aux2.c\
-			./checkers/command_aux3.c\
-			./checkers/identify_command.c\
-			./checkers/aux_command.c\
-			./checkers/aux_command_1.c\
-			./checkers/aux_command_2.c\
-			./checkers/ft_expander.c\
-			./checkers/ft_expander_variable.c\
-			./checkers/ft_aux_close_pipe.c\
-			./checkers/ft_close_pipe.c\
-			./checkers/string.c\
-			./checkers/string_2.c\
-			./signal/signal.c\
-			./commands/pwd.c\
-			./commands/echo.c\
-			./commands/export.c\
-			./commands/unset.c\
-			./commands/cd.c\
-			./commands/cd_aux.c\
-			./commands/env.c\
-			./commands/exit.c\
-			./env/env_utils.c\
-			memory_file2.c\
+CC = cc
 
-OBJS	= $(SRCS:.c=.o)
+CFLAGS = -Wall -Wextra -Werror -g3
 
-$(NAME): $(LIBFT_A) $(OBJS)
-	@$(CC) $(FLAGS) $(OBJS) $(LIBFT_A) -Iincludes -o $(NAME) -lreadline
-	@echo "\033[1;32mSUCESS!\033[0m"
+VPATH = pre_execute tree parse heredoc execute environ builtin
 
-%.o:%.c
-	@$(CC) $(FLAGS) -c $< -o $@
+INCLUDE = -I./include -I ./libft 
 
-$(LIBFT_A):
-	@$(MAKE) bonus -C $(LIBFT_DIR)
+LIBFT = ./libft/libft.a
 
-all: $(NAME)
+SRC = main.c \
+	check_syntax.c \
+	tokenizer.c \
+	tokenizer_utils.c \
+	utils.c \
+	check_heredoc.c \
+	get_env.c \
+	insert_env.c \
+	delete_env.c \
+	get_utils.c \
+	free_env.c \
+	signal.c \
+	build_bin_tree.c \
+	execution.c \
+	parser.c \
+	split_list.c \
+	split_redir.c \
+	find_path.c \
+	execute_operator.c \
+	execute_redir.c \
+	exit_status.c \
+	expand.c \
+	expand_heredoc.c \
+	pre_execute.c \
+	pre_expand.c \
+	re_tokenizer.c \
+	handle_error.c \
+	handle_fd.c \
+	handle_fork.c \
+	echo.c \
+	cd.c \
+	exit.c \
+	pwd.c \
+	export.c \
+	export_utils.c \
+	unset.c \
+	env.c \
+	error_builtin.c \
+	create_node.c \
+	handle_delimiter.c \
 
-run : $(NAME)
-	@echo "\033[1;32mMINISHELL_RUNNING..."
-	@./minishell
+OBJ = obj
 
+SRC_OBJ = $(SRC:%.c=$(OBJ)/%.o)
 
-clean :
-	@rm -rf $(OBJS)
-	@$(MAKE) clean -C $(LIBFT_DIR)
-	@echo "Cleaning objects"
+all: verify libft create_obj $(NAME)
 
-fclean : clean
-	@rm -rf $(NAME)
-	@$(MAKE) fclean -C $(LIBFT_DIR)
-	@echo "cleaning executable"
+bonus: verify libft create_obj $(NAME_BONUS)
 
-re : fclean all
+verify: libft $(SRC_OBJ) 
+	@if [ -d "./minishell/" ]; then \
+		rm -rf "minishell/"; \
+	fi
+	@if [ -d "./minishell_bonus/" ]; then \
+		rm -rf "minishell_bonus/"; \
+	fi
 
-valgrind:
-	valgrind  --leak-check=full ./minishell
-	
-valgrind_all:
-	valgrind  --leak-check=full --show-leak-kinds=all ./minishell
+$(NAME): $(SRC_OBJ)
+	@$(CC) $(CFLAGS) $(SRC_OBJ) -lreadline $(LIBFT) -o $(NAME) 
+	@echo "Compilation completed: $@"
 
-.PHONY : all clean fclean re
+$(NAME_BONUS): $(SRC_OBJ) 
+	@$(CC) $(CFLAGS) $(SRC_OBJ) -lreadline $(LIBFT) -o $(NAME_BONUS) 
+	@echo "Compilation completed: $@"
+
+libft:
+	make -C ./libft
+
+$(OBJ)/%.o : %.c
+	@mkdir -p $(dir $@)	
+	@$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDE) && printf "Compiling: $(notdir $<\n)"
+
+clean: 
+	@make -C ./libft clean --silent
+	@rm -rf $(OBJ)
+	@echo "objects removed" 
+
+fclean: clean
+	@make -C ./libft fclean --silent 
+	@rm -f $(NAME) $(NAME_BONUS) 
+	@echo "executable removed"
+
+re: fclean all
+
+create_obj:
+	@mkdir -p $(OBJ)/
+
+valgrind: all
+	valgrind --suppressions=readline.supp  --leak-check=full --show-leak-kinds=all --track-origins=yes ./minishell
+
+val:
+	valgrind -q --leak-check=full --show-leak-kinds=all --track-origins=yes \
+	--track-fds=yes --suppressions=readline.supp --trace-children=yes \
+	--trace-children-skip=/usr/*,./*,*/bin/* ./minishell
+
+.PHONY: all clean fclean re libft
+.DEFAULT_GOAL := all

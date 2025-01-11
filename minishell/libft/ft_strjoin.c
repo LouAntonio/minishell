@@ -3,36 +3,50 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbazagli <bbazagli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/20 08:23:55 by hmateque          #+#    #+#             */
-/*   Updated: 2025/01/07 12:05:48 by hmateque         ###   ########.fr       */
+/*   Created: 2023/07/22 18:35:06 by cogata            #+#    #+#             */
+/*   Updated: 2024/03/26 11:03:09 by bbazagli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+char	*ft_copy_str(char const *s1, char const *s2, char *res)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (s1[i] != '\0')
+	{
+		res[i] = s1[i];
+		i++;
+	}
+	j = 0;
+	while (s2[j] != '\0')
+	{
+		res[i] = s2[j];
+		i++;
+		j++;
+	}
+	res[i] = '\0';
+	return (res);
+}
+
 char	*ft_strjoin(char const *s1, char const *s2)
 {
-	size_t	len_s1;
-	size_t	len_s2;
-	size_t	i;
-	char	*result;
+	char	*res;
+	size_t	len1;
+	size_t	len2;
 
 	if (s1 == NULL || s2 == NULL)
 		return (NULL);
-	len_s1 = ft_strlen(s1);
-	len_s2 = ft_strlen(s2);
-	result = (char *)malloc(len_s1 + len_s2 + 1);
-	if (result == NULL)
+	len1 = ft_strlen(s1);
+	len2 = ft_strlen(s2);
+	res = ft_calloc(1, len1 + len2 + 1);
+	if (res == NULL)
 		return (NULL);
-	i = -1;
-	while (++i < len_s1 && s1[i] != '\0')
-		result[i] = s1[i];
-	i = -1;
-	while (++i < len_s2 && s2[i] != '\0')
-		result[len_s1 + i] = s2[i];
-	result[len_s1 + i] = '\0';
-	s1 = NULL;
-	return (result);
+	ft_copy_str(s1, s2, res);
+	return (res);
 }
