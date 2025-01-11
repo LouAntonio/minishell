@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_aux_str.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 11:56:22 by hmateque          #+#    #+#             */
-/*   Updated: 2025/01/07 10:50:56 by hmateque         ###   ########.fr       */
+/*   Updated: 2025/01/11 00:40:10 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,30 +33,36 @@ int	ft_strcmp(char *s1, char *s2)
 	return ((int)((unsigned char)s1[i] - (unsigned char)s2[i]));
 }
 
-char	*ft_strjoin_free(char *s1, const char *s2)
+char	*ft_strcpy2(char *dest, const char *src)
 {
-	char	*result;
-	size_t	len1;
-	size_t	len2;
+	char	*start;
 
-	if (!s1 && !s2)
-		return (NULL);
-	if (!s1)
-		return (ft_strdup(s2));
-	if (!s2)
-		return (s1);
-	len1 = ft_strlen(s1);
-	len2 = ft_strlen(s2);
-	result = (char *)malloc(len1 + len2 + 1);
-	if (!result)
+	start = dest;
+	while (*src)
 	{
-		free(s1);
-		return (NULL);
+		*dest = *src;
+		dest++;
+		src++;
 	}
-	strcpy(result, s1);
-	strcat(result, s2);
-	free(s1);
-	return (result);
+	*dest = '\0';
+	return (start);
+}
+
+char	*ft_strcat(char *dest, const char *src)
+{
+	char	*start;
+
+	start = dest;
+	while (*dest)
+		dest++;
+	while (*src)
+	{
+		*dest = *src;
+		dest++;
+		src++;
+	}
+	*dest = '\0';
+	return (start);
 }
 
 char	*ft_strndup(const char *s, size_t n)

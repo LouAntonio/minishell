@@ -6,7 +6,7 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 08:19:38 by hmateque          #+#    #+#             */
-/*   Updated: 2024/11/27 08:51:33 by lantonio         ###   ########.fr       */
+/*   Updated: 2025/01/11 00:19:00 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@ static void	delete_env(t_env **env, char *key)
 
 	temp = *env;
 	prev = NULL;
-	if (temp && strcmp(temp->name, key) == 0)
+	if (temp && ft_strcmp(temp->name, key) == 0)
 	{
 		*env = temp->next;
 		ft_free_node(temp);
 		return ;
 	}
-	while (temp && strcmp(temp->name, key) != 0)
+	while (temp && ft_strcmp(temp->name, key) != 0)
 	{
 		prev = temp;
 		temp = temp->next;

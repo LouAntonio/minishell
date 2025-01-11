@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_expander_variable.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 17:04:59 by hmateque          #+#    #+#             */
-/*   Updated: 2025/01/10 17:37:24 by hmateque         ###   ########.fr       */
+/*   Updated: 2025/01/11 00:30:57 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,8 @@ char	*expand_variable(char *var, t_env *env, int *g_returns)
 	{
 		if (*vars.current == '\'')
 			expand_single_quotes(&vars);
-		else if (*vars.current == '$' && !vars.inside_single_quotes)
+		else if (*vars.current == '$' && !vars.inside_single_quotes
+			&& ft_strlen(vars.current) > 1)
 			expand_dollar_sign(&vars, env, g_returns);
 		else
 			expand_regular_character(&vars);

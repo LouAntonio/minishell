@@ -6,7 +6,7 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 22:09:12 by lantonio          #+#    #+#             */
-/*   Updated: 2025/01/10 22:49:35 by lantonio         ###   ########.fr       */
+/*   Updated: 2025/01/11 00:08:07 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	execute_heredoc_child(t_cmd *cmd, int hd_fd[2], t_env **env)
 		str2 = readline("> ");
 		if (str2 == NULL)
 			exit(EXIT_FAILURE);
-		if (strcmp(str2, cmd->heredoc_end) == 0)
+		if (ft_strcmp(str2, cmd->heredoc_end) == 0)
 		{
 			free(str2);
 			break ;
