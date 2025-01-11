@@ -26,11 +26,12 @@ BONUS_OBJ = $(BONUS_SRC:%.c=%.o)
 all: $(NAME)
 
 $(NAME): $(OBJ)
+	@echo "\033[1;32mLIBFT COMPILED!\033[0m"
 
 bonus: $(BONUS_OBJ)
 
 %.o: %.c libft.h
-	@$(CC) $(CFLAGS) -c $< -o $@ && printf "Compiling: $(notdir $<\n)"
+	@$(CC) $(CFLAGS) -c $< -o $@
 	@ar rc $(NAME) $@
 	
 norm:

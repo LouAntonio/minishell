@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 18:22:51 by hmateque          #+#    #+#             */
-/*   Updated: 2025/01/11 09:23:39 by hmateque         ###   ########.fr       */
+/*   Updated: 2025/01/11 09:49:12 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,15 +58,12 @@ int	main(void)
 {
 	int						*fd;
 	char					*input;
-	static struct termios	term;
 	t_tree					*root;
 	char					**env_table;
 
 	env_table = get_env_table();
 	collect_env_mem(env_table);
 	init_pwd();
-	(void)term;
-	//tcgetattr(STDIN_FILENO, &term);
 	while (1)
 	{
 		fd = save_fd();
@@ -78,7 +75,6 @@ int	main(void)
 		parse(input, &root);
 		execute(root, &env_table);
 		reset_fd(fd);
-		//tcsetattr(STDIN_FILENO, TCSANOW, &term);
 		clean_tmp_files();
 		free_mem(get_mem_address());
 	}

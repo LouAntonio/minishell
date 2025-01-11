@@ -3,20 +3,18 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hmateque <hmateque@student.42.fr>          +#+  +:+       +#+         #
+#    By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/11 09:30:23 by hmateque          #+#    #+#              #
-#    Updated: 2025/01/11 09:30:25 by hmateque         ###   ########.fr        #
+#    Updated: 2025/01/11 10:29:48 by lantonio         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
-NAME_BONUS = minishell_bonus
-
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -g3
+CFLAGS = -Wall -Wextra -Werror
 
 VPATH = pre_execute tree parse heredoc execute environ builtin
 
@@ -69,32 +67,18 @@ OBJ = obj
 
 SRC_OBJ = $(SRC:%.c=$(OBJ)/%.o)
 
-all: verify libft create_obj $(NAME)
-
-bonus: verify libft create_obj $(NAME_BONUS)
-
-verify: libft $(SRC_OBJ) 
-	@if [ -d "./minishell/" ]; then \
-		rm -rf "minishell/"; \
-	fi
-	@if [ -d "./minishell_bonus/" ]; then \
-		rm -rf "minishell_bonus/"; \
-	fi
+all: libft create_obj $(NAME)
 
 $(NAME): $(SRC_OBJ)
 	@$(CC) $(CFLAGS) $(SRC_OBJ) -lreadline $(LIBFT) -o $(NAME) 
-	@echo "Compilation completed: $@"
-
-$(NAME_BONUS): $(SRC_OBJ) 
-	@$(CC) $(CFLAGS) $(SRC_OBJ) -lreadline $(LIBFT) -o $(NAME_BONUS) 
-	@echo "Compilation completed: $@"
+	@echo "\033[1;32mMINISHELL COMPILED!\033[0m"
 
 libft:
-	make -C ./libft
+	@make -C ./libft
 
 $(OBJ)/%.o : %.c
 	@mkdir -p $(dir $@)	
-	@$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDE) && printf "Compiling: $(notdir $<\n)"
+	@$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDE)
 
 clean: 
 	@make -C ./libft clean --silent
@@ -110,14 +94,6 @@ re: fclean all
 
 create_obj:
 	@mkdir -p $(OBJ)/
-
-valgrind: all
-	valgrind --suppressions=readline.supp  --leak-check=full --show-leak-kinds=all --track-origins=yes ./minishell
-
-val:
-	valgrind -q --leak-check=full --show-leak-kinds=all --track-origins=yes \
-	--track-fds=yes --suppressions=readline.supp --trace-children=yes \
-	--trace-children-skip=/usr/*,./*,*/bin/* ./minishell
 
 .PHONY: all clean fclean re libft
 .DEFAULT_GOAL := all
