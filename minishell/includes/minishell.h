@@ -6,7 +6,7 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 10:06:57 by lantonio          #+#    #+#             */
-/*   Updated: 2025/01/10 23:06:30 by lantonio         ###   ########.fr       */
+/*   Updated: 2025/01/11 00:40:58 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,6 +157,8 @@ void				handle_quote2(char c, t_wc_state *state);
 void				handle_non_quote(char c, t_wc_state *state);
 int					count_words(const char *input);
 char				*allocate_word(int capacity);
+char				*ft_strcpy2(char *dest, const char *src);
+char				*ft_strcat(char *dest, const char *src);
 char				*resize_word(char *word, int *capacity);
 int					handle_quote(t_word_data *data, char current_char);
 int					finalize_quoted_word(t_word_data *data);
@@ -268,7 +270,7 @@ t_env				*ft_list_last(t_env *lst);
 char				*ft_str_ncpy(int len, char *src);
 void				print_list(t_env *list, int flag);
 void				search_and_print_list(t_env *list, char *str, int fd);
-t_env				*find_env_var(t_env *env, const char *name);
+t_env				*find_env_var(t_env *env, char *name);
 
 // t_token
 char				**ft_tokens(const char *input, int *word_count);

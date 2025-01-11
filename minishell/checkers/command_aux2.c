@@ -6,7 +6,7 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 22:08:29 by lantonio          #+#    #+#             */
-/*   Updated: 2025/01/10 22:49:35 by lantonio         ###   ########.fr       */
+/*   Updated: 2025/01/11 01:07:17 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,10 @@ int	execute_command(const char *path, char **args, char **envp, int *g_returns)
 	if (pid == 0)
 	{
 		if (execve(path, args, envp) == -1)
-			return (perror("Exec error"), -1);
-		exit(EXIT_SUCCESS);
+		{
+			printf("minishell: %s: No such file or directory\n", path);
+			exit(EXIT_SUCCESS);
+		}
 	}
 	if (waitpid(pid, &status, 0) == -1)
 		return (perror("Waitpid error"), -1);

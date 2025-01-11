@@ -6,7 +6,7 @@
 #    By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/11 16:35:01 by lantonio          #+#    #+#              #
-#    Updated: 2025/01/10 22:31:03 by lantonio         ###   ########.fr        #
+#    Updated: 2025/01/11 00:37:55 by lantonio         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ SRCS	= minishell.c\
 			./src/mudar_dps.c\
 			./src/aux_file.c\
 			./src/aux_file2.c\
+			./src/aux_file3.c\
 			./src/tokenizer_aux.c\
 			./src/tokenizer_aux2.c\
 			./src/build_command.c\

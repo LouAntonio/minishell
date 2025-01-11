@@ -6,7 +6,7 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 10:41:02 by hmateque          #+#    #+#             */
-/*   Updated: 2025/01/10 22:02:13 by lantonio         ###   ########.fr       */
+/*   Updated: 2025/01/11 00:17:09 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,15 @@ int	navigate_to_directory(char *path, t_env **env, int *g_returns)
 	char	old_path[PATH_MAX];
 
 	if (getcwd(old_path, sizeof(old_path)) == NULL)
+	{
+		*g_returns = 1;
 		return (perror("Erro ao obter diretório atual"), 0);
+	}
 	if (chdir(path) != 0)
+	{
+		*g_returns = 1;
 		return (perror("Erro ao mudar de diretório"), 0);
+	}
 	update_oldpwd_pwd(old_path, env, g_returns);
 	return (1);
 }

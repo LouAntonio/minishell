@@ -6,7 +6,7 @@
 /*   By: lantonio <lantonio@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 11:13:21 by hmateque          #+#    #+#             */
-/*   Updated: 2025/01/10 22:37:01 by lantonio         ###   ########.fr       */
+/*   Updated: 2025/01/11 00:36:24 by lantonio         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,18 +38,19 @@ t_token	**allocate_classified_tokens(int wc)
 	return (classified_tokens);
 }
 
-t_token	*allocate_token(void)
+char	*ft_strncpy(char *dest, const char *src, int n)
 {
-	t_token	*token;
+	int	i;
 
-	token = malloc(sizeof(t_token));
-	if (!token)
+	i = -1;
+	while (++i < n && src[i] != '\0')
+		dest[i] = src[i];
+	while (i < n)
 	{
-		free_all_mem();
-		return (NULL);
+		dest[i] = '\0';
+		i++;
 	}
-	collect_mem(token, MEM_TOKEN_PTR, 0);
-	return (token);
+	return (dest);
 }
 
 char	*strip_quotes(const char *token)
@@ -68,7 +69,7 @@ char	*strip_quotes(const char *token)
 			return (NULL);
 		}
 		collect_mem(stripped_token, MEM_CHAR_PTR, 0);
-		strncpy(stripped_token, token + 1, len - 2);
+		ft_strncpy(stripped_token, token + 1, len - 2);
 		stripped_token[len - 2] = '\0';
 		return (stripped_token);
 	}
