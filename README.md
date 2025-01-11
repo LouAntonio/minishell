@@ -1,5 +1,9 @@
 # Minishell Project
 
+![New Project](https://github.com/user-attachments/assets/3780b4bf-9be5-444f-91d2-6c8cdaa61834)
+
+[DIAGRAMA DE EXECUÇÃO](https://whimsical.com/meu-minishell-8fCZZarjYZ3MNZBvxmzRzh)
+
 Este repositório contém um resumo das principais funções em C que são fundamentais para a implementação do projeto **Minishell**. Abaixo, você encontrará detalhes sobre a assinatura, bibliotecas, retorno, propósito e exemplos de uso dessas funções.
 
 ## Funções de Leitura de Linha e Histórico
